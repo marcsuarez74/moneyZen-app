@@ -2,13 +2,113 @@
 
 @include mat.core();
 
-// Temporary: Use default light theme
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+// Use Material 2 theming API which accepts custom palettes
+// MoneyZen Primary Teal Palette with A1/A2/A4 hues for accent
+$moneyzen-primary: (
+  50: #e0f2f1,
+  100: #b2dfdb,
+  200: #80cbc4,
+  300: #4db6ac,
+  400: #26a69a,
+  500: #009688,
+  600: #00897b,
+  700: #00796b,
+  800: #00695c,
+  900: #004d40,
+  A100: #a7ffeb,
+  A200: #64ffda,
+  A400: #1de9b6,
+  A700: #00bfa5,
+  contrast: (
+    50: rgba(0,0,0,0.87),
+    100: rgba(0,0,0,0.87),
+    200: rgba(0,0,0,0.87),
+    300: rgba(0,0,0,0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(0,0,0,0.87),
+    A200: rgba(0,0,0,0.87),
+    A400: white,
+    A700: white,
+  )
+);
 
-// CSS Variables for custom components
+// MoneyZen Accent Green Palette with A1/A2/A4 hues
+$moneyzen-accent: (
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  A100: #b9f6ca,
+  A200: #69f0ae,
+  A400: #00e676,
+  A700: #00c853,
+  contrast: (
+    50: rgba(0,0,0,0.87),
+    100: rgba(0,0,0,0.87),
+    200: rgba(0,0,0,0.87),
+    300: rgba(0,0,0,0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(0,0,0,0.87),
+    A200: rgba(0,0,0,0.87),
+    A400: white,
+    A700: white,
+  )
+);
+
+// Material 2 theme definition using m2 API
+$light-primary: mat.m2-define-palette($moneyzen-primary);
+$light-accent: mat.m2-define-palette($moneyzen-accent, A200, A100, A400);
+$light-warn: mat.m2-define-palette(mat.$m2-orange-palette);
+
+$light-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $light-primary,
+    accent: $light-accent,
+    warn: $light-warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+// Dark theme
+$dark-primary: mat.m2-define-palette($moneyzen-primary, 200, 100, 400);
+$dark-accent: mat.m2-define-palette($moneyzen-accent, A200, A100, A400);
+$dark-warn: mat.m2-define-palette(mat.$m2-orange-palette);
+
+$dark-theme: mat.m2-define-dark-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent,
+    warn: $dark-warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+// Apply light theme by default
+@include mat.all-component-themes($light-theme);
+
+// CSS Variables for custom components - Light Theme (MoneyZen nature theme)
 :root {
+  // MoneyZen Teal/Sarcelle colors
   --primary-color: #00796b;
-  --primary-light: #b2dfdb;
+  --primary-light: #4db6ac;
   --primary-dark: #004d40;
   --background: #f0f7f5;
   --surface: #ffffff;
@@ -18,12 +118,17 @@
   --border: #d0e8e3;
   --shadow: rgba(0, 0, 0, 0.08);
   --card-bg: #ffffff;
+  --accent-color: #4caf50;
 }
 
+// Dark theme styles
 .dark-theme {
+  @include mat.all-component-colors($dark-theme);
+  
+  // CSS Variables for custom components - Dark Theme
   --primary-color: #4db6ac;
-  --primary-light: #1a4a44;
-  --primary-dark: #80cbc4;
+  --primary-light: #80cbc4;
+  --primary-dark: #26a69a;
   --background: #121414;
   --surface: #1a1d1d;
   --surface-variant: #242928;
@@ -32,23 +137,26 @@
   --border: #334240;
   --shadow: rgba(0, 0, 0, 0.3);
   --card-bg: #1a1d1d;
+  --accent-color: #81c784;
 }
 
 // Global styles
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
   height: 100%;
-  margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
 }
 
 body {
   background-color: var(--background);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
 }
 
 // Material Icons
@@ -71,14 +179,27 @@ body {
 // Utility classes
 .text-center { text-align: center; }
 .w-100 { width: 100%; }
+.flex { display: flex; }
+.flex-1 { flex: 1; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-2 { gap: 16px; }
+.gap-3 { gap: 24px; }
 
 .mt-1 { margin-top: 8px; }
 .mt-2 { margin-top: 16px; }
 .mt-3 { margin-top: 24px; }
+.mt-4 { margin-top: 32px; }
 
 .mb-1 { margin-bottom: 8px; }
 .mb-2 { margin-bottom: 16px; }
 .mb-3 { margin-bottom: 24px; }
+.mb-4 { margin-bottom: 32px; }
+
+.p-1 { padding: 8px; }
+.p-2 { padding: 16px; }
+.p-3 { padding: 24px; }
+.p-4 { padding: 32px; }
 
 // Responsive
 @media (max-width: 600px) {
@@ -114,4 +235,37 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--text-secondary) transparent;
+}
+
+// MoneyZen specific accent colors for nature theme
+.moneyzen-accent {
+  color: var(--accent-color);
+}
+
+.moneyzen-primary {
+  color: var(--primary-color);
+}
+
+.moneyzen-bg {
+  background-color: var(--primary-color);
+}
+
+.nature-gradient {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+}
+
+// Card styles with nature accents
+.nature-card {
+  border-left: 4px solid var(--primary-color);
+  background: linear-gradient(to right, rgba(0, 121, 107, 0.05) 0%, transparent 100%);
+}
+
+// Loading animation
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
 }
