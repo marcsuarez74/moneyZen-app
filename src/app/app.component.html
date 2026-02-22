@@ -1,0 +1,62 @@
+<div class="app-wrapper">
+  <mat-toolbar color="primary" class="main-toolbar">
+    <button mat-icon-button (click)="toggleSidenav()" aria-label="Menu" class="menu-button hide-desktop">
+      <mat-icon>menu</mat-icon>
+    </button>
+    
+    <span class="app-title" routerLink="/">MoneyZen</span>
+    
+    <span class="spacer"></span>
+    
+    <nav class="desktop-nav">
+      <a mat-button routerLink="/budget" routerLinkActive="active-link">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span class="hide-mobile">Budget</span>
+      </a>
+      <a mat-button routerLink="/projects" routerLinkActive="active-link">
+        <mat-icon>flag</mat-icon>
+        <span class="hide-mobile">Projets</span>
+      </a>
+      <a mat-button routerLink="/meals" routerLinkActive="active-link">
+        <mat-icon>restaurant_menu</mat-icon>
+        <span class="hide-mobile">Repas</span>
+      </a>
+    </nav>
+    
+    <button mat-icon-button (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Mode clair' : 'Mode sombre'">
+      <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="over" class="mobile-sidenav">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/budget" routerLinkActive="active" (click)="closeSidenav()">
+          <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
+          <span matListItemTitle>Mon Budget</span>
+        </a>
+        <a mat-list-item routerLink="/projects" routerLinkActive="active" (click)="closeSidenav()">
+          <mat-icon matListItemIcon>flag</mat-icon>
+          <span matListItemTitle>Mes Projets</span>
+        </a>
+        <a mat-list-item routerLink="/meals" routerLinkActive="active" (click)="closeSidenav()">
+          <mat-icon matListItemIcon>restaurant_menu</mat-icon>
+          <span matListItemTitle>Repas & Courses</span>
+        </a>
+        
+        <mat-divider></mat-divider>
+        
+        <a mat-list-item (click)="resetAllData(); closeSidenav()">
+          <mat-icon matListItemIcon color="warn">delete_forever</mat-icon>
+          <span matListItemTitle>Réinitialiser tout</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="main-content">
+      <div class="page-container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

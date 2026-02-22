@@ -1,0 +1,249 @@
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+  
+  .header-content h1 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 500;
+  }
+  
+  .subtitle {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.add-project-form {
+  margin-bottom: 32px;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.three-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Templates
+.templates-section {
+  margin-bottom: 32px;
+  
+  h3 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+  }
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.template-card {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  .template-image {
+    height: 140px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+  }
+  
+  &:hover .template-image img {
+    transform: scale(1.05);
+  }
+  
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .template-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 12px;
+    color: var(--primary-color);
+  }
+  
+  h4 {
+    margin: 0 0 8px 0;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+}
+
+// Projects Grid
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-card {
+  .project-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    
+    &.priority-high {
+      background: rgba(244, 67, 54, 0.1);
+      color: #f44336;
+    }
+    
+    &.priority-medium {
+      background: rgba(255, 152, 0, 0.1);
+      color: #ff9800;
+    }
+    
+    &.priority-low {
+      background: rgba(76, 175, 80, 0.1);
+      color: #4caf50;
+    }
+  }
+}
+
+.project-desc {
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.progress-section {
+  margin-bottom: 16px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.progress-percent {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.project-stats {
+  display: flex;
+  gap: 16px;
+  
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Empty State
+.empty-card {
+  text-align: center;
+  overflow: hidden;
+  
+  .empty-hero {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px;
+  }
+  
+  .empty-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    color: var(--primary-color);
+  }
+  
+  h2 {
+    margin: 0 0 8px 0;
+  }
+  
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    max-width: 400px;
+  }
+}
