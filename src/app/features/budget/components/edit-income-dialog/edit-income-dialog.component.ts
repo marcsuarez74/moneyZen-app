@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,8 +23,7 @@ import { UserFinancialData } from '../../../../models/budget.model';
     MatInputModule,
     MatSlideToggleModule,
     MatIconModule,
-    MatSliderModule,
-    CurrencyPipe
+    MatSliderModule
   ],
   template: `
     <h2 mat-dialog-title>

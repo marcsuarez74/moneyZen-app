@@ -2,90 +2,10 @@
 
 @include mat.core();
 
-// MoneyZen Theme - Teal/Sarcelle for serenity
-$moneyzen-primary: (
-  50: #e0f2f1,
-  100: #b2dfdb,
-  200: #80cbc4,
-  300: #4db6ac,
-  400: #26a69a,
-  500: #009688,
-  600: #00897b,
-  700: #00796b,
-  800: #00695c,
-  900: #004d40,
-  A100: #a7ffeb,
-  A200: #64ffda,
-  A400: #1de9b6,
-  A700: #00bfa5,
-  contrast: (
-    50: rgba(0,0,0,0.87),
-    100: rgba(0,0,0,0.87),
-    200: rgba(0,0,0,0.87),
-    300: rgba(0,0,0,0.87),
-    400: rgba(0,0,0,0.87),
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-    A100: rgba(0,0,0,0.87),
-    A200: rgba(0,0,0,0.87),
-    A400: rgba(0,0,0,0.87),
-    A700: white,
-  )
-);
+// Temporary: Use default light theme
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-// Light theme with MoneyZen colors
-$light-primary: mat.define-palette($moneyzen-primary);
-$light-accent: mat.define-palette(mat.$teal-palette, A200, A100, A400);
-$light-warn: mat.define-palette(mat.$orange-palette);
-
-$light-theme: mat.define-light-theme((
-  color: (
-    primary: $light-primary,
-    accent: $light-accent,
-    warn: $light-warn,
-  ),
-  typography: mat.define-typography-config(),
-));
-
-// Dark theme with MoneyZen colors
-$dark-primary: mat.define-palette($moneyzen-primary, 300, 200, 500);
-$dark-accent: mat.define-palette(mat.$teal-palette, A200, A100, A400);
-$dark-warn: mat.define-palette(mat.$orange-palette);
-
-$dark-theme: mat.define-dark-theme((
-  color: (
-    primary: $dark-primary,
-    accent: $dark-accent,
-    warn: $dark-warn,
-  ),
-  typography: mat.define-typography-config(),
-));
-
-// Apply light theme by default
-@include mat.all-component-themes($light-theme);
-
-// Apply dark theme when body has dark-theme class
-.dark-theme {
-  @include mat.all-component-colors($dark-theme);
-  
-  // CSS Variables for custom components
-  --primary-color: #4db6ac;
-  --primary-light: #1a4a44;
-  --primary-dark: #80cbc4;
-  --background: #121414;
-  --surface: #1a1d1d;
-  --surface-variant: #242928;
-  --text-primary: #ffffff;
-  --text-secondary: #b0c4bf;
-  --border: #334240;
-  --shadow: rgba(0, 0, 0, 0.3);
-  --card-bg: #1a1d1d;
-}
-
-// Light theme CSS variables
+// CSS Variables for custom components
 :root {
   --primary-color: #00796b;
   --primary-light: #b2dfdb;
@@ -98,6 +18,20 @@ $dark-theme: mat.define-dark-theme((
   --border: #d0e8e3;
   --shadow: rgba(0, 0, 0, 0.08);
   --card-bg: #ffffff;
+}
+
+.dark-theme {
+  --primary-color: #4db6ac;
+  --primary-light: #1a4a44;
+  --primary-dark: #80cbc4;
+  --background: #121414;
+  --surface: #1a1d1d;
+  --surface-variant: #242928;
+  --text-primary: #ffffff;
+  --text-secondary: #b0c4bf;
+  --border: #334240;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --card-bg: #1a1d1d;
 }
 
 // Global styles
