@@ -73,7 +73,7 @@ jobs:
       run: npm ci --legacy-peer-deps
     
     - name: Build for production
-      run: npm run build -- --configuration=production --base-href=/moneyZen-app/
+      run: npm run build -- --configuration=production --base-href=/moneyZen-app/app/
     
     - name: Prepare GitHub Pages structure
       run: |
