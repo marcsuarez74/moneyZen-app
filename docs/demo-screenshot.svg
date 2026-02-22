@@ -1,0 +1,24 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" rx="12" fill="#f0f7f5"/>
+  
+  <!-- Header mockup -->
+  <rect x="0" y="0" width="400" height="50" fill="#00796b"/>
+  <text x="20" y="32" fill="white" font-family="Arial" font-size="18" font-weight="500">MoneyZen</text>
+  
+  <!-- Dashboard cards -->
+  <rect x="20" y="70" width="170" height="80" rx="8" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="35" y="95" fill="#666" font-family="Arial" font-size="11">Revenus mensuels</text>
+  <text x="35" y="120" fill="#00796b" font-family="Arial" font-size="20" font-weight="bold">2 500 €</text>
+  
+  <rect x="210" y="70" width="170" height="80" rx="8" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="225" y="95" fill="#666" font-family="Arial" font-size="11">Reste à vivre</text>
+  <text x="225" y="120" fill="#4caf50" font-family="Arial" font-size="20" font-weight="bold">+ 800 €</text>
+  
+  <!-- Recovery plan mockup -->
+  <rect x="20" y="165" width="360" height="100" rx="8" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="35" y="190" fill="#e65100" font-family="Arial" font-size="14" font-weight="bold">Plan de redressement</text>
+  <text x="35" y="215" fill="#666" font-family="Arial" font-size="12">Budget disponible ce mois :</text>
+  <text x="35" y="240" fill="#00796b" font-family="Arial" font-size="24" font-weight="bold">450 €</text>
+  <rect x="280" y="210" width="80" height="35" rx="17" fill="#00796b"/>
+  <text x="305" y="232" fill="white" font-family="Arial" font-size="12">Voir le plan</text>
+</svg>
