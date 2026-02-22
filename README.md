@@ -50,12 +50,6 @@ Le cœur de l'application, détaillé plus bas dans ce document.
 - Calculs de faisabilité basés sur le budget mensuel réel
 - Notifications de jalons atteints
 
-### 🍽️ Planification des Repas
-- Génération automatique de menus hebdomadaires équilibrés
-- Calcul du budget alimentaire réel vs estimé
-- Liste de courses optimisée générée automatiquement
-- Intégration avec l'analyse budgétaire (catégorie alimentation)
-
 ## 🏦 Module Budget - Documentation Complète
 
 ### 📊 Règles Financières de Référence
