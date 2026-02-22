@@ -11,7 +11,12 @@
     "e2e": "cypress open",
     "e2e:ci": "cypress run",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
-    "build:prod": "ng build --configuration=production"
+    "build:prod": "ng build --configuration=production",
+    "release:patch": "node scripts/release.js patch",
+    "release:minor": "node scripts/release.js minor",
+    "release:major": "node scripts/release.js major",
+    "version:show": "node -e \"console.log(require('./package.json').version)\"",
+    "postbuild": "cp src/assets/version.json dist/budget-app/"
   },
   "private": true,
   "dependencies": {

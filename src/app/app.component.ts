@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { LocalStorageService } from './services/local-storage.service';
+import { VersionDisplayComponent } from './shared/components/version-display/version-display.component';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,8 @@ import { LocalStorageService } from './services/local-storage.service';
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    VersionDisplayComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

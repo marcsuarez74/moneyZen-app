@@ -2,3 +2,4 @@ export { StepIndicatorComponent, Step } from './step-indicator/step-indicator.co
 export { FormCardComponent } from './form-card/form-card.component';
 export { ExpenseItemComponent } from './expense-item/expense-item.component';
 export { ExpenseFormComponent } from './expense-form/expense-form.component';
+export { VersionDisplayComponent } from './version-display/version-display.component';

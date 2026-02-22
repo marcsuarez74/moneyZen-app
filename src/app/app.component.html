@@ -20,6 +20,8 @@
 
     </nav>
     
+    <app-version-display></app-version-display>
+
     <button mat-icon-button (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Mode clair' : 'Mode sombre'">
       <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>

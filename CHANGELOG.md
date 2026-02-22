@@ -1,0 +1,105 @@
+# Changelog
+
+Toutes les modifications notables de ce projet seront documentées dans ce fichier.
+
+Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
+et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
+
+## [Unreleased]
+
+### Added
+- Système de release et changelog automatisé
+- Composant VersionDisplay pour afficher la version dans l'application
+
+### Changed
+- Position du badge de dépenses dans le header (top: -16px, right: -42px)
+
+## [1.0.0] - 2025-02-23
+
+### Added
+- Refonte complète de l'architecture avec pattern Smart/Dumb Components
+- Nouveau composant DashboardHeader pour l'en-tête du tableau de bord
+- Extraction du WelcomeCardComponent pour l'état vide
+- Séparation des templates inline vers fichiers HTML/SCSS dédiés
+- Conversion complète de la syntaxe Angular legacy (*ngIf, *ngFor) vers la nouvelle syntaxe (@if, @for)
+- Barils d'export (index.ts) pour des imports propres
+- Build optimisé sans erreurs de budget
+
+### Changed
+- Mise à jour vers Angular 19 avec détection de changements sans Zone.js
+- Thème MoneyZen avec teal (#00796b) et vert (#4caf50)
+- Support du mode sombre avec variables CSS
+- Structure des composants budget suivant les meilleures pratiques Angular
+
+### Fixed
+- Avertissements de budget dans les composants
+- Découvert des templates et styles dans des fichiers séparés
+- Imports inutilisés (RouterLink) supprimés
+
+## [0.9.0] - 2025-02-20
+
+### Added
+- Plan de redressement pour les découverts
+- Calculatrice de paie avec infos de budget quotidien
+- Système de projets d'épargne avec suivi de progression
+- Recommandations personnalisées basées sur l'analyse du budget
+- Visualisations graphiques des dépenses
+
+### Changed
+- Amélioration de l'UX dans le setup des dépenses avec formulaire manuel
+- Refonte du processus d'ajout de dépenses
+
+### Fixed
+- Correction des liens GitHub pour le déploiement
+- Ajustement du base-href pour GitHub Pages
+- Corrections de styles des boutons de navigation
+
+## [0.8.0] - 2025-02-15
+
+### Added
+- Analyse complète du budget avec métriques de santé
+- Insights prioritaires pour optimiser les finances
+- Scénarios de projection (conservateur, réaliste, optimisé)
+- Stockage local des données (100% confidentiel)
+
+### Changed
+- Migration vers Angular Material v19 avec M2 theming
+- Optimisation du bundle (--configuration=production)
+
+### Fixed
+- Avertissements SASS deprecation
+- Correction des couleurs Material 3
+
+## [0.7.0] - 2025-02-10
+
+### Added
+- Structure de base de l'application Angular 17+
+- Composants Material Design
+- Store NgRx pour la gestion d'état
+- Configuration CI/CD avec GitHub Actions
+
+### Tech Stack
+- Angular 19 (zoneless)
+- Angular Material 19
+- NgRx Signals & Store
+- TypeScript 5.8
+- SCSS avec architecture 7-1 pattern
+
+---
+
+## Guide de versioning
+
+Nous utilisons le [versionnage sémantique](https://semver.org/lang/fr/) :
+
+- **MAJEUR** (X.y.z) : Changements incompatibles avec les versions précédentes
+- **MINEUR** (x.Y.z) : Fonctionnalités ajoutées de manière rétrocompatible
+- **PATCH** (x.y.Z) : Corrections de bugs rétrocompatibles
+
+## Types de modifications
+
+- **Added** : Nouvelles fonctionnalités
+- **Changed** : Modifications de fonctionnalités existantes
+- **Deprecated** : Fonctionnalités obsolètes (seront supprimées)
+- **Removed** : Fonctionnalités supprimées
+- **Fixed** : Corrections de bugs
+- **Security** : Corrections de vulnérabilités de sécurité
