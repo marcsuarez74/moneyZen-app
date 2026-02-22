@@ -1,64 +1,165 @@
-name: Create Release
+name: 🚀 Release
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
-  create-release:
+  # Vérifications pré-release
+  validate:
+    name: ✅ Validation
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Build application
-      run: npm run build:prod
+      - name: Lint
+        run: npm run lint
 
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-        body: |
-          ## 🚀 MoneyZen ${{ github.ref }}
+      - name: Unit tests
+        run: npm run test:ci
 
-          ### Installation
+      - name: Build application
+        run: npm run build:prod
 
-          Cette application est une PWA (Progressive Web App) hébergée sur GitHub Pages.
+  # Création de la release
+  release:
+    name: 📝 Create Release
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-          **Accès direct :** https://marcsuarez.github.io/budget-app/
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-          ### Notes de version
+      - name: Install dependencies
+        run: npm ci
 
-          Voir le [CHANGELOG.md](./CHANGELOG.md) pour les détails complets.
+      - name: Build application
+        run: npm run build:prod
 
-          ### 📱 Fonctionnalités
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-          - 💰 Suivi budgétaire complet
-          - 📊 Analyse et recommandations
-          - 🎯 Plan de redressement
-          - 🏆 Projets d'épargne
-          - 🔒 100% offline et confidentiel
+      - name: Extract changelog section
+        id: changelog
+        run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          CHANGELOG_CONTENT=$(awk "/^## \[$VERSION\]/{flag=1;next}/^## \[/{flag=0}flag" CHANGELOG.md)
+          
+          if [ -z "$CHANGELOG_CONTENT" ]; then
+            CHANGELOG_CONTENT="Voir le [CHANGELOG.md](./CHANGELOG.md) pour les détails complets."
+          fi
+          
+          # Escape newlines for GitHub Actions
+          CHANGELOG_CONTENT="${CHANGELOG_CONTENT//'%'/'%25'}"
+          CHANGELOG_CONTENT="${CHANGELOG_CONTENT//$'\n'/'%0A'}"
+          CHANGELOG_CONTENT="${CHANGELOG_CONTENT//$'\r'/'%0D'}"
+          
+          echo "CONTENT=$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
 
-          ### Compatibility
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: 🚀 MoneyZen v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## 🎉 Nouvelle version v${{ steps.get_version.outputs.VERSION }}
 
-          - Angular 19
-          - TypeScript 5.8+
-          - Navigateurs modernes (Chrome, Firefox, Safari, Edge)
+            ${{ steps.changelog.outputs.CONTENT }}
+
+            ---
+
+            ### 📦 Installation
+
+            Cette application est une PWA (Progressive Web App) hébergée sur GitHub Pages.
+
+            **🌐 Accès direct :** https://marcsuarez74.github.io/moneyZen-app/
+
+            ### 💾 Téléchargements
+
+            - 📱 **Application Web** : [Voir la démo en ligne](https://marcsuarez74.github.io/moneyZen-app/)
+            - 📦 **Code source** : Disponible ci-dessous
+
+            ### 📱 Fonctionnalités principales
+
+            - 💰 Suivi budgétaire complet et intelligent
+            - 📊 Analyse et recommandations personnalisées
+            - 🎯 Plan de redressement pour découverts bancaires
+            - 🏆 Gestion de projets d'épargne
+            - 🔄 Calcul automatique du budget quotidien
+            - 🔒 100% offline et confidentiel (données locales)
+
+            ### 🛠️ Stack technique
+
+            - Angular 19 (zoneless)
+            - TypeScript 5.8+
+            - Angular Material
+            - NgRx Signals
+
+            ### 📋 Exigences
+
+            - Navigateur moderne (Chrome, Firefox, Safari, Edge)
+            - JavaScript activé
+            - LocalStorage disponible
+
+            ---
+
+            <sub>Release générée automatiquement le ${{ github.event.head_commit.timestamp }}</sub>
+          draft: false
+          prerelease: ${{ contains(github.ref, '-') }}
+          generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Déploiement (optionnel - si vous voulez déployer automatiquement)
+  deploy:
+    name: 🚀 Deploy
+    needs: release
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/tags/v*' && !contains(github.ref, '-')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for production
+        run: npm run build:prod
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/budget-app/browser
+          cname: |-
+            # Si vous avez un domaine personnalisé, décommentez et modifiez:
+            # marcsuarez74.github.io
