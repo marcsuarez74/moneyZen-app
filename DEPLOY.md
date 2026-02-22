@@ -25,7 +25,7 @@ cd /Users/marcsuarez/Documents/PROJET_DEV/budget-app
 git init
 
 # Ajouter le remote (remplacez USERNAME par votre pseudo)
-git remote add origin https://github.com/USERNAME/moneyzen.git
+git remote add origin https://github.com/USERNAME/moneyZen-app.git
 
 # Renommer la branche
 git branch -M main
@@ -54,7 +54,7 @@ Le workflow GitHub Actions (`.github/workflows/deploy.yml`) se déclenchera auto
 ### Le workflow fait :
 1. Checkout du code
 2. Installation des dépendances
-3. Build de l'application Angular avec `--base-href /moneyzen/`
+3. Build de l'application Angular avec `--base-href /moneyZen-app/`
 4. Copie de la landing page (docs/) + build Angular
 5. Déploiement sur GitHub Pages
 
@@ -62,8 +62,8 @@ Le workflow GitHub Actions (`.github/workflows/deploy.yml`) se déclenchera auto
 
 Après le déploiement (2-3 minutes), votre site sera accessible :
 
-- **Landing Page** : `https://USERNAME.github.io/moneyzen/`
-- **Application** : `https://USERNAME.github.io/moneyzen/app/`
+- **Landing Page** : `https://USERNAME.github.io/moneyZen-app/`
+- **Application** : `https://USERNAME.github.io/moneyZen-app/app/`
 
 > Remplacez `USERNAME` par votre nom d'utilisateur GitHub
 
