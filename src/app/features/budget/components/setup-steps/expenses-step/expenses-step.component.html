@@ -1,0 +1,50 @@
+<app-form-card
+  title="Étape 2 : Vos charges"
+  subtitle="Listez toutes vos dépenses régulières pour un budget précis"
+  icon="receipt_long"
+  [showBackButton]="true"
+  [nextButtonLabel]="'Terminer'"
+  nextButtonIcon="check"
+  (backClick)="onPrevious()"
+  (nextClick)="onNext()"
+>
+  <div class="expenses-content">
+    <!-- Liste des dépenses actuelles -->
+    <div class="current-expenses" *ngIf="expensesArray().length > 0">
+      <h3>Vos dépenses ({{ expensesArray().length }})</h3>
+      <div class="expenses-list">
+        @for (expenseGroup of expensesArray().controls; track $index) {
+          <app-expense-item
+            [expense]="expenseGroup.value"
+            [icon]="getIcon(expenseGroup.value.category)"
+            (remove)="onRemoveExpense($index)"
+          ></app-expense-item>
+        }
+      </div>
+    </div>
+
+    <!-- Message si aucune dépense -->
+    <div class="no-expenses" *ngIf="expensesArray().length === 0">
+      <mat-icon>info</mat-icon>
+      <p>Aucune dépense ajoutée. Utilisez les suggestions ci-dessous pour commencer.</p>
+    </div>
+
+    <!-- Dépenses suggérées -->
+    <div class="suggested-expenses">
+      <h3>Dépenses suggérées</h3>
+      <div class="suggestions-list">
+        @for (expense of suggestedExpenses(); track $index) {
+          <button 
+            mat-stroked-button 
+            class="suggestion-chip"
+            (click)="onAddSuggested(expense)"
+          >
+            <mat-icon>{{ getIcon(expense.category) }}</mat-icon>
+            {{ expense.name }}
+            <span class="amount">{{ expense.amount }}€</span>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</app-form-card>

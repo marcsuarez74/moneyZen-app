@@ -1,0 +1,23 @@
+<div class="step-indicator">
+  @for (step of steps(); track $index) {
+    <div 
+      class="step" 
+      [class.active]="currentStep() === $index + 1"
+      [class.completed]="step.completed"
+      [class.clickable]="$index + 1 < currentStep()"
+      (click)="onStepClick($index)"
+    >
+      <div class="step-circle">
+        @if (step.completed && currentStep() > $index + 1) {
+          <mat-icon>check</mat-icon>
+        } @else {
+          <mat-icon>{{ step.icon }}</mat-icon>
+        }
+      </div>
+      <span class="step-label">{{ step.label }}</span>
+    </div>
+    @if (!$last) {
+      <div class="step-connector" [class.completed]="step.completed"></div>
+    }
+  }
+</div>

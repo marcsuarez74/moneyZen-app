@@ -1,0 +1,33 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>{{ icon() }}</mat-icon>
+    <mat-card-title>{{ title() }}</mat-card-title>
+    @if (subtitle()) {
+      <mat-card-subtitle>{{ subtitle() }}</mat-card-subtitle>
+    }
+  </mat-card-header>
+  
+  <mat-card-content>
+    <ng-content></ng-content>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    @if (showBackButton()) {
+      <button mat-button (click)="backClick.emit()">
+        <mat-icon>arrow_back</mat-icon>
+        Retour
+      </button>
+    }
+    @if (showNextButton()) {
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="nextClick.emit()"
+        [disabled]="nextButtonDisabled()"
+      >
+        {{ nextButtonLabel() }}
+        <mat-icon>{{ nextButtonIcon() }}</mat-icon>
+      </button>
+    }
+  </mat-card-actions>
+</mat-card>

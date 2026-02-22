@@ -1,0 +1,33 @@
+<div class="setup-container">
+  <div class="setup-header">
+    <h1 class="page-title">Configuration du budget</h1>
+    <p class="page-desc">Définissez vos revenus et vos dépenses pour obtenir une analyse personnalisée.</p>
+  </div>
+
+  <app-step-indicator
+    [steps]="steps"
+    [currentStep]="currentStep"
+    (stepChange)="onStepChange($event)"
+  ></app-step-indicator>
+
+  <div class="setup-content">
+    @if (currentStep === 1) {
+      <app-financial-step
+        [form]="financialForm"
+        [isOverdrawn]="isOverdrawn()"
+        (nextStep)="onFinancialNext()"
+      ></app-financial-step>
+    }
+
+    @if (currentStep === 2) {
+      <app-expenses-step
+        [expensesArray]="expensesArray"
+        [suggestedExpenses]="suggestedExpenses"
+        (previousStep)="onExpensesPrevious()"
+        (nextStep)="onExpensesNext()"
+        (addExpense)="onAddExpense($event)"
+        (removeExpense)="onRemoveExpense($event)"
+      ></app-expenses-step>
+    }
+  </div>
+</div>

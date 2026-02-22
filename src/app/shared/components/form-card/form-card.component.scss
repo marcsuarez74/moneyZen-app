@@ -1,0 +1,29 @@
+.form-card {
+  margin-bottom: 24px;
+  
+  mat-card-header {
+    padding-bottom: 16px;
+  }
+  
+  mat-card-content {
+    padding-top: 16px;
+  }
+  
+  mat-card-actions {
+    padding: 16px;
+    gap: 12px;
+  }
+}
+
+mat-icon[mat-card-avatar] {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  color: white;
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

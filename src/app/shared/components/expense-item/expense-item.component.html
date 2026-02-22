@@ -1,0 +1,27 @@
+<div class="expense-item">
+  <div class="expense-icon">
+    <mat-icon>{{ icon() }}</mat-icon>
+  </div>
+  
+  <div class="expense-info">
+    <span class="expense-name">{{ expense().name }}</span>
+    <mat-chip-set>
+      <mat-chip>{{ expense().frequency === 'monthly' ? 'Mensuel' : 'Annuel' }}</mat-chip>
+    </mat-chip-set>
+  </div>
+  
+  <span class="expense-amount">{{ expense().monthlyEquivalent | currency:'EUR' }}/mois</span>
+  
+  <div class="expense-actions">
+    @if (editable()) {
+      <button mat-icon-button (click)="edit.emit(expense())" matTooltip="Modifier">
+        <mat-icon>edit</mat-icon>
+      </button>
+    }
+    @if (removable()) {
+      <button mat-icon-button color="warn" (click)="remove.emit(expense())" matTooltip="Supprimer">
+        <mat-icon>delete</mat-icon>
+      </button>
+    }
+  </div>
+</div>
