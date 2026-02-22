@@ -1,6 +1,6 @@
 import { computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { Expense, UserFinancialData, BudgetSummary, BudgetOptimization } from '../models/budget.model';
+import { Expense, UserFinancialData, BudgetSummary } from '../models/budget.model';
 
 export interface BudgetState {
   userData: UserFinancialData | null;

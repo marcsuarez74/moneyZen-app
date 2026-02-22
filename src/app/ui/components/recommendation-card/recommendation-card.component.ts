@@ -1,10 +1,10 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
-import { Recommendation, ExpenseCategory } from '../../../models/budget.model';
+import { Recommendation } from '../../../models/budget.model';
 
 @Component({
   selector: 'app-recommendation-card',

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -31,7 +31,7 @@ import { UserFinancialData, Expense, EXPENSE_CATEGORIES } from '../../../../mode
   templateUrl: './budget-setup.component.html',
   styleUrls: ['./budget-setup.component.scss']
 })
-export class BudgetSetupComponent {
+export class BudgetSetupComponent implements OnInit {
   private fb = inject(FormBuilder);
   private budgetStore = inject(BudgetStore);
   private storageService = inject(LocalStorageService);
