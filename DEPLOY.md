@@ -24,8 +24,8 @@ cd /Users/marcsuarez/Documents/PROJET_DEV/budget-app
 # Initialiser Git (si pas déjà fait)
 git init
 
-# Ajouter le remote (remplacez USERNAME par votre pseudo)
-git remote add origin https://github.com/USERNAME/moneyZen-app.git
+# Ajouter le remote (remplacez marcsuarez74 par votre pseudo)
+git remote add origin https://github.com/marcsuarez74/moneyZen-app.git
 
 # Renommer la branche
 git branch -M main
@@ -62,24 +62,24 @@ Le workflow GitHub Actions (`.github/workflows/deploy.yml`) se déclenchera auto
 
 Après le déploiement (2-3 minutes), votre site sera accessible :
 
-- **Landing Page** : `https://USERNAME.github.io/moneyZen-app/`
-- **Application** : `https://USERNAME.github.io/moneyZen-app/app/`
+- **Landing Page** : `https://marcsuarez74.github.io/moneyZen-app/`
+- **Application** : `https://marcsuarez74.github.io/moneyZen-app/app/`
 
-> Remplacez `USERNAME` par votre nom d'utilisateur GitHub
+> Remplacez `marcsuarez74` par votre nom d'utilisateur GitHub
 
 ## 📝 Personnalisation
 
 ### Modifier la landing page
 
 Éditez le fichier `docs/index.html` :
-- Remplacez `USERNAME` par votre pseudo GitHub (3 occurrences)
+- Remplacez `marcsuarez74` par votre pseudo GitHub (3 occurrences)
 - Personnalisez les textes, couleurs, etc.
 
 ### Modifier l'URL de base
 
 Si vous changez le nom du repo, modifiez dans :
 1. `.github/workflows/deploy.yml` : ligne `--base-href /NOM_REPO/`
-2. `docs/index.html` : tous les liens `https://github.com/USERNAME/NOM_REPO`
+2. `docs/index.html` : tous les liens `https://github.com/marcsuarez74/NOM_REPO`
 
 ## 🔍 Troubleshooting
 
