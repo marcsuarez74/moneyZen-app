@@ -361,6 +361,12 @@ src/app/features/budget/
 └── budget-feature.component.ts   # Entry point
 ```
 
+## 🌐 Démo en ligne
+
+**Essayez l'application maintenant !** 👉 [https://marcsuarez74.github.io/moneyZen-app/](https://marcsuarez74.github.io/moneyZen-app/)
+
+L'application est une PWA (Progressive Web App) fonctionnant directement dans votre navigateur.
+
 ## 🚀 Installation et Démarrage
 
 ### Prérequis

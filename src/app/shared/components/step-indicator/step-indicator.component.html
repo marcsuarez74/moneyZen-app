@@ -1,12 +1,17 @@
 <div class="step-indicator">
   @for (step of steps(); track $index) {
-    <div 
-      class="step" 
-      [class.active]="currentStep() === $index + 1"
-      [class.completed]="step.completed"
-      [class.clickable]="$index + 1 < currentStep()"
-      (click)="onStepClick($index)"
-    >
+     <div
+       class="step"
+       [class.active]="currentStep() === $index + 1"
+       [class.completed]="step.completed"
+       [class.clickable]="$index + 1 < currentStep()"
+       (click)="onStepClick($index)"
+       (keydown.enter)="onStepClick($index)"
+       (keydown.space)="onStepClick($index); $event.preventDefault()"
+       [attr.tabindex]="$index + 1 < currentStep() ? 0 : -1"
+       [attr.role]="$index + 1 < currentStep() ? 'button' : null"
+       [attr.aria-label]="'Étape ' + ($index + 1) + ' : ' + step.label"
+     >
       <div class="step-circle">
         @if (step.completed && currentStep() > $index + 1) {
           <mat-icon>check</mat-icon>
