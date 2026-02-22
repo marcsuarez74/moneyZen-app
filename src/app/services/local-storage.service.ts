@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BudgetState } from '../store/budget.store';
 import { ProjectState } from '../store/project.store';
-import { MealState } from '../store/meal.store';
 
 const STORAGE_KEYS = {
   BUDGET: 'budget_data',
   PROJECTS: 'projects_data',
-  MEALS: 'meals_data',
   THEME: 'theme_preference'
 } as const;
 
@@ -31,14 +29,6 @@ export class LocalStorageService {
     return this.loadFromStorage<ProjectState>(STORAGE_KEYS.PROJECTS);
   }
 
-  saveMealState(state: MealState): void {
-    this.saveToStorage(STORAGE_KEYS.MEALS, state);
-  }
-
-  loadMealState(): MealState | null {
-    return this.loadFromStorage<MealState>(STORAGE_KEYS.MEALS);
-  }
-
   saveThemePreference(isDark: boolean): void {
     localStorage.setItem(STORAGE_KEYS.THEME, JSON.stringify(isDark));
   }
@@ -48,14 +38,9 @@ export class LocalStorageService {
     return value ? JSON.parse(value) : false;
   }
 
-  clearAll(): void {
-    Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
-  }
-
   private saveToStorage<T>(key: string, data: T): void {
     try {
-      const serialized = JSON.stringify(data);
-      localStorage.setItem(key, serialized);
+      localStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
       console.error(`Error saving to localStorage [${key}]:`, error);
     }
@@ -63,11 +48,17 @@ export class LocalStorageService {
 
   private loadFromStorage<T>(key: string): T | null {
     try {
-      const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : null;
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) as T : null;
     } catch (error) {
       console.error(`Error loading from localStorage [${key}]:`, error);
       return null;
     }
+  }
+
+  clearAll(): void {
+    localStorage.removeItem(STORAGE_KEYS.BUDGET);
+    localStorage.removeItem(STORAGE_KEYS.PROJECTS);
+    localStorage.removeItem(STORAGE_KEYS.THEME);
   }
 }

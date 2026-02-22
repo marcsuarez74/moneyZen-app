@@ -9,9 +9,5 @@ export const routes: Routes = [
   {
     path: 'projects',
     loadChildren: () => import('./features/projects/projects.routes').then(m => m.projectsRoutes)
-  },
-  {
-    path: 'meals',
-    loadChildren: () => import('./features/meals/meals.routes').then(m => m.mealsRoutes)
   }
 ];
