@@ -1,0 +1,36 @@
+<app-form-card
+  title="Étape 1 : Vos revenus"
+  subtitle="Commençons par votre situation financière de base"
+  icon="account_balance_wallet"
+  [showBackButton]="false"
+  [nextButtonDisabled]="!form().valid"
+  (nextClick)="onNext()"
+>
+  <div [formGroup]="form()" class="form-content">
+    <div class="form-grid">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Salaire net mensuel</mat-label>
+        <input matInput type="number" formControlName="salary" placeholder="3000">
+        <span matSuffix>€</span>
+        <mat-hint>Votre revenu net après impôts et cotisations</mat-hint>
+        <mat-error *ngIf="form().get('salary')?.hasError('required')">
+          Le salaire est requis
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Solde de vos comptes actuel</mat-label>
+        <input matInput type="number" formControlName="accountBalance" placeholder="0">
+        <span matSuffix>€</span>
+        <mat-hint>Somme de tous vos comptes (positif ou négatif si découvert)</mat-hint>
+      </mat-form-field>
+    </div>
+
+    @if (isOverdrawn()) {
+      <div class="alert-box warning">
+        <mat-icon color="warn">warning</mat-icon>
+        <span>Vous êtes actuellement à découvert. Nous vous aiderons à remettre vos comptes en ordre.</span>
+      </div>
+    }
+  </div>
+</app-form-card>

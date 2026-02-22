@@ -1,0 +1,31 @@
+.form-content {
+  padding: 16px 0;
+}
+
+.form-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.alert-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 24px;
+  
+  &.warning {
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    color: #e65100;
+  }
+  
+  mat-icon {
+    flex-shrink: 0;
+  }
+}

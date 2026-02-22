@@ -1,0 +1,58 @@
+.expense-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-color);
+  margin-bottom: 8px;
+}
+
+.expense-icon {
+  background: var(--surface-variant);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  mat-icon {
+    color: var(--primary-color);
+  }
+}
+
+.expense-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.expense-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.expense-amount {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 15px;
+}
+
+.expense-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.expense-item:hover .expense-actions {
+  opacity: 1;
+}
+
+mat-chip {
+  font-size: 11px;
+  height: 20px;
+}
