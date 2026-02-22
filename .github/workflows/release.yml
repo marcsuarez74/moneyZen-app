@@ -1,0 +1,64 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build:prod
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+        body: |
+          ## 🚀 MoneyZen ${{ github.ref }}
+
+          ### Installation
+
+          Cette application est une PWA (Progressive Web App) hébergée sur GitHub Pages.
+
+          **Accès direct :** https://marcsuarez.github.io/budget-app/
+
+          ### Notes de version
+
+          Voir le [CHANGELOG.md](./CHANGELOG.md) pour les détails complets.
+
+          ### 📱 Fonctionnalités
+
+          - 💰 Suivi budgétaire complet
+          - 📊 Analyse et recommandations
+          - 🎯 Plan de redressement
+          - 🏆 Projets d'épargne
+          - 🔒 100% offline et confidentiel
+
+          ### Compatibility
+
+          - Angular 19
+          - TypeScript 5.8+
+          - Navigateurs modernes (Chrome, Firefox, Safari, Edge)
