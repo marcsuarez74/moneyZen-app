@@ -1,0 +1,150 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Mes Projets d'Épargne</h1>
+      <p class="subtitle">Planifiez et suivez vos objectifs financiers</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="showForm = !showForm">
+      <mat-icon>add</mat-icon>
+      Nouveau projet
+    </button>
+  </div>
+
+  <!-- Add Project Form -->
+  <mat-card class="form-card" *ngIf="showForm">
+    <mat-card-header>
+      <mat-card-title>Créer un nouveau projet</mat-card-title>
+    </mat-card-header>
+    <mat-card-content [formGroup]="projectForm">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom du projet</mat-label>
+          <input matInput formControlName="name" placeholder="Ex: Voyage au Japon">
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="2" placeholder="Objectifs et détails..."></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row three-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Catégorie</mat-label>
+          <mat-select formControlName="category">
+            <mat-option *ngFor="let cat of projectCategories" [value]="cat.value">
+              {{ cat.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Objectif (€)</mat-label>
+          <input matInput type="number" formControlName="targetAmount" placeholder="5000">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Priorité</mat-label>
+          <mat-select formControlName="priority">
+            <mat-option value="high">Haute</mat-option>
+            <mat-option value="medium">Moyenne</mat-option>
+            <mat-option value="low">Basse</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row two-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Montant déjà épargné (€)</mat-label>
+          <input matInput type="number" formControlName="currentAmount" placeholder="0">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contribution mensuelle (€)</mat-label>
+          <input matInput type="number" formControlName="monthlyContribution" placeholder="200">
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="showForm = false">Annuler</button>
+      <button mat-raised-button color="primary" (click)="addProject()" [disabled]="!projectForm.valid">
+        Créer
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Templates Section -->
+  <div class="templates-section" *ngIf="projectStore.projects().length === 0 && !showForm">
+    <h3>Modèles rapides</h3>
+    <div class="templates-grid">
+      <mat-card class="template-card" *ngFor="let template of projectTemplates" (click)="applyTemplate(template)">
+        <div class="template-image">
+          <img [src]="getTemplateImage(template.category)" [alt]="template.name">
+        </div>
+        <mat-card-content>
+          <mat-icon class="template-icon">{{ getCategoryIcon(template.category) }}</mat-icon>
+          <h4>{{ template.name }}</h4>
+          <p>{{ template.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Projects Grid -->
+  <div class="projects-grid" *ngIf="projectStore.projects().length > 0">
+    <mat-card class="project-card" *ngFor="let project of projectStore.projects()">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="project-icon priority-{{ project.priority }}">
+          {{ getCategoryIcon(project.category) }}
+        </mat-icon>
+        <mat-card-title>{{ project.name }}</mat-card-title>
+        <mat-card-subtitle>{{ project.category | titlecase }}</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <p class="project-desc">{{ project.description }}</p>
+        
+        <div class="progress-section">
+          <div class="progress-info">
+            <span>{{ project.currentAmount | currency:'EUR' }}</span>
+            <span>/ {{ project.targetAmount | currency:'EUR' }}</span>
+          </div>
+          <mat-progress-bar mode="determinate" [value]="getProgress(project)"></mat-progress-bar>
+          <div class="progress-percent">{{ getProgress(project) }}%</div>
+        </div>
+
+        <div class="project-stats">
+          <div class="stat">
+            <mat-icon>payments</mat-icon>
+            <span>{{ project.monthlyContribution | currency:'EUR' }}/mois</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="warn" (click)="deleteProject(project.id)">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <mat-card class="empty-card" *ngIf="projectStore.projects().length === 0 && !showForm">
+    <div class="empty-hero">
+      <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600&auto=format&fit=crop" alt="Épargne">
+    </div>
+    <mat-card-content>
+      <mat-icon class="empty-icon">flag</mat-icon>
+      <h2>Aucun projet</h2>
+      <p>Créez votre premier projet d'épargne pour commencer à planifier votre avenir financier.</p>
+      <button mat-raised-button color="primary" (click)="showForm = true">
+        <mat-icon>add</mat-icon>
+        Créer un projet
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>

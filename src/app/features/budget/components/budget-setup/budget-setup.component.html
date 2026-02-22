@@ -1,0 +1,142 @@
+<div class="setup-page">
+  <h1 class="page-title">Configuration du budget</h1>
+  <p class="page-desc">Définissez vos revenus et vos dépenses pour obtenir une analyse personnalisée.</p>
+
+  <!-- Step 1: Revenue -->
+  <mat-card class="setup-section" *ngIf="currentStep === 1">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>account_balance_wallet</mat-icon>
+      <mat-card-title>Étape 1 : Vos revenus</mat-card-title>
+      <mat-card-subtitle>Commençons par votre situation financière de base</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content [formGroup]="financialForm">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Salaire net mensuel</mat-label>
+          <input matInput type="number" formControlName="salary" placeholder="3000">
+          <span matSuffix>€</span>
+          <mat-hint>Votre revenu net après impôts et cotisations</mat-hint>
+          <mat-error *ngIf="financialForm.get('salary')?.hasError('required')">
+            Le salaire est requis
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Solde de vos comptes actuel</mat-label>
+          <input matInput type="number" formControlName="accountBalance" placeholder="0">
+          <span matSuffix>€</span>
+          <mat-hint>Somme de tous vos comptes (positif ou négatif si découvert)</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="info-box" *ngIf="isOverdrawn()">
+        <mat-icon color="warn">warning</mat-icon>
+        <span>Vous êtes actuellement à découvert. Nous vous aiderons à remettre vos comptes en ordre.</span>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" (click)="goToStep(2)" [disabled]="!financialForm.valid">
+        Continuer
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Step 2: Expenses -->
+  <mat-card class="setup-section" *ngIf="currentStep === 2">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>receipt_long</mat-icon>
+      <mat-card-title>Étape 2 : Vos dépenses mensuelles</mat-card-title>
+      <mat-card-subtitle>Ajoutez toutes vos charges récurrentes</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content [formGroup]="expensesForm">
+      <!-- Quick Add Chips -->
+      <div class="quick-add-section">
+        <p class="section-label">Ajout rapide (cliquez pour ajouter) :</p>
+        <div class="chips-container">
+          <button mat-stroked-button 
+                  *ngFor="let expense of suggestedExpenses" 
+                  (click)="addSuggestedExpense(expense)"
+                  class="expense-chip">
+            <mat-icon>{{ getCategoryIcon(expense.category) }}</mat-icon>
+            {{ expense.name }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Expenses List -->
+      <div class="expenses-list" formArrayName="expenses">
+        <div class="expense-row" *ngFor="let expense of expensesArray.controls; let i = index" [formGroupName]="i">
+          <div class="row-number">{{ i + 1 }}</div>
+          
+          <mat-form-field appearance="outline" class="expense-name">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" placeholder="Ex: Loyer">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="expense-category">
+            <mat-label>Catégorie</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let cat of expenseCategories" [value]="cat.value">
+                <mat-icon>{{ cat.icon }}</mat-icon>
+                {{ cat.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="expense-amount">
+            <mat-label>Montant</mat-label>
+            <input matInput type="number" formControlName="amount" placeholder="0">
+            <span matSuffix>€</span>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="expense-frequency">
+            <mat-label>Fréq.</mat-label>
+            <mat-select formControlName="frequency">
+              <mat-option value="monthly">Mois</mat-option>
+              <mat-option value="quarterly">Trim.</mat-option>
+              <mat-option value="yearly">An</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-icon-button color="warn" (click)="removeExpense(i)" matTooltip="Supprimer">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <button mat-stroked-button color="primary" (click)="addExpense()" class="add-btn">
+        <mat-icon>add</mat-icon>
+        Ajouter une dépense personnalisée
+      </button>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button (click)="goToStep(1)">
+        <mat-icon>arrow_back</mat-icon>
+        Retour
+      </button>
+      <button mat-raised-button color="primary" (click)="saveBudget()" [disabled]="expensesArray.length === 0">
+        <mat-icon>save</mat-icon>
+        Sauvegarder
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Summary Card (visible on step 2) -->
+  <mat-card class="summary-card" *ngIf="currentStep === 2 && expensesArray.length > 0">
+    <mat-card-content>
+      <div class="summary-row">
+        <span>Total dépenses mensuelles :</span>
+        <strong>{{ calculateTotalExpenses() | currency:'EUR' }}</strong>
+      </div>
+      <div class="summary-row" [class.positive]="calculateRemaining() > 0" [class.negative]="calculateRemaining() < 0">
+        <span>Reste à vivre estimé :</span>
+        <strong>{{ calculateRemaining() | currency:'EUR' }}</strong>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
