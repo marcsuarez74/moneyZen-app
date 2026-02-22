@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +19,8 @@ import { BudgetInsightsComponent } from '../budget-insights/budget-insights.comp
 import { DebtRecoveryPlanComponent, RecoveryPlanData } from '../debt-recovery-plan/debt-recovery-plan.component';
 import { EditIncomeDialogComponent } from '../edit-income-dialog/edit-income-dialog.component';
 import { EditExpensesDialogComponent } from '../edit-expenses-dialog/edit-expenses-dialog.component';
+import { DashboardHeaderComponent } from '../dashboard-header/dashboard-header.component';
+import { WelcomeCardComponent } from '../welcome-card/welcome-card.component';
 import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
 
 @Component({
@@ -27,7 +28,6 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -40,135 +40,29 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
     ExpenseBreakdownComponent,
     BudgetRecommendationsComponent,
     BudgetInsightsComponent,
-    DebtRecoveryPlanComponent
+    DebtRecoveryPlanComponent,
+    DashboardHeaderComponent,
+    WelcomeCardComponent
   ],
   template: `
     <div class="page-container">
-      <!-- Header Premium avec info paie -->
-      <header class="dashboard-header" [class.negative]="isNegativeBalance()">
-        <div class="header-content">
-          <div class="header-left">
-            <h1>Tableau de Bord</h1>
-            <div class="header-info">
-              @if (paydayInfo(); as payday) {
-                <div class="payday-info" [class.urgent]="payday.daysUntilPayday <= 5 || payday.monthProgressPercent >= 66">
-                  <mat-icon>event</mat-icon>
-                  <span>{{ paydayMessage() }}</span>
-                  @if (payday.actualDailyBudget > 0) {
-                    <span class="daily-budget" [class.tight]="payday.actualDailyBudget < 20">
-                      ({{ payday.actualDailyBudget | currency:'EUR' }}/jour)
-                    </span>
-                  }
-                </div>
-              }
-              
-              <!-- Notification des charges à venir -->
-              @if (upcomingCharges(); as charges) {
-                @if (charges.count > 0 && charges.total > 0) {
-                  <div class="charges-notification" [class.urgent]="charges.total > 500">
-                    <mat-icon>receipt_long</mat-icon>
-                    <span>
-                      {{ charges.count }} charge{{ charges.count > 1 ? 's' : '' }} à venir : {{ charges.total | currency:'EUR' }}
-                    </span>
-                  </div>
-                }
-              }
-              
-              @if (isNegativeBalance()) {
-                <div class="alert-badge">
-                  <mat-icon>warning</mat-icon>
-                  Solde négatif
-                </div>
-              }
-            </div>
-          </div>
-          
-          <div class="header-actions" *ngIf="budgetStore.hasUserData()">
-            <button mat-stroked-button (click)="openEditIncome()" class="action-btn">
-              <mat-icon>payments</mat-icon>
-              <span class="btn-text">Revenus</span>
-            </button>
-            
-            <button mat-stroked-button (click)="openEditExpenses()" class="action-btn charges-btn">
-              <mat-icon>receipt_long</mat-icon>
-              <span class="btn-text">Charges</span>
-              @if (budgetStore.expenses().length > 0) {
-                <span class="expense-badge">{{ budgetStore.expenses().length }}</span>
-              }
-            </button>
-            
-            <button mat-raised-button color="primary" (click)="createNewBudget()" class="action-btn primary">
-              <mat-icon>add_circle</mat-icon>
-              <span class="btn-text">Nouveau</span>
-            </button>
-          </div>
-          
-          <a mat-raised-button color="primary" 
-             routerLink="/budget/setup" 
-             *ngIf="!budgetStore.hasUserData()">
-            <mat-icon>add</mat-icon>
-            Configurer
-          </a>
-        </div>
-        
-        <!-- Barre de santé budgétaire -->
-        @if (budgetStore.hasUserData() && budgetAnalysis()?.metrics) {
-          <div class="health-bar-container">
-            <div class="health-bar">
-              <div class="health-indicator" 
-                   [style.width.%]="budgetAnalysis()?.metrics?.budgetHealth || 0" 
-                   [class.healthy]="(budgetAnalysis()?.metrics?.budgetHealth || 0) >= 70"
-                   [class.warning]="(budgetAnalysis()?.metrics?.budgetHealth || 0) >= 50 && (budgetAnalysis()?.metrics?.budgetHealth || 0) < 70"
-                   [class.critical]="(budgetAnalysis()?.metrics?.budgetHealth || 0) < 50">
-              </div>
-            </div>
-            <span class="health-label">
-              Santé: {{ budgetAnalysis()?.metrics?.budgetHealth || 0 }}%
-            </span>
-          </div>
-        }
-      </header>
+      <!-- Header avec composant dumb -->
+      <app-dashboard-header
+        [hasUserData]="budgetStore.hasUserData()"
+        [isNegativeBalance]="isNegativeBalance()"
+        [paydayInfo]="paydayInfo()"
+        [paydayMessage]="paydayMessage()"
+        [upcomingCharges]="upcomingCharges()"
+        [expenseCount]="budgetStore.expenses().length"
+        [budgetHealth]="budgetAnalysis()?.metrics?.budgetHealth"
+        (editIncome)="openEditIncome()"
+        (editExpenses)="openEditExpenses()"
+        (createNewBudget)="createNewBudget()"
+      ></app-dashboard-header>
 
       <!-- Empty State -->
       @if (!budgetStore.hasUserData()) {
-        <div class="empty-state">
-          <mat-card class="welcome-card">
-            <div class="welcome-illustration">
-              <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop" 
-                   alt="Budget">
-            </div>
-            <mat-card-content>
-              <h2>Bienvenue dans MoneyZen</h2>
-              <p class="subtitle">Maîtrisez vos finances en toute sérénité</p>
-              
-              <div class="features-preview">
-                <div class="feature-item">
-                  <mat-icon>analytics</mat-icon>
-                  <span>Analyse complète de votre budget</span>
-                </div>
-                <div class="feature-item">
-                  <mat-icon>trending_up</mat-icon>
-                  <span>Plan de redressement si découvert</span>
-                </div>
-                <div class="feature-item">
-                  <mat-icon>lightbulb</mat-icon>
-                  <span>Recommandations personnalisées</span>
-                </div>
-              </div>
-              
-              <div class="cta-section">
-                <a mat-raised-button color="primary" routerLink="/budget/setup" class="cta-button">
-                  <mat-icon>add</mat-icon>
-                  Configurer mon budget
-                </a>
-                <p class="privacy-note">
-                  <mat-icon>lock</mat-icon>
-                  Vos données restent sur votre appareil - 100% confidentiel
-                </p>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
+        <app-welcome-card></app-welcome-card>
       }
 
       <!-- Dashboard Content -->
@@ -434,97 +328,7 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
         }
       }
     }
-    
-    .empty-state {
-      padding: 40px 20px;
-      max-width: 600px;
-      margin: 0 auto;
-      
-      .welcome-card {
-        overflow: hidden;
-        
-        img {
-          width: 100%;
-          height: 220px;
-          object-fit: cover;
-        }
-        
-        h2 {
-          margin: 24px 0 8px 0;
-          font-size: 28px;
-          font-weight: 300;
-        }
-        
-        .subtitle {
-          color: var(--text-secondary);
-          font-size: 16px;
-          margin-bottom: 32px;
-        }
-        
-        .features-preview {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-          margin-bottom: 32px;
-          text-align: left;
-          padding: 0 16px;
-          
-          .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: var(--surface-variant);
-            border-radius: 12px;
-            
-            mat-icon {
-              color: var(--primary-color);
-              font-size: 24px;
-              width: 24px;
-              height: 24px;
-              flex-shrink: 0;
-            }
-            
-            span {
-              font-size: 15px;
-              color: var(--text-primary);
-            }
-          }
-        }
-        
-        .cta-section {
-          padding: 0 16px 16px 16px;
-          
-          .cta-button {
-            width: 100%;
-            padding: 16px 24px;
-            font-size: 16px;
-            margin-bottom: 16px;
-            
-            mat-icon {
-              margin-right: 8px;
-            }
-          }
-          
-          .privacy-note {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin: 0;
-            
-            mat-icon {
-              font-size: 16px;
-              width: 16px;
-              height: 16px;
-            }
-          }
-        }
-      }
-    }
-    
+
     .dashboard-content {
       padding: 24px 32px;
       display: flex;

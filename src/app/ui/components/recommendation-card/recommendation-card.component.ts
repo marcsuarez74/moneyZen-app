@@ -29,12 +29,14 @@ import { Recommendation } from '../../../models/budget.model';
         
         <p class="rec-description">{{ recommendation().description }}</p>
         
-        <div class="rec-footer" *ngIf="recommendation().potentialSavings > 0">
+        @if (recommendation().potentialSavings > 0) {
+        <div class="rec-footer">
           <div class="savings">
             <mat-icon>savings</mat-icon>
             <span>Économie potentielle: <strong>{{ recommendation().potentialSavings | currency:'EUR' }}</strong></span>
           </div>
         </div>
+        }
       </mat-card-content>
     </mat-card>
   `,

@@ -11,7 +11,8 @@
   </div>
 
   <!-- Add Project Form -->
-  <mat-card class="form-card" *ngIf="showForm">
+  @if (showForm) {
+  <mat-card class="form-card">
     <mat-card-header>
       <mat-card-title>Créer un nouveau projet</mat-card-title>
     </mat-card-header>
@@ -34,9 +35,11 @@
         <mat-form-field appearance="outline">
           <mat-label>Catégorie</mat-label>
           <mat-select formControlName="category">
-            <mat-option *ngFor="let cat of projectCategories" [value]="cat.value">
+            @for (cat of projectCategories; track cat.value) {
+            <mat-option [value]="cat.value">
               {{ cat.label }}
             </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -74,12 +77,15 @@
       </button>
     </mat-card-actions>
   </mat-card>
+  }
 
   <!-- Templates Section -->
-  <div class="templates-section" *ngIf="projectStore.projects().length === 0 && !showForm">
+  @if (projectStore.projects().length === 0 && !showForm) {
+  <div class="templates-section">
     <h3>Modèles rapides</h3>
     <div class="templates-grid">
-      <mat-card class="template-card" *ngFor="let template of projectTemplates" (click)="applyTemplate(template)">
+      @for (template of projectTemplates; track template.id) {
+      <mat-card class="template-card" (click)="applyTemplate(template)">
         <div class="template-image">
           <img [src]="getTemplateImage(template.category)" [alt]="template.name">
         </div>
@@ -89,12 +95,16 @@
           <p>{{ template.description }}</p>
         </mat-card-content>
       </mat-card>
+      }
     </div>
   </div>
+  }
 
   <!-- Projects Grid -->
-  <div class="projects-grid" *ngIf="projectStore.projects().length > 0">
-    <mat-card class="project-card" *ngFor="let project of projectStore.projects()">
+  @if (projectStore.projects().length > 0) {
+  <div class="projects-grid">
+    @for (project of projectStore.projects(); track project.id) {
+    <mat-card class="project-card">
       <mat-card-header>
         <mat-icon mat-card-avatar class="project-icon priority-{{ project.priority }}">
           {{ getCategoryIcon(project.category) }}
@@ -102,10 +112,10 @@
         <mat-card-title>{{ project.name }}</mat-card-title>
         <mat-card-subtitle>{{ project.category | titlecase }}</mat-card-subtitle>
       </mat-card-header>
-      
+
       <mat-card-content>
         <p class="project-desc">{{ project.description }}</p>
-        
+
         <div class="progress-section">
           <div class="progress-info">
             <span>{{ project.currentAmount | currency:'EUR' }}</span>
@@ -130,10 +140,13 @@
         </button>
       </mat-card-actions>
     </mat-card>
+    }
   </div>
+  }
 
   <!-- Empty State -->
-  <mat-card class="empty-card" *ngIf="projectStore.projects().length === 0 && !showForm">
+  @if (projectStore.projects().length === 0 && !showForm) {
+  <mat-card class="empty-card">
     <div class="empty-hero">
       <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600&auto=format&fit=crop" alt="Épargne">
     </div>
@@ -147,4 +160,5 @@
       </button>
     </mat-card-content>
   </mat-card>
+  }
 </div>

@@ -17,9 +17,11 @@ import { MatIconModule } from '@angular/material/icon';
         <div class="stat-value" [style.color]="valueColor()">
           {{ value() | currency:'EUR':'symbol':'1.2-2' }}
         </div>
-        <div class="stat-subtitle" *ngIf="subtitle()">
+        @if (subtitle()) {
+        <div class="stat-subtitle">
           {{ subtitle() }}
         </div>
+        }
       </mat-card-content>
     </mat-card>
   `,
