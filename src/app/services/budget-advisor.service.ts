@@ -203,11 +203,11 @@ export class BudgetAdvisorService {
   /**
    * Génère des insights intelligents basés sur l'analyse
    */
-  private generateInsights(
+    private generateInsights(
     userData: UserFinancialData,
     expenses: Expense[],
     summary: BudgetSummary,
-    metrics: any
+    metrics: { savingsRate: number; budgetHealth: number; fixedExpensesRatio: number }
   ): FinancialInsight[] {
     const insights: FinancialInsight[] = [];
 
@@ -371,7 +371,7 @@ export class BudgetAdvisorService {
 
     // 2. Créer un fonds d'urgence si pas d'épargne
     if (metrics.savingsRate === 0) {
-      const emergencyFundTarget = summary.totalIncome * 0.20; // 20% du salaire
+      // Fond d'urgence de 20% du salaire
       recommendations.push({
         id: `rec-${recId++}`,
         type: 'suggestion',
@@ -490,8 +490,8 @@ export class BudgetAdvisorService {
   /**
    * Récupère les catégories qui dépassent les seuils recommandés
    */
-  private getOverloadedCategories(summary: BudgetSummary): Array<{ category: ExpenseCategory; amount: number; overBudget: number }> {
-    const overloaded: Array<{ category: ExpenseCategory; amount: number; overBudget: number }> = [];
+  private getOverloadedCategories(summary: BudgetSummary): { category: ExpenseCategory; amount: number; overBudget: number }[] {
+    const overloaded: { category: ExpenseCategory; amount: number; overBudget: number }[] = [];
     
     (Object.keys(summary.expenseBreakdown) as ExpenseCategory[]).forEach(category => {
       const amount = summary.expenseBreakdown[category];
@@ -513,8 +513,8 @@ export class BudgetAdvisorService {
   /**
    * Suggère où trouver l'argent pour épargner
    */
-  private getSavingsSuggestions(expenses: Expense[], targetAmount: number): Array<{ category: string; suggestion: string; potential: number }> {
-    const suggestions: Array<{ category: string; suggestion: string; potential: number }> = [];
+  private getSavingsSuggestions(expenses: Expense[], _targetAmount: number): { category: string; suggestion: string; potential: number }[] {
+    const suggestions: { category: string; suggestion: string; potential: number }[] = [];
     
     // Analyser chaque catégorie pour des opportunités
     expenses.forEach(expense => {

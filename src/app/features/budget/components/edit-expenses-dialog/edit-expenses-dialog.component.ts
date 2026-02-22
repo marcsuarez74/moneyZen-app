@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Expense, EXPENSE_CATEGORIES, ExpenseCategory } from '../../../../models/budget.model';
+import { Expense, EXPENSE_CATEGORIES } from '../../../../models/budget.model';
 
 /**
  * DIALOG - Édition des dépenses/charges

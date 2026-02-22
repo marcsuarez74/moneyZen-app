@@ -33,7 +33,7 @@ export class PaydayCalculatorService {
     const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     
     // Date de paie du mois courant
-    let thisMonthPayday = new Date(currentYear, currentMonth, paydayDay);
+    const thisMonthPayday = new Date(currentYear, currentMonth, paydayDay);
     
     // Si on est après la paie du mois, la prochaine est le mois prochain
     let nextPayday: Date;
@@ -150,7 +150,7 @@ export class PaydayCalculatorService {
   /**
    * Calcule les charges à venir dans le mois
    */
-  getUpcomingCharges(expenses: any[], currentDay: number): { total: number; charges: any[] } {
+  getUpcomingCharges(expenses: any[], _currentDay: number): { total: number; charges: any[] } {
     // Charges mensuelles non encore prélevées (on suppose qu'elles sont prélevées entre le 1er et le 28)
     const upcomingCharges = expenses.filter(e => {
       if (e.frequency !== 'monthly') return false;

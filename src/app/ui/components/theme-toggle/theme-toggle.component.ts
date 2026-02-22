@@ -11,7 +11,7 @@ import { NgClass } from '@angular/common';
     <button 
       mat-icon-button 
       [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
-      (click)="toggle.emit()"
+      (click)="themeToggled.emit()"
       [class.dark-mode]="isDarkMode()">
       <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
@@ -36,5 +36,5 @@ import { NgClass } from '@angular/common';
 })
 export class ThemeToggleComponent {
   readonly isDarkMode = input.required<boolean>();
-  readonly toggle = output<void>();
+  readonly themeToggled = output<void>();
 }
