@@ -1,0 +1,145 @@
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.payday-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+  color: white;
+  border-radius: 12px;
+  margin-bottom: 8px;
+
+  &.urgent {
+    background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .payday-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .payday-text {
+      font-weight: 600;
+      font-size: 16px;
+
+      .month-progress {
+        font-size: 13px;
+        opacity: 0.85;
+        margin-left: 8px;
+        font-weight: 500;
+      }
+    }
+
+    .payday-budget {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .stat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  &.income .stat-icon { color: #4caf50; }
+  &.expense .stat-icon { color: #ff9800; }
+  &.balance.positive .stat-icon { color: #2196f3; }
+  &.balance.negative .stat-icon { color: #f44336; }
+  &.savings .stat-icon { color: #9c27b0; }
+
+  .stat-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 4px 0;
+  }
+
+  .stat-sublabel {
+    font-size: 12px;
+    color: var(--text-secondary);
+
+    &.warning { color: #f44336; font-weight: 500; }
+    &.good { color: #4caf50; font-weight: 500; }
+  }
+}
+
+.metrics-bar {
+  display: flex;
+  gap: 24px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: 8px;
+  flex-wrap: wrap;
+
+  .metric-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+
+      &.healthy { color: #4caf50; }
+      &.warning { color: #ff9800; }
+      &.critical { color: #f44336; }
+    }
+  }
+}

@@ -3,13 +3,14 @@
   <p class="page-desc">Définissez vos revenus et vos dépenses pour obtenir une analyse personnalisée.</p>
 
   <!-- Step 1: Revenue -->
-  <mat-card class="setup-section" *ngIf="currentStep === 1">
+  @if (currentStep === 1) {
+  <mat-card class="setup-section">
     <mat-card-header>
       <mat-icon mat-card-avatar>account_balance_wallet</mat-icon>
       <mat-card-title>Étape 1 : Vos revenus</mat-card-title>
       <mat-card-subtitle>Commençons par votre situation financière de base</mat-card-subtitle>
     </mat-card-header>
-    
+
     <mat-card-content [formGroup]="financialForm">
       <div class="form-grid">
         <mat-form-field appearance="outline" class="full-width">
@@ -17,9 +18,9 @@
           <input matInput type="number" formControlName="salary" placeholder="3000">
           <span matSuffix>€</span>
           <mat-hint>Votre revenu net après impôts et cotisations</mat-hint>
-          <mat-error *ngIf="financialForm.get('salary')?.hasError('required')">
-            Le salaire est requis
-          </mat-error>
+          @if (financialForm.get('salary')?.hasError('required')) {
+          <mat-error>Le salaire est requis</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
@@ -30,10 +31,12 @@
         </mat-form-field>
       </div>
 
-      <div class="info-box" *ngIf="isOverdrawn()">
+      @if (isOverdrawn()) {
+      <div class="info-box">
         <mat-icon color="warn">warning</mat-icon>
         <span>Vous êtes actuellement à découvert. Nous vous aiderons à remettre vos comptes en ordre.</span>
       </div>
+      }
     </mat-card-content>
 
     <mat-card-actions align="end">
@@ -43,9 +46,11 @@
       </button>
     </mat-card-actions>
   </mat-card>
+  }
 
   <!-- Step 2: Expenses -->
-  <mat-card class="setup-section" *ngIf="currentStep === 2">
+  @if (currentStep === 2) {
+  <mat-card class="setup-section">
     <mat-card-header>
       <mat-icon mat-card-avatar>receipt_long</mat-icon>
       <mat-card-title>Étape 2 : Vos dépenses mensuelles</mat-card-title>
@@ -57,21 +62,23 @@
       <div class="quick-add-section">
         <p class="section-label">Ajout rapide (cliquez pour ajouter) :</p>
         <div class="chips-container">
-          <button mat-stroked-button 
-                  *ngFor="let expense of suggestedExpenses" 
+          @for (expense of suggestedExpenses; track expense.name) {
+          <button mat-stroked-button
                   (click)="addSuggestedExpense(expense)"
                   class="expense-chip">
             <mat-icon>{{ getCategoryIcon(expense.category) }}</mat-icon>
             {{ expense.name }}
           </button>
+          }
         </div>
       </div>
 
       <!-- Expenses List -->
       <div class="expenses-list" formArrayName="expenses">
-        <div class="expense-row" *ngFor="let expense of expensesArray.controls; let i = index" [formGroupName]="i">
-          <div class="row-number">{{ i + 1 }}</div>
-          
+        @for (expense of expensesArray.controls; track $index) {
+        <div class="expense-row" [formGroupName]="$index">
+          <div class="row-number">{{ $index + 1 }}</div>
+
           <mat-form-field appearance="outline" class="expense-name">
             <mat-label>Nom</mat-label>
             <input matInput formControlName="name" placeholder="Ex: Loyer">
@@ -80,10 +87,12 @@
           <mat-form-field appearance="outline" class="expense-category">
             <mat-label>Catégorie</mat-label>
             <mat-select formControlName="category">
-              <mat-option *ngFor="let cat of expenseCategories" [value]="cat.value">
+              @for (cat of expenseCategories; track cat.value) {
+              <mat-option [value]="cat.value">
                 <mat-icon>{{ cat.icon }}</mat-icon>
                 {{ cat.label }}
               </mat-option>
+              }
             </mat-select>
           </mat-form-field>
 
@@ -102,10 +111,11 @@
             </mat-select>
           </mat-form-field>
 
-          <button mat-icon-button color="warn" (click)="removeExpense(i)" matTooltip="Supprimer">
+          <button mat-icon-button color="warn" (click)="removeExpense($index)" matTooltip="Supprimer">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
+        }
       </div>
 
       <button mat-stroked-button color="primary" (click)="addExpense()" class="add-btn">
@@ -125,9 +135,11 @@
       </button>
     </mat-card-actions>
   </mat-card>
+  }
 
   <!-- Summary Card (visible on step 2) -->
-  <mat-card class="summary-card" *ngIf="currentStep === 2 && expensesArray.length > 0">
+  @if (currentStep === 2 && expensesArray.length > 0) {
+  <mat-card class="summary-card">
     <mat-card-content>
       <div class="summary-row">
         <span>Total dépenses mensuelles :</span>
@@ -139,4 +151,5 @@
       </div>
     </mat-card-content>
   </mat-card>
+  }
 </div>

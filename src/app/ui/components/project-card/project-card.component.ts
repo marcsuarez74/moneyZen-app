@@ -51,7 +51,8 @@ import { Project } from '../../../models/project.model';
           </div>
         </div>
         
-        <div class="project-actions" *ngIf="showActions()">
+        @if (showActions()) {
+        <div class="project-actions">
           <button mat-stroked-button color="primary" (click)="edit.emit(project())">
             <mat-icon>edit</mat-icon>
             Modifier
@@ -61,6 +62,7 @@ import { Project } from '../../../models/project.model';
             Supprimer
           </button>
         </div>
+        }
       </mat-card-content>
     </mat-card>
   `,

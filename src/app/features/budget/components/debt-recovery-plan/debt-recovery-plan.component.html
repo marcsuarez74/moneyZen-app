@@ -1,0 +1,227 @@
+<mat-card class="recovery-card" #recoveryCard>
+  <mat-card-header>
+    <div class="header-icon alert" mat-card-avatar>
+      <mat-icon>trending_up</mat-icon>
+    </div>
+    <mat-card-title>Plan de redressement du découvert</mat-card-title>
+    <mat-card-subtitle>
+      Découvert actuel : {{ data().overdraftAmount | currency:'EUR' }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="situation-box">
+      <h3>
+        <mat-icon>account_balance</mat-icon>
+        Votre situation actuelle
+      </h3>
+      <div class="situation-grid">
+        <div class="situation-item negative">
+          <span class="label">Découvert actuel</span>
+          <span class="value">-{{ data().overdraftAmount | currency:'EUR' }}</span>
+          <span class="sublabel">Objectif : remonter à zéro</span>
+        </div>
+        <div class="situation-item income">
+          <span class="label">Revenus mensuels</span>
+          <span class="value">{{ data().monthlyIncome | currency:'EUR' }}</span>
+        </div>
+        <div class="situation-item expenses">
+          <span class="label">Charges fixes obligatoires</span>
+          <span class="value">{{ data().fixedExpenses | currency:'EUR' }}</span>
+        </div>
+        <div class="situation-item remaining" [class.negative]="data().remainingBudget < 0">
+          <span class="label">Reste à vivre actuel</span>
+          <span class="value">{{ data().remainingBudget | currency:'EUR' }}</span>
+          @if (data().remainingBudget < 0) {
+            <span class="sublabel">⚠️ Vous dépensez plus que vous ne gagnez</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-box">
+      <h3>
+        <mat-icon>lightbulb</mat-icon>
+        Stratégie recommandée
+      </h3>
+      <div class="strategy-content">
+        <div class="strategy-item primary">
+          <mat-icon>savings</mat-icon>
+          <div class="strategy-text">
+            <span class="strategy-label">Budget mensuel disponible</span>
+            <span class="strategy-value">{{ recommendedMonthlyBudget() | currency:'EUR' }}</span>
+            <span class="strategy-detail">C'est ce que vous pouvez dépenser en extra ce mois-ci tout en remontant votre découvert</span>
+          </div>
+        </div>
+
+        <div class="strategy-item">
+          <mat-icon>calendar_today</mat-icon>
+          <div class="strategy-text">
+            <span class="strategy-label">Budget quotidien réaliste</span>
+            <span class="strategy-value">{{ recommendedDailyBudget() | currency:'EUR' }}/jour</span>
+            <span class="strategy-detail">Pour {{ daysInMonth() }} jours (alimentation, loisirs, imprévus...)</span>
+          </div>
+        </div>
+
+        @if (minimumRecoveryPerMonth() > 0) {
+          <div class="strategy-item">
+            <mat-icon>trending_up</mat-icon>
+            <div class="strategy-text">
+              <span class="strategy-label">Minimum à "retrouver" par mois</span>
+              <span class="strategy-value">{{ minimumRecoveryPerMonth() | currency:'EUR' }}</span>
+              <span class="strategy-detail">Pour atteindre zéro en {{ targetMonths() }} mois</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="duration-section" #durationSection>
+      <h3>
+        <mat-icon>schedule</mat-icon>
+        Durée de remontée
+      </h3>
+      <div class="duration-control">
+        <mat-slider
+          [min]="minDuration()"
+          [max]="12"
+          [step]="1"
+          [discrete]="true"
+          [showTickMarks]="true">
+          <input matSliderThumb [(ngModel)]="selectedDuration" (ngModelChange)="updateDuration($event)">
+        </mat-slider>
+        <div class="duration-summary">
+          <div class="duration-info">
+            <span class="duration-number">{{ targetMonths() }} mois</span>
+            <span class="duration-detail">
+              pour remonter à {{ estimatedFinalBalance() | currency:'EUR' }}
+            </span>
+          </div>
+          @if (monthlyRecovery() > 0) {
+            <div class="monthly-impact">
+              <span class="impact-label">Votre découvert baisse de :</span>
+              <span class="impact-value">
+                {{ monthlyRecovery() | currency:'EUR' }}/mois
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="targets-section">
+      <h3>
+        <mat-icon>flag</mat-icon>
+        Évolution mois par mois
+      </h3>
+      <p class="targets-explanation">
+        Suivez la progression de votre découvert en respectant les budgets ci-dessous :
+      </p>
+
+      <div class="targets-list">
+        @for (target of monthlyTargets(); track target.month) {
+          <div class="target-card" [class.achievable]="target.isAchievable" [class.difficult]="!target.isAchievable">
+            <div class="target-header">
+              <div class="month-badge">M{{ target.month }}</div>
+              <span class="month-name">{{ target.monthName }}</span>
+              @if (!target.isAchievable) {
+                <mat-icon class="warning-icon" color="warn">warning</mat-icon>
+              }
+            </div>
+
+            <div class="target-body">
+              <div class="balance-track">
+                <div class="balance-point start">
+                  <span class="point-label">Début</span>
+                  <span class="point-value negative">-{{ target.startOverdraft | currency:'EUR' }}</span>
+                </div>
+                <mat-icon class="arrow">arrow_forward</mat-icon>
+                <div class="balance-point end">
+                  <span class="point-label">Fin du mois</span>
+                  @if (target.endOverdraft > 0) {
+                    <span class="point-value negative">-{{ target.endOverdraft | currency:'EUR' }}</span>
+                  } @else {
+                    <span class="point-value zero">0 €</span>
+                  }
+                </div>
+              </div>
+
+              <div class="budget-box">
+                <div class="budget-row">
+                  <mat-icon>shopping_cart</mat-icon>
+                  <div class="budget-text">
+                    <span class="budget-label">Ce mois vous pouvez dépenser :</span>
+                    <span class="budget-amount">{{ target.availableBudget | currency:'EUR' }}</span>
+                  </div>
+                </div>
+                <div class="budget-daily">
+                  soit {{ target.dailyBudget | currency:'EUR' }}/jour en moyenne
+                </div>
+              </div>
+
+              @if (target.overdraftReduction > 0) {
+                <div class="reduction-box">
+                  <span class="reduction-label">Votre découvert diminue de :</span>
+                  <span class="reduction-value">{{ target.overdraftReduction | currency:'EUR' }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="summary-section">
+      <h3>
+        <mat-icon>tips_and_updates</mat-icon>
+        Comment y arriver
+      </h3>
+
+      @if (hasDifficultMonths()) {
+        <div class="alert-box">
+          <mat-icon>warning</mat-icon>
+          <div>
+            <strong>Attention</strong>
+            <p>Certaines mensualités seront difficiles avec ce budget. Envisagez {{ recommendedDuration() }} mois pour plus de confort.</p>
+          </div>
+        </div>
+      }
+
+      <ul class="tips-list">
+        <li>
+          <mat-icon>account_balance</mat-icon>
+          <span><strong>Priorisez les charges fixes :</strong> Payez d'abord loyer, factures et crédits avant toute dépense extra</span>
+        </li>
+        <li>
+          <mat-icon>restaurant</mat-icon>
+          <span><strong>Budget alimentation :</strong> Prévoyez environ 40% de votre budget quotidien pour les courses ({{ (recommendedDailyBudget() * 0.4 * daysInMonth()) | currency:'EUR' }}/mois)</span>
+        </li>
+        <li>
+          <mat-icon>credit_card_off</mat-icon>
+          <span><strong>Évitez les dépenses impulsives :</strong> Attendez 48h avant tout achat non essentiel</span>
+        </li>
+        <li>
+          <mat-icon>show_chart</mat-icon>
+          <span><strong>Suivez vos dépenses :</strong> Notez chaque dépense pour rester dans le budget quotidien de {{ recommendedDailyBudget() | currency:'EUR' }}</span>
+        </li>
+        @if (data().remainingBudget < 0) {
+          <li class="urgent">
+            <mat-icon>priority_high</mat-icon>
+            <span><strong>URGENT :</strong> Vos dépenses dépassent vos revenus de {{ Math.abs(data().remainingBudget) | currency:'EUR' }}/mois. Réduisez immédiatement vos charges fixes ou augmentez vos revenus.</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-stroked-button (click)="scrollToDuration()">
+      <mat-icon>edit</mat-icon>
+      Ajuster la durée
+    </button>
+    <button mat-raised-button color="primary" (click)="adoptPlan()">
+      <mat-icon>check</mat-icon>
+      J'adhère à ce plan sur {{ targetMonths() }} mois
+    </button>
+  </mat-card-actions>
+</mat-card>

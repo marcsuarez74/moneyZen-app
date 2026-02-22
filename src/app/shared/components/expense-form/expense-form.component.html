@@ -9,9 +9,9 @@
       <mat-form-field appearance="outline" class="form-field name-field">
         <mat-label>Nom de la charge</mat-label>
         <input matInput formControlName="name" placeholder="Ex: Loyer, Électricité...">
-        <mat-error *ngIf="expenseForm.get('name')?.hasError('required')">
-          Le nom est requis
-        </mat-error>
+        @if (expenseForm.get('name')?.hasError('required')) {
+          <mat-error>Le nom est requis</mat-error>
+        }
       </mat-form-field>
       
       <mat-form-field appearance="outline" class="form-field category-field">
@@ -32,9 +32,9 @@
         <mat-label>Montant</mat-label>
         <input matInput type="number" formControlName="amount" placeholder="0">
         <span matSuffix>€</span>
-        <mat-error *ngIf="expenseForm.get('amount')?.hasError('required')">
-          Le montant est requis
-        </mat-error>
+        @if (expenseForm.get('amount')?.hasError('required')) {
+          <mat-error>Le montant est requis</mat-error>
+        }
       </mat-form-field>
       
       <mat-form-field appearance="outline" class="form-field frequency-field">
@@ -57,14 +57,15 @@
           Ajouter
         </button>
         
-        <button 
-          mat-button 
-          type="button"
-          (click)="onCancel()"
-          *ngIf="isEditing()"
-        >
-          Annuler
-        </button>
+        @if (isEditing()) {
+          <button
+            mat-button
+            type="button"
+            (click)="onCancel()"
+          >
+            Annuler
+          </button>
+        }
       </div>
     </div>
   </form>
