@@ -123,9 +123,7 @@ $dark-theme: mat.m2-define-dark-theme((
 
 // Dark theme styles
 .dark-theme {
-  @include mat.all-component-colors($dark-theme);
-  
-  // CSS Variables for custom components - Dark Theme
+  // CSS Variables for custom components - Dark Theme (doit être avant @include)
   --primary-color: #4db6ac;
   --primary-light: #80cbc4;
   --primary-dark: #26a69a;
@@ -138,6 +136,8 @@ $dark-theme: mat.m2-define-dark-theme((
   --shadow: rgba(0, 0, 0, 0.3);
   --card-bg: #1a1d1d;
   --accent-color: #81c784;
+  
+  @include mat.all-component-colors($dark-theme);
 }
 
 // Global styles
