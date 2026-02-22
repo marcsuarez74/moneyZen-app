@@ -2,12 +2,12 @@
 
 /**
  * Script de release automatisé
- * Usage: node scripts/release.js [patch|minor|major]
+ * Usage: node scripts/release.js [patch|minor|major] [--push]
  */
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 
 const RELEASE_TYPES = {
   patch: 'PATCH',
@@ -46,6 +46,20 @@ function updatePackageJson(newVersion) {
   console.log(`✅ package.json mis à jour: ${oldVersion} → ${newVersion}`);
 }
 
+function extractChangelogSection(version) {
+  const changelogPath = path.join(process.cwd(), 'CHANGELOG.md');
+  const changelog = fs.readFileSync(changelogPath, 'utf8');
+
+  const regex = new RegExp(`## \\[${version}\\] - (.*?)(?=\n## \\[|$)`, 's');
+  const match = changelog.match(regex);
+
+  if (match) {
+    return match[0].split('\n').slice(1).join('\n').trim();
+  }
+
+  return 'Voir le CHANGELOG.md pour les détails.';
+}
+
 function updateChangelog(newVersion) {
   const changelogPath = path.join(process.cwd(), 'CHANGELOG.md');
   let changelog = fs.readFileSync(changelogPath, 'utf8');
@@ -74,13 +88,12 @@ function updateVersionMd(newVersion) {
 
   version = version.replace(versionLine, `**${newVersion}**`);
 
-  // Ajouter une ligne dans l'historique
   const versionPattern = /## Historique des versions\n\n/;
   if (versionPattern.test(version)) {
-    const newHistoryEntry = `| Version | Date | Description |\n|---------|------|-------------|\n| ${newVersion} | ${today} | [INSECIRRE LA DESCRIPTION] |`;
+    const newHistoryEntry = `| ${newVersion} | ${today} | [INSCRIRE LA DESCRIPTION] |`;
     version = version.replace(
       versionPattern,
-      `## Historique des versions\n\n${newHistoryEntry}\n`
+      `## Historique des versions\n\n| Version | Date | Description |\n|---------|------|-------------|\n${newHistoryEntry}\n`
     );
   }
 
@@ -131,40 +144,97 @@ function createGitTag(newVersion) {
   }
 }
 
-function main() {
-  const args = process.argv.slice(2);
-  const releaseType = args[0]?.toLowerCase();
+function pushToRemote(newVersion) {
+  try {
+    execSync('git push origin main');
+    execSync(`git push origin v${newVersion}`);
+    console.log(`✅ Push effectué vers origin (branche main + tag v${newVersion})`);
+  } catch (error) {
+    console.error('⚠️  Erreur lors du push:', error.message);
+    console.log('   Vous pouvez push manuellement avec:');
+    console.log(`   git push origin main`);
+    console.log(`   git push origin v${newVersion}`);
+  }
+}
 
-  if (!releaseType || !RELEASE_TYPES[releaseType]) {
-    console.error('❌ Usage: node scripts/release.js [patch|minor|major]');
+async function createGitHubRelease(newVersion, shouldPush) {
+  const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise((resolve) => {
+    readline.question('\n🚀 Créer une release GitHub automatiquement ? (nécessite gh CLI) [y/N] : ', async (answer) => {
+      readline.close();
+
+      if (answer.toLowerCase() === 'y') {
+        try {
+          execSync('gh --version', { stdio: 'ignore' });
+
+          const notes = extractChangelogSection(newVersion);
+          const releaseNotes = `## 🎉 MoneyZen v${newVersion}\n\n${notes}\n\n---\n\n🌐 **Démo en ligne** : https://marcsuarez74.github.io/moneyZen-app/`;
+
+          execSync(`gh release create v${newVersion} --title "🚀 MoneyZen v${newVersion}" --notes "${releaseNotes}"`);
+          console.log(`✅ Release GitHub créée pour v${newVersion}`);
+
+          if (!shouldPush) {
+            console.log('\n⚠️  N\'oubliez pas de push les changements :');
+            console.log(`   git push origin main`);
+            console.log(`   git push origin v${newVersion}`);
+          }
+        } catch (error) {
+          console.log('⚠️  GitHub CLI (gh) non disponible ou erreur de création.');
+          console.log('   La release sera créée automatiquement par le workflow CI.');
+          console.log(`   Push le tag : git push origin v${newVersion}`);
+        }
+      } else {
+        console.log('\n✨ Release terminée !');
+        console.log('\nProchaines étapes :');
+        console.log(`  1. Push : git push origin main && git push origin v${newVersion}`);
+        console.log(`  2. La release GitHub sera créée automatiquement par le workflow`);
+        console.log(`  3. Déployer : npm run deploy`);
+      }
+
+      resolve();
+    });
+  });
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const releaseType = args.find(arg => RELEASE_TYPES[arg?.toLowerCase()])?.toLowerCase();
+  const shouldPush = args.includes('--push');
+
+  if (!releaseType) {
+    console.error('❌ Usage: node scripts/release.js [patch|minor|major] [--push]');
     console.error('');
     console.error('Types de release :');
     console.error('  patch : Correction de bug (1.0.0 → 1.0.1)');
     console.error('  minor : Nouvelle fonctionnalité (1.0.0 → 1.1.0)');
     console.error('  major : Changement majeur (1.0.0 → 2.0.0)');
+    console.error('');
+    console.error('Options :');
+    console.error('  --push  : Push automatique après création du tag');
     process.exit(1);
   }
 
   console.log(`🚀 Lancement d'une release ${RELEASE_TYPES[releaseType]}...\n`);
 
-  // Récupérer la version actuelle
   const packagePath = path.join(process.cwd(), 'package.json');
   const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
   const currentVersion = packageJson.version;
 
   console.log(`Version actuelle : ${currentVersion}`);
 
-  // Calculer la nouvelle version
   const newVersion = incrementVersion(currentVersion, releaseType);
   console.log(`Nouvelle version : ${newVersion}\n`);
 
-  // Demander confirmation
   const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
-  readline.question(`Confirmer la release ${newVersion} ? (Y/n) : `, (answer) => {
+  readline.question(`Confirmer la release ${newVersion} ? (Y/n) : `, async (answer) => {
     readline.close();
 
     if (answer.toLowerCase() !== '' && answer.toLowerCase() !== 'y') {
@@ -174,22 +244,24 @@ function main() {
 
     console.log('\n📦 Mise à jour des fichiers...\n');
 
-    // Mettre à jour tous les fichiers
     updatePackageJson(newVersion);
     updateChangelog(newVersion);
     updateVersionMd(newVersion);
     updateVersionJson(newVersion);
 
-    // Commit et tag
     console.log('\n🏷️  Création du commit et du tag...\n');
     commitChanges(newVersion);
     createGitTag(newVersion);
 
-    console.log('\n✨ Release terminée !');
-    console.log(`\nProchaines étapes :`);
-    console.log(`  1. Push du tag : git push origin v${newVersion}`);
-    console.log(`  2. Créer une release GitHub à partir du tag v${newVersion}`);
-    console.log(`  3. Déployer l'application : npm run deploy`);
+    if (shouldPush) {
+      console.log('\n📤 Push vers le remote...\n');
+      pushToRemote(newVersion);
+      await createGitHubRelease(newVersion, true);
+    } else {
+      await createGitHubRelease(newVersion, false);
+    }
+
+    console.log('\n✅ Terminé !');
   });
 }
 

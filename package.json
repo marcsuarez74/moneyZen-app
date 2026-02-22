@@ -13,8 +13,11 @@
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
     "build:prod": "ng build --configuration=production",
     "release:patch": "node scripts/release.js patch",
+    "release:patch:push": "node scripts/release.js patch --push",
     "release:minor": "node scripts/release.js minor",
+    "release:minor:push": "node scripts/release.js minor --push",
     "release:major": "node scripts/release.js major",
+    "release:major:push": "node scripts/release.js major --push",
     "version:show": "node -e \"console.log(require('./package.json').version)\"",
     "postbuild": "cp src/assets/version.json dist/budget-app/"
   },
