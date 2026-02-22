@@ -20,7 +20,7 @@ import { BudgetInsightsComponent } from '../budget-insights/budget-insights.comp
 import { DebtRecoveryPlanComponent, RecoveryPlanData } from '../debt-recovery-plan/debt-recovery-plan.component';
 import { EditIncomeDialogComponent } from '../edit-income-dialog/edit-income-dialog.component';
 import { EditExpensesDialogComponent } from '../edit-expenses-dialog/edit-expenses-dialog.component';
-import { BudgetSummary, Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
+import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
 
 @Component({
   selector: 'app-budget-dashboard-page',

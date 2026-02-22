@@ -17,10 +17,7 @@
         <mat-icon>flag</mat-icon>
         <span class="hide-mobile">Projets</span>
       </a>
-      <a mat-button routerLink="/meals" routerLinkActive="active-link">
-        <mat-icon>restaurant_menu</mat-icon>
-        <span class="hide-mobile">Repas</span>
-      </a>
+
     </nav>
     
     <button mat-icon-button (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Mode clair' : 'Mode sombre'">
@@ -39,14 +36,11 @@
           <mat-icon matListItemIcon>flag</mat-icon>
           <span matListItemTitle>Mes Projets</span>
         </a>
-        <a mat-list-item routerLink="/meals" routerLinkActive="active" (click)="closeSidenav()">
-          <mat-icon matListItemIcon>restaurant_menu</mat-icon>
-          <span matListItemTitle>Repas & Courses</span>
-        </a>
+
         
         <mat-divider></mat-divider>
         
-        <a mat-list-item (click)="resetAllData(); closeSidenav()">
+        <a mat-list-item (click)="resetAllData(); closeSidenav()" (keydown.enter)="resetAllData(); closeSidenav()" tabindex="0">
           <mat-icon matListItemIcon color="warn">delete_forever</mat-icon>
           <span matListItemTitle>Réinitialiser tout</span>
         </a>

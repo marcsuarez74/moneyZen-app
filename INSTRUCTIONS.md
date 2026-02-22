@@ -44,7 +44,7 @@ Puis ouvrir http://localhost:8080
 
 - **Gestion de Budget** : Saisie des revenus et charges avec recommandations
 - **Projets** : Planification et suivi d'objectifs financiers  
-- **Repas** : Menus hebdomadaires avec liste de courses
+
 
 ## Architecture
 
