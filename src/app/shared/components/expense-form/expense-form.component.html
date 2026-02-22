@@ -1,0 +1,71 @@
+<div class="expense-form-container">
+  <h3 class="form-title">
+    <mat-icon>add_circle</mat-icon>
+    Ajouter une charge
+  </h3>
+  
+  <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" class="expense-form">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field name-field">
+        <mat-label>Nom de la charge</mat-label>
+        <input matInput formControlName="name" placeholder="Ex: Loyer, Électricité...">
+        <mat-error *ngIf="expenseForm.get('name')?.hasError('required')">
+          Le nom est requis
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="form-field category-field">
+        <mat-label>Catégorie</mat-label>
+        <mat-select formControlName="category">
+          @for (category of expenseCategories; track category.value) {
+            <mat-option [value]="category.value">
+              <mat-icon>{{ getCategoryIcon(category.value) }}</mat-icon>
+              {{ category.label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field amount-field">
+        <mat-label>Montant</mat-label>
+        <input matInput type="number" formControlName="amount" placeholder="0">
+        <span matSuffix>€</span>
+        <mat-error *ngIf="expenseForm.get('amount')?.hasError('required')">
+          Le montant est requis
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="form-field frequency-field">
+        <mat-label>Fréquence</mat-label>
+        <mat-select formControlName="frequency">
+          <mat-option value="monthly">Mensuel</mat-option>
+          <mat-option value="yearly">Annuel</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <div class="form-actions">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit"
+          [disabled]="!expenseForm.valid"
+          class="submit-btn"
+        >
+          <mat-icon>add</mat-icon>
+          Ajouter
+        </button>
+        
+        <button 
+          mat-button 
+          type="button"
+          (click)="onCancel()"
+          *ngIf="isEditing()"
+        >
+          Annuler
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

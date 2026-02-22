@@ -1,15 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
 import { FormCardComponent } from '../../../../../shared/components/form-card/form-card.component';
 import { ExpenseItemComponent } from '../../../../../shared/components/expense-item/expense-item.component';
-import { Expense } from '../../../../../models/budget.model';
-
-export type SuggestedExpense = Omit<Expense, 'id' | 'monthlyEquivalent'>;
+import { ExpenseFormComponent } from '../../../../../shared/components/expense-form/expense-form.component';
+import { Expense, ExpenseCategory } from '../../../../../models/budget.model';
 
 @Component({
   selector: 'app-expenses-step',
@@ -19,23 +17,21 @@ export type SuggestedExpense = Omit<Expense, 'id' | 'monthlyEquivalent'>;
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatChipsModule,
-    MatTooltipModule,
+    MatDividerModule,
     FormCardComponent,
-    ExpenseItemComponent
+    ExpenseItemComponent,
+    ExpenseFormComponent
   ],
   templateUrl: './expenses-step.component.html',
   styleUrls: ['./expenses-step.component.scss']
 })
 export class ExpensesStepComponent {
   readonly expensesArray = input.required<FormArray>();
-  readonly suggestedExpenses = input<SuggestedExpense[]>([]);
   
   readonly previousStep = output<void>();
   readonly nextStep = output<void>();
-  readonly addExpense = output<SuggestedExpense>();
+  readonly addExpense = output<{ name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'yearly' }>();
   readonly removeExpense = output<number>();
-  readonly editExpense = output<{ index: number; expense: Expense }>();
 
   onPrevious(): void {
     this.previousStep.emit();
@@ -45,7 +41,7 @@ export class ExpensesStepComponent {
     this.nextStep.emit();
   }
 
-  onAddSuggested(expense: SuggestedExpense): void {
+  onAddExpense(expense: { name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'yearly' }): void {
     this.addExpense.emit(expense);
   }
 
@@ -53,14 +49,16 @@ export class ExpensesStepComponent {
     this.removeExpense.emit(index);
   }
 
-  onEditExpense(index: number, expense: Expense): void {
-    this.editExpense.emit({ index, expense });
+  getTotalMonthly(): number {
+    return this.expensesArray().controls.reduce((total, control) => {
+      const expense = control.value as Expense;
+      return total + (expense.monthlyEquivalent || 0);
+    }, 0);
   }
 
-  getIcon(category: string): string {
+  getCategoryIcon(category: string): string {
     const icons: Record<string, string> = {
       housing: 'home',
-      mortgage: 'home',
       transport: 'directions_car',
       food: 'restaurant',
       utilities: 'bolt',
@@ -69,8 +67,6 @@ export class ExpensesStepComponent {
       education: 'school',
       leisure: 'sports_esports',
       savings: 'savings',
-      internet: 'wifi',
-      phone: 'smartphone',
       other: 'more_horiz'
     };
     return icons[category] || 'help';

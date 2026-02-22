@@ -22,7 +22,6 @@
     @if (currentStep === 2) {
       <app-expenses-step
         [expensesArray]="expensesArray"
-        [suggestedExpenses]="suggestedExpenses"
         (previousStep)="onExpensesPrevious()"
         (nextStep)="onExpensesNext()"
         (addExpense)="onAddExpense($event)"

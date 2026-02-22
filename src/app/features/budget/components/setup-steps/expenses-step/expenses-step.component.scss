@@ -2,14 +2,44 @@
   padding: 16px 0;
 }
 
-.current-expenses {
-  margin-bottom: 32px;
+.expenses-list-section {
+  margin-top: 32px;
+}
+
+.expenses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
   
   h3 {
+    margin: 0;
     color: var(--text-primary);
-    margin-bottom: 16px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
+  }
+}
+
+.total-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  strong {
+    font-size: 16px;
   }
 }
 
@@ -19,63 +49,72 @@
   gap: 8px;
 }
 
-.no-expenses {
+.expense-row {
+  position: relative;
+}
+
+.empty-state {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 24px;
+  padding: 32px;
   background: var(--surface-variant);
-  border-radius: 8px;
+  border-radius: 12px;
   color: var(--text-secondary);
-  margin-bottom: 32px;
+  text-align: center;
+  justify-content: center;
   
   mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
     color: var(--primary-color);
   }
-}
-
-.suggested-expenses {
-  h3 {
-    color: var(--text-primary);
-    margin-bottom: 16px;
-    font-size: 16px;
-    font-weight: 500;
+  
+  p {
+    margin: 0;
+    max-width: 400px;
   }
 }
 
-.suggestions-list {
+.quick-suggestions {
+  margin-top: 32px;
+  padding: 20px;
+  background: rgba(0, 121, 107, 0.05);
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  
+  h4 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-size: 16px;
+  }
+  
+  p {
+    margin: 0 0 16px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+}
+
+.suggestion-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-
-.suggestion-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.2s;
   
-  mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-    color: var(--primary-color);
-  }
-  
-  .amount {
-    color: var(--primary-color);
-    font-weight: 500;
-    font-size: 13px;
-  }
-  
-  &:hover {
-    background: var(--surface-variant);
-    border-color: var(--primary-color);
+  button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+    
+    &:hover {
+      background: var(--surface-variant);
+    }
   }
 }

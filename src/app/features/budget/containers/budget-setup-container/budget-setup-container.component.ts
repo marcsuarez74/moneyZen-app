@@ -4,12 +4,17 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BudgetStore } from '../../../../store/budget.store';
 import { LocalStorageService } from '../../../../services/local-storage.service';
-import { UserFinancialData, Expense } from '../../../../models/budget.model';
+import { UserFinancialData, Expense, ExpenseCategory } from '../../../../models/budget.model';
 import { StepIndicatorComponent, Step } from '../../../../shared/components/step-indicator/step-indicator.component';
 import { FinancialStepComponent } from '../../components/setup-steps/financial-step/financial-step.component';
 import { ExpensesStepComponent } from '../../components/setup-steps/expenses-step/expenses-step.component';
 
-type SuggestedExpense = Omit<Expense, 'id' | 'monthlyEquivalent'>;
+interface NewExpense {
+  name: string;
+  category: ExpenseCategory;
+  amount: number;
+  frequency: 'monthly' | 'yearly';
+}
 
 @Component({
   selector: 'app-budget-setup-container',
@@ -49,19 +54,6 @@ export class BudgetSetupContainerComponent implements OnInit {
     return this.expensesForm.get('expenses') as FormArray;
   }
   
-  suggestedExpenses: SuggestedExpense[] = [
-    { name: 'Loyer / Prêt immo', category: 'housing', amount: 800, frequency: 'monthly' },
-    { name: 'Courses alimentaires', category: 'food', amount: 400, frequency: 'monthly' },
-    { name: 'Electricité', category: 'utilities', amount: 80, frequency: 'monthly' },
-    { name: 'Internet', category: 'utilities', amount: 30, frequency: 'monthly' },
-    { name: 'Téléphone', category: 'utilities', amount: 20, frequency: 'monthly' },
-    { name: 'Transport', category: 'transport', amount: 100, frequency: 'monthly' },
-    { name: 'Assurance auto', category: 'insurance', amount: 600, frequency: 'yearly' },
-    { name: 'Assurance habitation', category: 'insurance', amount: 300, frequency: 'yearly' },
-    { name: 'Mutuelle', category: 'health', amount: 50, frequency: 'monthly' },
-    { name: 'Loisirs', category: 'leisure', amount: 100, frequency: 'monthly' }
-  ];
-  
   isOverdrawn = computed(() => {
     const balance = this.financialForm.get('accountBalance')?.value || 0;
     return balance < 0;
@@ -98,7 +90,7 @@ export class BudgetSetupContainerComponent implements OnInit {
     this.saveAndNavigate();
   }
   
-  onAddExpense(expense: SuggestedExpense): void {
+  onAddExpense(expense: NewExpense): void {
     this.expensesArray.push(this.createExpenseForm(expense));
     this.steps[1].completed = this.expensesArray.length > 0;
   }
@@ -107,7 +99,7 @@ export class BudgetSetupContainerComponent implements OnInit {
     this.expensesArray.removeAt(index);
   }
   
-  private createExpenseForm(expense?: Expense | SuggestedExpense): FormGroup {
+  private createExpenseForm(expense?: Expense | NewExpense): FormGroup {
     return this.fb.group({
       name: [expense?.name || '', Validators.required],
       category: [expense?.category || 'other', Validators.required],

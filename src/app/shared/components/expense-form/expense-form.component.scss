@@ -1,0 +1,86 @@
+.expense-form-container {
+  background: var(--surface-variant);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+}
+
+.form-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  
+  mat-icon {
+    color: var(--primary-color);
+  }
+}
+
+.expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.form-field {
+  flex: 1;
+  
+  &.name-field {
+    flex: 2;
+  }
+  
+  &.category-field {
+    flex: 1.5;
+  }
+  
+  &.amount-field {
+    flex: 1;
+  }
+  
+  &.frequency-field {
+    flex: 1;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding-top: 4px;
+  
+  .submit-btn {
+    white-space: nowrap;
+    
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+mat-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--primary-color);
+  }
+}
