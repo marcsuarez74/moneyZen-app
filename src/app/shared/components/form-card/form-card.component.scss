@@ -1,29 +1,13 @@
-.form-card {
-  margin-bottom: 24px;
-  
-  mat-card-header {
-    padding-bottom: 16px;
-  }
-  
-  mat-card-content {
-    padding-top: 16px;
-  }
-  
-  mat-card-actions {
-    padding: 16px;
-    gap: 12px;
-  }
-}
-
-mat-icon[mat-card-avatar] {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-  color: white;
-  border-radius: 50%;
-  padding: 8px;
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.form-card{background:var(--surface);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid var(--border);overflow:hidden;animation:slideUp .5s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.form-card ::ng-deep .mat-mdc-card-header{padding:28px 28px 20px 28px;display:flex;align-items:center;gap:16px}
+.form-card ::ng-deep .mat-mdc-card-header-text{display:flex;flex-direction:column;gap:6px}
+.form-card ::ng-deep .mat-mdc-card-title{margin:0;font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-.5px}
+.form-card ::ng-deep .mat-mdc-card-subtitle{margin:0;font-size:14px;color:var(--text-secondary);font-weight:500}
+mat-icon[mat-card-avatar]{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)!important;color:white!important;border-radius:16px!important;padding:12px!important;font-size:28px!important;width:28px!important;height:28px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 8px 24px rgba(102,126,234,.3)!important}
+.form-card ::ng-deep .mat-mdc-card-content{padding:0 28px 28px 28px}
+.form-card ::ng-deep .mat-mdc-card-actions{padding:20px 28px;border-top:1px solid var(--border);gap:16px;display:flex;justify-content:flex-end}
+.form-card ::ng-deep .mat-mdc-card-actions button{height:48px;border-radius:12px;font-weight:600;padding:0 24px}
+.form-card ::ng-deep .mat-mdc-card-actions button mat-icon{margin:0 8px}
+.form-card ::ng-deep .mat-mdc-card-actions button.mat-mdc-raised-button{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);box-shadow:0 4px 16px rgba(102,126,234,.4)}
+.form-card ::ng-deep .mat-mdc-card-actions button.mat-mdc-raised-button:hover{box-shadow:0 6px 20px rgba(102,126,234,.5)}@media(max-width:600px){.form-card{border-radius:20px}.form-card ::ng-deep .mat-mdc-card-header{padding:20px}.form-card ::ng-deep .mat-mdc-card-content{padding:0 20px 20px 20px}.form-card ::ng-deep .mat-mdc-card-actions{padding:16px 20px;flex-direction:column-reverse}.form-card ::ng-deep .mat-mdc-card-actions button{width:100%}}

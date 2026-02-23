@@ -1,0 +1,137 @@
+<div class="budget-page">
+  <app-dashboard-header
+    [hasUserData]="budgetStore.hasUserData()"
+    [isNegativeBalance]="isNegativeBalance()"
+    [paydayInfo]="paydayInfo()"
+    [paydayMessage]="paydayMessage()"
+    [upcomingCharges]="upcomingCharges()"
+    [expenseCount]="budgetStore.expenses().length"
+    [budgetHealth]="budgetAnalysis()?.metrics?.budgetHealth"
+    (editIncome)="openEditIncome()"
+    (editExpenses)="openEditExpenses()"
+    (createNewBudget)="createNewBudget()"
+    (importBank)="openBankImport()">
+  </app-dashboard-header>
+
+  @if (!budgetStore.hasUserData()) {
+    <app-welcome-card></app-welcome-card>
+  }
+
+  @if (budgetStore.hasUserData()) {
+    <main class="dashboard-layout">
+      <div class="dashboard-container">
+        
+        @if (isNegativeBalance() && recoveryData(); as recovery) {
+          <section class="dashboard-section section-alert">
+            <app-debt-recovery-plan
+              [data]="recovery"
+              (acceptPlan)="onAcceptRecoveryPlan($event)"
+              (adjustPlan)="onAdjustRecoveryPlan($event)">
+            </app-debt-recovery-plan>
+          </section>
+        }
+        
+        @if (priorityInsights().length > 0) {
+          <section class="dashboard-section section-insights">
+            <app-budget-insights
+              [insights]="priorityInsights()"
+              (actionClicked)="handleInsightAction($event)">
+            </app-budget-insights>
+          </section>
+        }
+
+        <section class="dashboard-section section-stats">
+          <app-budget-stats-display
+            [summary]="budgetStore.budgetSummary()!"
+            [userData]="budgetStore.userData()!"
+            [analysis]="budgetAnalysis()"
+            [paydayInfo]="paydayInfo()">
+          </app-budget-stats-display>
+        </section>
+
+        <section class="dashboard-section section-content">
+          <div class="content-tabs">
+            <mat-tab-group animationDuration="300ms" class="modern-tabs">
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <div class="tab-label">
+                    <div class="tab-icon">
+                      <mat-icon>donut_large</mat-icon>
+                    </div>
+                    <span class="tab-text">Répartition</span>
+                  </div>
+                </ng-template>
+                <div class="tab-panel">
+                  <app-expense-breakdown
+                    [summary]="budgetStore.budgetSummary()!"
+                    [expenses]="budgetStore.expenses()"
+                    [thresholds]="categoryThresholds">
+                  </app-expense-breakdown>
+                </div>
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <div class="tab-label">
+                    <div class="tab-icon">
+                      <mat-icon>lightbulb</mat-icon>
+                    </div>
+                    <span class="tab-text">Conseils</span>
+                    @if (budgetAnalysis()?.recommendations?.length) {
+                      <span class="tab-badge">{{ budgetAnalysis()?.recommendations?.length }}</span>
+                    }
+                  </div>
+                </ng-template>
+                <div class="tab-panel">
+                  <app-budget-recommendations
+                    [analysis]="budgetAnalysis()"
+                    [summary]="budgetStore.budgetSummary()!">
+                  </app-budget-recommendations>
+                </div>
+              </mat-tab>
+
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <div class="tab-label">
+                    <div class="tab-icon">
+                      <mat-icon>trending_up</mat-icon>
+                    </div>
+                    <span class="tab-text">Projections</span>
+                  </div>
+                </ng-template>
+                <div class="tab-panel">
+                  <div class="scenarios-grid">
+                    @for (scenario of scenarioArray(); track scenario.name) {
+                      <article class="scenario-card" [class]="getScenarioClass(scenario.name)">
+                        <div class="scenario-header">
+                          <div class="scenario-icon">
+                            <mat-icon>
+                              {{ scenario.name === 'Conservateur' ? 'trending_down' : 
+                                 scenario.name === 'Optimisé' ? 'trending_up' : 'trending_flat' }}
+                            </mat-icon>
+                          </div>
+                          <h3>{{ scenario.name }}</h3>
+                        </div>
+                        <div class="scenario-body">
+                          <div class="scenario-metric">
+                            <span class="metric-label">Épargne mensuelle</span>
+                            <span class="metric-value">{{ scenario.monthlySavings | currency:'EUR' }}</span>
+                          </div>
+                          <div class="scenario-metric">
+                            <span class="metric-label">Projection annuelle</span>
+                            <span class="metric-value main">{{ scenario.yearlyProjection | currency:'EUR' }}</span>
+                          </div>
+                        </div>
+                      </article>
+                    }
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </section>
+        
+      </div>
+    </main>
+  }
+</div>

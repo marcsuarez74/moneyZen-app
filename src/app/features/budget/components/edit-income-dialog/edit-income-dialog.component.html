@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>
+  <div class="title-icon">
+    <mat-icon>edit</mat-icon>
+  </div>
+  Modifier mes revenus
+</h2>
+
+<mat-dialog-content [formGroup]="incomeForm">
+  <section class="form-section">
+    <h3>
+      <div class="section-icon income">
+        <mat-icon>payments</mat-icon>
+      </div>
+      Revenus mensuels
+    </h3>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Salaire mensuel net</mat-label>
+      <input matInput type="number" formControlName="salary" placeholder="2500">
+      <span matSuffix>€</span>
+      <mat-hint>Votre revenu principal après impôts</mat-hint>
+    </mat-form-field>
+  </section>
+  
+  <section class="form-section">
+    <h3>
+      <div class="section-icon calendar">
+        <mat-icon>event</mat-icon>
+      </div>
+      Jour de paie
+    </h3>
+    <div class="payday-control">
+      <mat-slider min="1" max="31" step="1" discrete showTickMarks>
+        <input matSliderThumb formControlName="paydayDay">
+      </mat-slider>
+      <div class="payday-display">
+        <span class="day-number">{{ incomeForm.get('paydayDay')?.value }}</span>
+        <span class="day-label">
+          {{ incomeForm.get('paydayDay')?.value === 1 ? 'er' : '' }} 
+          du mois
+        </span>
+      </div>
+    </div>
+    <p class="payday-help">
+      Le jour où vous recevez votre salaire nous aide à calculer votre budget quotidien.
+    </p>
+  </section>
+  
+  <section class="form-section">
+    <h3>
+      <div class="section-icon bank">
+        <mat-icon>account_balance</mat-icon>
+      </div>
+      Situation bancaire actuelle
+    </h3>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Solde bancaire actuel</mat-label>
+      <input matInput type="number" formControlName="accountBalance" placeholder="0">
+      <span matSuffix>€</span>
+      <mat-hint>Positif = créditeur, Négatif = débiteur</mat-hint>
+    </mat-form-field>
+    
+    <div class="balance-indicator" [class.positive]="incomeForm.get('isPositiveBalance')?.value" [class.negative]="!incomeForm.get('isPositiveBalance')?.value">
+      <mat-slide-toggle formControlName="isPositiveBalance" color="primary">
+        Mon solde est positif
+      </mat-slide-toggle>
+      <span class="balance-status">
+        <mat-icon>{{ incomeForm.get('isPositiveBalance')?.value ? 'check_circle' : 'warning' }}</mat-icon>
+        {{ incomeForm.get('isPositiveBalance')?.value ? 'Compte créditeur' : 'Compte débiteur' }}
+      </span>
+    </div>
+  </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!incomeForm.valid">
+    <mat-icon>save</mat-icon>
+    Enregistrer
+  </button>
+</mat-dialog-actions>

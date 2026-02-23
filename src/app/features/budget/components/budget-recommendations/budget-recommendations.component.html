@@ -1,0 +1,106 @@
+@if (analysis()?.recommendations?.length) {
+  <div class="recommendations-container">
+    <header class="section-header">
+      <div class="header-icon">
+        <mat-icon>lightbulb</mat-icon>
+      </div>
+      <div class="header-content">
+        <h2>Recommandations</h2>
+        <span class="subtitle">{{ analysis()?.recommendations?.length || 0 }} conseils personnalisés</span>
+      </div>
+    </header>
+    
+    @if (highPriorityRecs().length > 0) {
+      <section class="priority-section high-priority">
+        <h3 class="section-title">
+          <mat-icon>priority_high</mat-icon>
+          Actions prioritaires
+        </h3>
+        
+        <div class="rec-list">
+          @for (rec of highPriorityRecs(); track rec.id) {
+            <article class="rec-item" [class]="rec.type">
+              <div class="rec-main">
+                <div class="rec-icon" [class]="rec.type">
+                  <mat-icon>{{ getRecIcon(rec.type) }}</mat-icon>
+                </div>
+                
+                <div class="rec-info">
+                  <div class="rec-header">
+                    <h4>{{ rec.title }}</h4>
+                    <span class="rec-category">{{ getCategoryLabel(rec.category) }}</span>
+                  </div>
+                  <p class="rec-description">{{ rec.description }}</p>
+                </div>
+                
+                @if (rec.potentialSavings > 0) {
+                  <div class="rec-savings">
+                    <mat-icon>savings</mat-icon>
+                    <span>{{ rec.potentialSavings | currency:'EUR' }}</span>
+                  </div>
+                }
+              </div>
+              
+              <div class="rec-actions">
+                <button mat-button (click)="viewDetails.emit(rec)">
+                  Détails
+                </button>
+                <button mat-raised-button color="primary" (click)="applyRecommendation.emit(rec)">
+                  <mat-icon>check</mat-icon>
+                  Appliquer
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    }
+    
+    @if (mediumPriorityRecs().length > 0) {
+      <section class="priority-section medium-priority">
+        <h3 class="section-title">
+          <mat-icon>star</mat-icon>
+          Optimisations possibles
+        </h3>
+        
+        <div class="rec-list">
+          @for (rec of mediumPriorityRecs().slice(0, 3); track rec.id) {
+            <article class="rec-item" [class]="rec.type">
+              <div class="rec-main">
+                <div class="rec-icon" [class]="rec.type">
+                  <mat-icon>{{ getRecIcon(rec.type) }}</mat-icon>
+                </div>
+                
+                <div class="rec-info">
+                  <div class="rec-header">
+                    <h4>{{ rec.title }}</h4>
+                    <span class="rec-category">{{ getCategoryLabel(rec.category) }}</span>
+                  </div>
+                  <p class="rec-description">{{ rec.description }}</p>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+    }
+  </div>
+} @else {
+  <div class="no-recommendations">
+    <div class="success-illustration">
+      <mat-icon>check_circle</mat-icon>
+    </div>
+    <h2>Excellent !</h2>
+    <p>Votre budget est bien optimisé. Continuez ainsi !</p>
+    <div class="metrics-preview">
+      <div class="metric-badge">
+        <mat-icon>favorite</mat-icon>
+        <span>Santé: {{ analysis()?.metrics?.budgetHealth || 0 }}/100</span>
+      </div>
+      <div class="metric-badge">
+        <mat-icon>savings</mat-icon>
+        <span>Épargne: {{ analysis()?.metrics?.savingsRate?.toFixed(1) || 0 }}%</span>
+      </div>
+    </div>
+  </div>
+}

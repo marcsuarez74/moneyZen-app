@@ -28,6 +28,11 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# Test data files
+/data
+*.ofx
+*.csv
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/

@@ -1,97 +1,95 @@
-<div class="stats-container">
-  <!-- Info paie prioritaire avec date actuelle -->
-  @if (paydayInfo(); as payday) {
-    <div class="payday-banner" [class.urgent]="payday.daysUntilPayday <= 3 || payday.monthProgressPercent >= 75">
-      <mat-icon>event</mat-icon>
-      <div class="payday-content">
-        <span class="payday-text">
-          {{ payday.daysUntilPayday === 0 ? "C'est aujourd'hui !" :
-             payday.daysUntilPayday === 1 ? "Demain !" :
-             payday.daysUntilPayday + ' jours avant la paie' }}
-          <span class="month-progress">(mois à {{ payday.monthProgressPercent }}%)</span>
-        </span>
-        @if (payday.actualDailyBudget > 0) {
-          <span class="payday-budget">
-            Budget réel: {{ payday.actualDailyBudget | currency:'EUR' }}/jour sur {{ payday.remainingDaysInMonth }} jours restants
-          </span>
+<div class="stats-grid">
+  <!-- Main Balance Card (Hero) -->
+  @if (userData(); as user) {
+    <article class="hero-card" [class.negative]="user.accountBalance < 0">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <header class="hero-header">
+          <span class="hero-label">Solde actuel</span>
+          <div class="hero-badge" [class]="getHealthColor()">
+            <mat-icon>{{ getHealthIcon() }}</mat-icon>
+            <span>{{ getBalanceStatus() }}</span>
+          </div>
+        </header>
+        
+        <div class="hero-balance">
+          <span class="balance-currency">€</span>
+          <span class="balance-amount">{{ formatBalance(user.accountBalance) }}</span>
+        </div>
+        
+        @if (paydayInfo(); as payday) {
+          <footer class="hero-footer">
+            <div class="footer-item">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Paye dans {{ payday.daysUntilPayday }}j</span>
+            </div>
+            @if (payday.actualDailyBudget > 0) {
+              <div class="footer-item" [class.warning]="payday.actualDailyBudget < 20">
+                <mat-icon>speed</mat-icon>
+                <span>{{ payday.actualDailyBudget | currency:'EUR' }}/jour</span>
+              </div>
+            }
+          </footer>
         }
       </div>
-    </div>
+    </article>
   }
 
-  <div class="stats-grid">
-    <mat-card class="stat-card income">
-      <mat-card-content>
-        <mat-icon class="stat-icon">trending_up</mat-icon>
-        <div class="stat-info">
-          <span class="stat-label">Revenus mensuels</span>
-          <span class="stat-value">{{ summary().totalIncome | currency:'EUR' }}</span>
-          @if (userData()?.paydayDay) {
-            <span class="stat-sublabel">Payé le {{ userData()?.paydayDay }} du mois</span>
-          }
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="stat-card expense">
-      <mat-card-content>
-        <mat-icon class="stat-icon">receipt_long</mat-icon>
-        <div class="stat-info">
-          <span class="stat-label">Dépenses</span>
-          <span class="stat-value">{{ summary().totalExpenses | currency:'EUR' }}</span>
-          <span class="stat-sublabel">{{ getExpensePercentOfIncome() }}% du revenu</span>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="stat-card balance"
-              [class.positive]="summary().remainingBudget > 0"
-              [class.negative]="summary().remainingBudget < 0">
-      <mat-card-content>
-        <mat-icon class="stat-icon">
-          {{ summary().remainingBudget >= 0 ? 'account_balance_wallet' : 'warning' }}
-        </mat-icon>
-        <div class="stat-info">
-          <span class="stat-label">Reste à vivre</span>
-          <span class="stat-value">{{ summary().remainingBudget | currency:'EUR' }}</span>
-          <span class="stat-sublabel" [class.warning]="summary().remainingBudget < 0">
-            {{ getBalanceStatus() }}
-          </span>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="stat-card savings">
-      <mat-card-content>
-        <mat-icon class="stat-icon">savings</mat-icon>
-        <div class="stat-info">
-          <span class="stat-label">Capacité d'épargne</span>
-          <span class="stat-value">{{ summary().savingsPotential | currency:'EUR' }}</span>
-          @if (analysis()) {
-            <span class="stat-sublabel" [class.good]="analysis()!.metrics.savingsRate >= 10">
-              {{ analysis()!.metrics.savingsRate.toFixed(1) }}% du salaire
-            </span>
-          }
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <!-- Métriques additionnelles -->
-  @if (analysis()) {
-    <div class="metrics-bar">
-      <div class="metric-item">
-        <mat-icon [class]="getHealthColor()">favorite</mat-icon>
-        <span>Santé: {{ analysis()!.metrics.budgetHealth }}/100</span>
-      </div>
-      <div class="metric-item">
-        <mat-icon>account_balance</mat-icon>
-        <span>Charges fixes: {{ analysis()!.metrics.fixedExpensesRatio.toFixed(0) }}%</span>
-      </div>
-      <div class="metric-item">
-        <mat-icon>shopping_bag</mat-icon>
-        <span>Variable: {{ analysis()!.metrics.discretionarySpending.toFixed(0) }}%</span>
-      </div>
+  <!-- Income Card -->
+  <article class="stat-card income">
+    <div class="card-icon">
+      <mat-icon>trending_up</mat-icon>
     </div>
+    <div class="card-content">
+      <span class="card-label">Revenus mensuels</span>
+      <span class="card-value">{{ summary().totalIncome | currency:'EUR':'symbol':'1.0-0' }}</span>
+      @if (userData()?.salary !== summary().totalIncome) {
+        <span class="card-subtitle">Salaire : {{ userData()?.salary | currency:'EUR':'symbol':'1.0-0' }}</span>
+      }
+    </div>
+  </article>
+
+  <!-- Expenses Card -->
+  <article class="stat-card expenses">
+    <div class="card-icon">
+      <mat-icon>trending_down</mat-icon>
+    </div>
+    <div class="card-content">
+      <span class="card-label">Dépenses</span>
+      <span class="card-value">{{ summary().totalExpenses | currency:'EUR':'symbol':'1.0-0' }}</span>
+      <span class="card-subtitle">{{ getExpensePercentOfIncome() }}% des revenus</span>
+    </div>
+  </article>
+
+  <!-- Remaining Card -->
+  <article class="stat-card remaining" [class.negative]="summary().remainingBudget < 0">
+    <div class="card-icon">
+      <mat-icon>account_balance_wallet</mat-icon>
+    </div>
+    <div class="card-content">
+      <span class="card-label">Reste à vivre</span>
+      <span class="card-value">{{ summary().remainingBudget | currency:'EUR':'symbol':'1.0-0' }}</span>
+      <span class="card-subtitle">
+        {{ summary().remainingBudget >= 0 ? '💰 Montant disponible' : '⚠️ Déficit' }}
+      </span>
+    </div>
+  </article>
+
+  <!-- Health Score -->
+  @if (analysis(); as analysis) {
+    <article class="stat-card health" [class]="getHealthColor()">
+      <div class="card-icon">
+        <mat-icon>favorite</mat-icon>
+      </div>
+      <div class="card-content">
+        <span class="card-label">Santé financière</span>
+        <div class="health-score">
+          <span class="score-value">{{ analysis.metrics.budgetHealth }}%</span>
+          <div class="score-bar">
+            <div class="score-fill" [style.width.%]="analysis.metrics.budgetHealth"></div>
+          </div>
+        </div>
+      </div>
+    </article>
   }
 </div>
