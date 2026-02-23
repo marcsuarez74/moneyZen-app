@@ -1,0 +1,30 @@
+@if (insights().length > 0) {
+  <div class="insights-container">
+    @for (insight of insights(); track insight.title; let i = $index) {
+      <article class="insight-card" [class]="insight.type" [style.--delay]="i * 0.1 + 's'">
+        <div class="insight-content">
+          <div class="insight-icon" [class]="insight.type">
+            <mat-icon>{{ insight.icon }}</mat-icon>
+          </div>
+          
+          <div class="insight-body">
+            <div class="insight-header">
+              <h3>{{ insight.title }}</h3>
+              <span class="priority-badge" [class]="insight.type">
+                {{ getPriorityLabel(insight.priority) }}
+              </span>
+            </div>
+            <p class="insight-description">{{ insight.description }}</p>
+          </div>
+          
+          @if (insight.actionable && insight.actionText) {
+            <button mat-stroked-button class="action-btn" (click)="actionClicked.emit(insight)">
+              {{ insight.actionText }}
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </div>
+}

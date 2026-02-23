@@ -1,82 +1,127 @@
 <header class="dashboard-header" [class.negative]="isNegativeBalance()">
-  <div class="header-content">
-    <div class="header-left">
-      <h1>Tableau de Bord</h1>
-      <div class="header-info">
+  <div class="header-container">
+    <!-- Left: Brand & Info -->
+    <div class="header-brand">
+      <div class="brand-content">
+        <h1 class="brand-title">
+          <mat-icon>account_balance_wallet</mat-icon>
+          Mon Budget
+        </h1>
+        
         @if (paydayInfo(); as payday) {
-          <div class="payday-info" [class.urgent]="payday.daysUntilPayday <= 5 || payday.monthProgressPercent >= 66">
-            <mat-icon>event</mat-icon>
-            <span>{{ paydayMessage() }}</span>
+          <div class="brand-subtitle" [class.urgent]="payday.daysUntilPayday <= 5">
+            <div class="subtitle-badge">
+              <mat-icon>event</mat-icon>
+              <span>{{ paydayMessage() }}</span>
+            </div>
+            
             @if (payday.actualDailyBudget > 0) {
-              <span class="daily-budget" [class.tight]="payday.actualDailyBudget < 20">
-                ({{ payday.actualDailyBudget | currency:'EUR' }}/jour)
-              </span>
+              <div class="daily-budget" [class.tight]="payday.actualDailyBudget < 20">
+                <mat-icon>speed</mat-icon>
+                <span>{{ payday.actualDailyBudget | currency:'EUR' }}/jour</span>
+              </div>
             }
           </div>
         }
-        
+      </div>
+
+      @if (hasUserData() && budgetHealth() !== undefined) {
+        <div class="health-widget" [class]="getHealthClass()">
+          <div class="health-icon">
+            <mat-icon>{{ getHealthIcon() }}</mat-icon>
+          </div>
+          <div class="health-info">
+            <span class="health-label">Santé</span>
+            <span class="health-value">{{ budgetHealth() }}%</span>
+          </div>
+          <div class="health-bar">
+            <div class="health-fill" [style.width.%]="budgetHealth()"></div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Center: Quick Stats -->
+    @if (hasUserData()) {
+      <div class="header-stats">
         @if (upcomingCharges(); as charges) {
-          @if (charges.count > 0 && charges.total > 0) {
-            <div class="charges-notification" [class.urgent]="charges.total > 500">
-              <mat-icon>receipt_long</mat-icon>
-              <span>
-                {{ charges.count }} charge{{ charges.count > 1 ? 's' : '' }} à venir : {{ charges.total | currency:'EUR' }}
-              </span>
+          @if (charges.count > 0) {
+            <div class="stat-card charges-card" [class.urgent]="charges.total > 500">
+              <div class="stat-icon">
+                <mat-icon>receipt_long</mat-icon>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value">{{ charges.total | currency:'EUR':'symbol':'1.0-0' }}</span>
+                <span class="stat-label">{{ charges.count }} charge{{ charges.count > 1 ? 's' : '' }} à venir</span>
+              </div>
             </div>
           }
         }
-        
+
         @if (isNegativeBalance()) {
-          <div class="alert-badge">
-            <mat-icon>warning</mat-icon>
-            Solde négatif
+          <div class="stat-card alert-card">
+            <div class="stat-icon">
+              <mat-icon>warning</mat-icon>
+            </div>
+            <div class="stat-content">
+              <span class="stat-value">Déficit</span>
+              <span class="stat-label">Solde négatif</span>
+            </div>
           </div>
         }
       </div>
-    </div>
-    
-    @if (hasUserData()) {
-      <div class="header-actions">
-        <button mat-stroked-button (click)="editIncome.emit()" class="action-btn">
-          <mat-icon>payments</mat-icon>
-          <span class="btn-text">Revenus</span>
-        </button>
-        
-        <button mat-stroked-button (click)="editExpenses.emit()" class="action-btn charges-btn">
+    }
+
+    <!-- Right: Actions -->
+    <div class="header-actions">
+      @if (hasUserData()) {
+        <button 
+          mat-icon-button 
+          class="action-btn"
+          [class.has-badge]="expenseCount() > 0"
+          (click)="editExpenses.emit()"
+          matTooltip="Modifier les charges">
           <mat-icon>receipt_long</mat-icon>
-          <span class="btn-text">Charges</span>
           @if (expenseCount() > 0) {
-            <span class="expense-badge">{{ expenseCount() }}</span>
+            <span class="btn-badge">{{ expenseCount() }}</span>
           }
         </button>
-        
-        <button mat-raised-button color="primary" (click)="createNewBudget.emit()" class="action-btn primary">
-          <mat-icon>add</mat-icon>
-          <span class="btn-text">Nouveau budget</span>
+
+        <button 
+          mat-icon-button 
+          class="action-btn"
+          (click)="editIncome.emit()"
+          matTooltip="Modifier les revenus">
+          <mat-icon>payments</mat-icon>
         </button>
-      </div>
-    } @else {
-      <a mat-raised-button color="primary" routerLink="/budget/setup">
-        <mat-icon>add</mat-icon>
-        Configurer
-      </a>
-    }
-  </div>
-  
-  <!-- Barre de santé budgétaire -->
-  @if (hasUserData() && budgetHealth() !== undefined) {
-    <div class="health-bar-container">
-      <div class="health-bar">
-        <div class="health-indicator" 
-             [style.width.%]="budgetHealth() || 0" 
-             [class.healthy]="(budgetHealth() || 0) >= 70"
-             [class.warning]="(budgetHealth() || 0) >= 50 && (budgetHealth() || 0) < 70"
-             [class.critical]="(budgetHealth() || 0) < 50">
-        </div>
-      </div>
-      <span class="health-label">
-        Santé: {{ budgetHealth() || 0 }}%
-      </span>
+
+        <button 
+          mat-icon-button 
+          class="action-btn"
+          (click)="importBank.emit()"
+          matTooltip="Importer relevé bancaire">
+          <mat-icon>upload_file</mat-icon>
+        </button>
+
+        <div class="divider"></div>
+
+        <button 
+          mat-raised-button 
+          class="new-budget-btn"
+          color="primary"
+          (click)="createNewBudget.emit()">
+          <mat-icon>add</mat-icon>
+          <span>Nouveau</span>
+        </button>
+      } @else {
+        <button 
+          mat-raised-button 
+          color="primary"
+          routerLink="/budget/setup">
+          <mat-icon>add</mat-icon>
+          Commencer
+        </button>
+      }
     </div>
-  }
+  </div>
 </header>

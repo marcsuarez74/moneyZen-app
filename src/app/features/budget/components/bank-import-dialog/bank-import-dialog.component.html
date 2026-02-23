@@ -1,0 +1,241 @@
+<h2 mat-dialog-title>
+  <mat-icon>upload_file</mat-icon>
+  Importer des transactions bancaires
+</h2>
+
+<mat-dialog-content>
+  <mat-horizontal-stepper [linear]="true" [selectedIndex]="currentStep()">
+    
+    <!-- Étape 1 : Sélection du fichier -->
+    <mat-step label="Fichier">
+      <div class="step-content">
+        
+        @if (!selectedFile()) {
+          <div class="file-drop-zone"
+               (drop)="onDropFile($event)"
+               (dragover)="onDragOver($event)">
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <p class="drop-text">Glissez-déposez votre fichier CSV ou OFX ici</p>
+            <p class="drop-subtext">ou</p>
+            <input type="file" 
+                   #fileInput 
+                   accept=".csv,.ofx" 
+                   style="display: none"
+                   (change)="onFileSelected($event)">
+            <button mat-stroked-button color="primary" (click)="fileInput.click()">
+              <mat-icon>folder_open</mat-icon>
+              Sélectionner un fichier
+            </button>
+            <p class="file-types">Formats supportés : CSV, OFX</p>
+          </div>
+        } @else {
+          <div class="file-info">
+            <div class="file-details">
+              <mat-icon class="file-icon">description</mat-icon>
+              <div class="file-meta">
+                <span class="file-name">{{ fileName() }}</span>
+                <span class="file-type">{{ fileType() }}</span>
+                @if (detectedFormat() !== 'unknown' && detectedFormat() !== 'standard') {
+                  <mat-chip color="primary" selected>
+                    {{ getFormatLabel(detectedFormat()) }}
+                  </mat-chip>
+                }
+              </div>
+            </div>
+            <button mat-icon-button color="warn" (click)="removeFile()">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+
+          @if (errorMessage()) {
+            <div class="error-message">
+              <mat-icon color="warn">error</mat-icon>
+              <span>{{ errorMessage() }}</span>
+            </div>
+          }
+
+           <div class="step-actions">
+            <button mat-button type="button" (click)="onCancel()">Annuler</button>
+            <button mat-raised-button 
+                    type="button"
+                    color="primary" 
+                    (click)="importFile(); $event.preventDefault(); $event.stopPropagation();"
+                    [disabled]="!selectedFile() || isLoading()">
+              <span class="btn-content">
+                @if (isLoading()) {
+                  <mat-icon class="spinner">refresh</mat-icon>
+                  <span>Import en cours...</span>
+                } @else {
+                  <mat-icon>upload</mat-icon>
+                  <span class="btn-text">Importer</span>
+                }
+              </span>
+            </button>
+          </div>
+        }
+
+        @if (isLoading()) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+      </div>
+    </mat-step>
+
+    <!-- Étape 2 : Vérification et catégorisation -->
+    <mat-step label="Transactions">
+      <div class="step-content">
+        
+        @if (importResult(); as result) {
+          <div class="import-summary">
+            <div class="summary-card">
+              <span class="summary-label">Total importé</span>
+              <span class="summary-value">{{ result.totalImported }}</span>
+            </div>
+            <div class="summary-card credits">
+              <span class="summary-label">Crédits</span>
+              <span class="summary-value">{{ result.totalCredits | currency:'EUR' }}</span>
+            </div>
+            <div class="summary-card debits">
+              <span class="summary-label">Débits</span>
+              <span class="summary-value">{{ result.totalDebits | currency:'EUR' }}</span>
+            </div>
+          </div>
+
+          <div class="table-toolbar">
+            <mat-checkbox 
+              [checked]="isAllSelected()"
+              [indeterminate]="isIndeterminate()"
+              (change)="toggleSelectAll($event.checked)">
+              Tout sélectionner ({{ selectedTransactions().size }} / {{ result.transactions.length }})
+            </mat-checkbox>
+
+            @if (detectedFormat() !== 'unknown') {
+              <mat-chip color="accent" selected>
+                Format détecté : {{ getFormatLabel(detectedFormat()) }}
+              </mat-chip>
+            }
+          </div>
+
+          <div class="table-container">
+            <table mat-table [dataSource]="result.transactions" class="transactions-table">
+              
+              <!-- Sélection -->
+              <ng-container matColumnDef="selected">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox 
+                    [checked]="isAllSelected()"
+                    [indeterminate]="isIndeterminate()"
+                    (change)="toggleSelectAll($event.checked)">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let transaction">
+                  <mat-checkbox 
+                    [checked]="selectedTransactions().has(transaction.id)"
+                    (change)="toggleTransactionSelection(transaction.id)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+
+              <!-- Date -->
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let transaction">
+                  {{ transaction.date | date:'dd/MM/yyyy' }}
+                </td>
+              </ng-container>
+
+              <!-- Description -->
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let transaction" class="description-cell">
+                  {{ transaction.description }}
+                </td>
+              </ng-container>
+
+              <!-- Montant -->
+              <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef>Montant</th>
+                <td mat-cell *matCellDef="let transaction" 
+                    [class.credit]="transaction.type === 'credit'"
+                    [class.debit]="transaction.type === 'debit'">
+                  {{ transaction.amount | currency:'EUR' }}
+                </td>
+              </ng-container>
+
+              <!-- Type -->
+              <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef>Type</th>
+                <td mat-cell *matCellDef="let transaction">
+                  <mat-icon [class.credit-icon]="transaction.type === 'credit'"
+                           [class.debit-icon]="transaction.type === 'debit'">
+                    {{ transaction.type === 'credit' ? 'add_circle' : 'remove_circle' }}
+                  </mat-icon>
+                </td>
+              </ng-container>
+
+              <!-- Catégorie -->
+              <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef>Catégorie</th>
+                <td mat-cell *matCellDef="let transaction">
+                  <mat-form-field appearance="outline" class="category-select">
+                    <mat-select [value]="transaction.matchedCategory || 'other'"
+                                (selectionChange)="updateTransactionCategory(transaction, $event.value)">
+                      @for (cat of getAllCategories(); track cat.value) {
+                        <mat-option [value]="cat.value">
+                          <mat-icon>{{ cat.icon }}</mat-icon>
+                          {{ cat.label }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                  [class.selected-row]="selectedTransactions().has(row.id)"></tr>
+            </table>
+          </div>
+
+          @if (result.errors.length > 0) {
+            <div class="errors-section">
+              <h4>
+                <mat-icon color="warn">warning</mat-icon>
+                Erreurs ({{ result.errors.length }})
+              </h4>
+              <ul>
+                @for (error of result.errors.slice(0, 5); track error) {
+                  <li>{{ error }}</li>
+                }
+                @if (result.errors.length > 5) {
+                  <li>... et {{ result.errors.length - 5 }} autres erreurs</li>
+                }
+              </ul>
+            </div>
+          }
+
+          <div class="selected-summary">
+            <div class="selected-info">
+              <span>{{ selectedTransactions().size }} transaction(s) sélectionnée(s)</span>
+              <span class="selected-total">
+                Total : {{ getTotalImported() | currency:'EUR' }}
+                ({{ getTotalCredits() | currency:'EUR' }} crédits, 
+                {{ getTotalDebits() | currency:'EUR' }} débits)
+              </span>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button mat-button (click)="currentStep.set(0)">Retour</button>
+            <button mat-raised-button 
+                    color="primary" 
+                    (click)="onConfirmImport()"
+                    [disabled]="selectedTransactions().size === 0">
+              <mat-icon>save</mat-icon>
+              Importer {{ selectedTransactions().size }} transaction(s)
+            </button>
+          </div>
+        }
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</mat-dialog-content>

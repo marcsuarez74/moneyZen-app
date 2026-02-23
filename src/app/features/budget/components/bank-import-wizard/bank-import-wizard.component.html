@@ -1,0 +1,70 @@
+<div class="wizard-container">
+  <!-- Header -->
+  <div class="wizard-header">
+    <div class="header-content">
+      <mat-icon class="header-icon">account_balance</mat-icon>
+      <div class="header-text">
+        <h2>Importer mes relevés bancaires</h2>
+        <p class="subtitle">Importez vos transactions en quelques clics</p>
+      </div>
+    </div>
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Progress bar with clickable navigation -->
+  <div class="progress-bar">
+    @for (step of [0, 1, 2, 3]; track step) {
+      <div class="progress-step" 
+           [class.active]="currentStep() >= step"
+           [class.completed]="currentStep() > step"
+           [class.current]="currentStep() === step"
+           [class.clickable]="isStepAccessible(step)"
+           (click)="isStepAccessible(step) && goToStep(step)"
+           role="button"
+           tabindex="0"
+           [attr.aria-label]="'Étape ' + (step + 1) + ': ' + stepLabels[step]">
+        <div class="step-number">{{ step + 1 }}</div>
+        <span class="step-label">{{ stepLabels[step] }}</span>
+      </div>
+      @if (step < 3) {
+        <div class="progress-line" [class.active]="currentStep() > step"></div>
+      }
+    }
+  </div>
+
+  <!-- Étape 1 : Choix de la banque -->
+  @if (currentStep() === 0) {
+    <app-bank-selection-step 
+      [banks]="banks" 
+      (selectBank)="onBankSelect($event)">
+    </app-bank-selection-step>
+  }
+
+  <!-- Étape 2 : Guide d'export -->
+  @if (currentStep() === 1 && selectedBank()) {
+    <app-export-guide-step [selectedBank]="selectedBank()">
+    </app-export-guide-step>
+  }
+
+  <!-- Étape 3 : Upload -->
+  @if (currentStep() === 2) {
+    <app-file-upload-step 
+      [isLoading]="isLoading()" 
+      (fileSelected)="onFileSelected($event)" 
+      (fileDropped)="onDropFile($event)">
+    </app-file-upload-step>
+  }
+
+  <!-- Étape 4 : Validation avec analyse -->
+  @if (currentStep() === 3 && importResult()) {
+    <app-transaction-validation-step 
+      [importResult]="importResult()" 
+      [selectedTransactions]="selectedTransactions()" 
+      (toggleSelection)="toggleSelection($event)" 
+      (selectAll)="selectAll()" 
+      (deselectAll)="deselectAll()">
+    </app-transaction-validation-step>
+  }
+</div>
