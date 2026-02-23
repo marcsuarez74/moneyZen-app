@@ -8,6 +8,17 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
+- 
+
+### Changed
+- 
+
+### Fixed
+- 
+
+## [1.1.0] - 2026-02-23
+
+### Added
 - Système de release et changelog automatisé
 - Composant VersionDisplay pour afficher la version dans l'application
 

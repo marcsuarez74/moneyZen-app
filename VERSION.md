@@ -2,12 +2,15 @@
 
 ## Version actuelle
 
-**1.0.0**
+**1.1.0**
 
 Date de release : 2025-02-23
 
 ## Historique des versions
 
+| Version | Date | Description |
+|---------|------|-------------|
+| 1.1.0 | 2026-02-23 | [INSCRIRE LA DESCRIPTION] |
 | Version | Date | Description |
 |---------|------|-------------|
 | 1.0.0 | 2025-02-23 | Release initiale avec architecture Smart/Dumb Components refactorisée |
