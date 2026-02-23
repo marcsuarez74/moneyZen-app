@@ -1,9 +1,14 @@
-<div class="expense-form-container">
-  <h3 class="form-title">
-    <mat-icon>add_circle</mat-icon>
-    Ajouter une charge
-  </h3>
-  
+<div class="expense-form-container" [class.open]="isOpen()">
+  <div class="form-header">
+    <h3 class="form-title">
+      <mat-icon>{{ isEditing() ? 'edit' : 'add_circle' }}</mat-icon>
+      {{ formTitle() }}
+    </h3>
+    <button mat-icon-button class="close-btn" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
   <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" class="expense-form">
     <div class="form-row">
       <mat-form-field appearance="outline" class="form-field name-field">
@@ -12,21 +17,24 @@
         @if (expenseForm.get('name')?.hasError('required')) {
           <mat-error>Le nom est requis</mat-error>
         }
+        @if (expenseForm.get('name')?.hasError('minlength')) {
+          <mat-error>Le nom doit contenir au moins 2 caractères</mat-error>
+        }
       </mat-form-field>
-      
+
       <mat-form-field appearance="outline" class="form-field category-field">
         <mat-label>Catégorie</mat-label>
         <mat-select formControlName="category">
-          @for (category of expenseCategories; track category.value) {
-            <mat-option [value]="category.value">
-              <mat-icon>{{ getCategoryIcon(category.value) }}</mat-icon>
-              {{ category.label }}
+          @for (cat of getAlphabeticalCategories(); track cat.value) {
+            <mat-option [value]="cat.value">
+              <mat-icon>{{ cat.icon }}</mat-icon>
+              {{ cat.label }}
             </mat-option>
           }
         </mat-select>
       </mat-form-field>
     </div>
-    
+
     <div class="form-row">
       <mat-form-field appearance="outline" class="form-field amount-field">
         <mat-label>Montant</mat-label>
@@ -35,38 +43,51 @@
         @if (expenseForm.get('amount')?.hasError('required')) {
           <mat-error>Le montant est requis</mat-error>
         }
+        @if (expenseForm.get('amount')?.hasError('min')) {
+          <mat-error>Le montant doit être positif</mat-error>
+        }
       </mat-form-field>
-      
+
       <mat-form-field appearance="outline" class="form-field frequency-field">
         <mat-label>Fréquence</mat-label>
         <mat-select formControlName="frequency">
-          <mat-option value="monthly">Mensuel</mat-option>
-          <mat-option value="yearly">Annuel</mat-option>
+          <mat-option value="monthly">
+            <mat-icon>calendar_month</mat-icon>
+            Mensuel
+          </mat-option>
+          <mat-option value="quarterly">
+            <mat-icon>calendar_view_week</mat-icon>
+            Trimestriel
+          </mat-option>
+          <mat-option value="yearly">
+            <mat-icon>event</mat-icon>
+            Annuel
+          </mat-option>
+          <mat-option value="one-time">
+            <mat-icon>today</mat-icon>
+            Ponctuel
+          </mat-option>
         </mat-select>
       </mat-form-field>
-      
-      <div class="form-actions">
-        <button 
-          mat-raised-button 
-          color="primary" 
-          type="submit"
-          [disabled]="!expenseForm.valid"
-          class="submit-btn"
-        >
-          <mat-icon>add</mat-icon>
-          Ajouter
-        </button>
-        
-        @if (isEditing()) {
-          <button
-            mat-button
-            type="button"
-            (click)="onCancel()"
-          >
-            Annuler
-          </button>
-        }
-      </div>
+    </div>
+
+    <div class="form-actions">
+      <button
+        mat-button
+        type="button"
+        (click)="onCancel()">
+        Annuler
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!expenseForm.valid"
+        class="submit-btn">
+        <mat-icon>{{ submitButtonIcon() }}</mat-icon>
+        {{ submitButtonText() }}
+      </button>
     </div>
   </form>
 </div>

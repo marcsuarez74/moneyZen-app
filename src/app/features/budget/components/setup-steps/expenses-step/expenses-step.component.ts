@@ -30,7 +30,7 @@ export class ExpensesStepComponent {
   
   readonly previousStep = output<void>();
   readonly nextStep = output<void>();
-  readonly addExpense = output<{ name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'yearly' }>();
+  readonly addExpense = output<{ name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time' }>();
   readonly removeExpense = output<number>();
 
   onPrevious(): void {
@@ -41,7 +41,7 @@ export class ExpensesStepComponent {
     this.nextStep.emit();
   }
 
-  onAddExpense(expense: { name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'yearly' }): void {
+  onAddExpense(expense: { name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time' }): void {
     this.addExpense.emit(expense);
   }
 

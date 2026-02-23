@@ -1,0 +1,23 @@
+<mat-form-field [appearance]="appearance()" class="category-select-field">
+  <mat-label>{{ label() }}</mat-label>
+  <mat-select 
+    [formControl]="formControl()"
+    [placeholder]="placeholder()"
+    (selectionChange)="onSelectionChange($event.value)">
+    
+    <!-- Avec regroupement par groupes (par défaut) -->
+    @for (group of groupedCategories(); track group.name) {
+      <mat-optgroup [label]="group.name">
+        @for (category of group.categories; track category.value) {
+          <mat-option [value]="category.value">
+            @if (showIcon()) {
+              <mat-icon class="category-icon">{{ category.icon }}</mat-icon>
+            }
+            <span class="category-label">{{ category.label }}</span>
+          </mat-option>
+        }
+      </mat-optgroup>
+    }
+    
+  </mat-select>
+</mat-form-field>
