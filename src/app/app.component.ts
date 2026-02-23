@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { LocalStorageService } from './services/local-storage.service';
+import { PlanAutoUpdateService } from './services/plan-auto-update.service';
 import { VersionDisplayComponent } from './shared/components/version-display/version-display.component';
 
 @Component({
@@ -25,16 +26,22 @@ import { VersionDisplayComponent } from './shared/components/version-display/ver
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   private storageService = inject(LocalStorageService);
-  
+  private planAutoUpdate = inject(PlanAutoUpdateService);
+
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  
+
   isDarkMode = false;
-  
+
   ngOnInit(): void {
     this.isDarkMode = this.storageService.loadThemePreference();
     this.applyTheme();
+    this.planAutoUpdate.initialize();
+  }
+
+  ngOnDestroy(): void {
+    this.planAutoUpdate.destroy();
   }
   
   toggleTheme(): void {

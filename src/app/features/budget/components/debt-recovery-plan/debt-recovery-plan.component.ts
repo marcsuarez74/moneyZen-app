@@ -1,4 +1,4 @@
-import { Component, input, output, computed, signal, ViewChild, ElementRef } from '@angular/core';
+import { Component, input, output, computed, signal, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,6 +7,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { PlanStore } from '../../../../store/plan.store';
+import { LocalStorageService } from '../../../../services/local-storage.service';
+import { BudgetStore } from '../../../../store/budget.store';
 
 export interface RecoveryPlanData {
   overdraftAmount: number;
@@ -46,6 +49,10 @@ export interface MonthlyTarget {
 export class DebtRecoveryPlanComponent {
   @ViewChild('durationSection') durationSection!: ElementRef;
   @ViewChild('recoveryCard') recoveryCard!: ElementRef;
+
+  private planStore = inject(PlanStore);
+  private budgetStore = inject(BudgetStore);
+  private storageService = inject(LocalStorageService);
 
   readonly data = input.required<RecoveryPlanData>();
   readonly acceptPlan = output<{ duration: number; monthlyBudget: number; dailyBudget: number; adopted: boolean }>();
@@ -166,6 +173,8 @@ export class DebtRecoveryPlanComponent {
   }
 
   adoptPlan(): void {
+    const userData = this.budgetStore.userData();
+
     this.acceptPlan.emit({
       duration: this.targetMonths(),
       monthlyBudget: this.recommendedMonthlyBudget(),
@@ -173,6 +182,23 @@ export class DebtRecoveryPlanComponent {
       adopted: true
     });
 
-    alert(`Plan adopté ! Vous allez remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois avec un budget de ${this.recommendedMonthlyBudget().toFixed(0)}€ par mois pour vos dépenses extra (${this.recommendedDailyBudget().toFixed(0)}€/jour).`);
+    // Créer et sauvegarder le plan dans le store
+    this.planStore.createPlan({
+      type: 'debt-recovery',
+      durationMonths: this.targetMonths(),
+      monthlyBudget: this.recommendedMonthlyBudget(),
+      dailyBudget: this.recommendedDailyBudget(),
+      paydayDay: userData?.paydayDay || 1,
+      targets: this.monthlyTargets()
+    });
+
+    // Persister dans le localStorage
+    this.storageService.savePlanState({
+      activePlan: this.planStore.activePlan(),
+      pastPlans: this.planStore.pastPlans()
+    });
+
+    console.log('✅ Plan sauvegardé avec succès !');
+    alert(`Plan adopté et sauvegardé ! Vous allez remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois avec un budget de ${this.recommendedMonthlyBudget().toFixed(0)}€ par mois pour vos dépenses extra (${this.recommendedDailyBudget().toFixed(0)}€/jour). Le plan se mettra à jour automatiquement chaque mois après votre paie.`);
   }
 }
