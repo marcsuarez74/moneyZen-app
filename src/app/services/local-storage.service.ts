@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BudgetState } from '../store/budget.store';
 import { ProjectState } from '../store/project.store';
+import { PlanState } from '../store/plan.store';
 
 const STORAGE_KEYS = {
   BUDGET: 'budget_data',
   PROJECTS: 'projects_data',
-  THEME: 'theme_preference'
+  THEME: 'theme_preference',
+  PLAN: 'plan_data'
 } as const;
 
 @Injectable({
@@ -38,6 +40,14 @@ export class LocalStorageService {
     return value ? JSON.parse(value) : false;
   }
 
+  savePlanState(state: PlanState): void {
+    this.saveToStorage(STORAGE_KEYS.PLAN, state);
+  }
+
+  loadPlanState(): PlanState | null {
+    return this.loadFromStorage<PlanState>(STORAGE_KEYS.PLAN);
+  }
+
   private saveToStorage<T>(key: string, data: T): void {
     try {
       localStorage.setItem(key, JSON.stringify(data));
@@ -60,5 +70,6 @@ export class LocalStorageService {
     localStorage.removeItem(STORAGE_KEYS.BUDGET);
     localStorage.removeItem(STORAGE_KEYS.PROJECTS);
     localStorage.removeItem(STORAGE_KEYS.THEME);
+    localStorage.removeItem(STORAGE_KEYS.PLAN);
   }
 }
