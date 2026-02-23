@@ -8,7 +8,17 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
+- 
 
+### Changed
+- 
+
+### Fixed
+- 
+
+## [1.3.0] - 2026-02-23
+
+### Added
 ### Changed
 
 ### Fixed
