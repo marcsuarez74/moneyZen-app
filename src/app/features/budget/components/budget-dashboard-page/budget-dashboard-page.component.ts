@@ -84,8 +84,27 @@ export class BudgetDashboardPageComponent implements OnInit {
     
     if (!userData || !summary) return null;
     
+    // Charges fixes obligatoires : crédits, loyer, taxes, charges copro, services indispensables
     const fixedExpenses = this.budgetStore.expenses()
-      .filter(e => ['housing', 'mortgage', 'carLoan', 'insurance'].includes(e.category))
+      .filter(e => [
+        'housing',         // Loyer
+        'mortgage',        // Crédit immobilier
+        'condoFees',       // Charges de copropriété
+        'propertyTax',     // Taxe foncière
+        'housingServices', // Services logement (ménage, jardinier)
+        'carLoan',         // Crédit voiture
+        'consumerLoan',    // Crédit consommation
+        'debtRepayment',   // Remboursement dettes
+        'energy',          // Électricité/Gaz
+        'water',           // Eau
+        'internet',        // Internet
+        'phone',           // Téléphone
+        'tvStreaming',     // Box TV
+        'homeInsurance',   // Assurance habitation
+        'carInsurance',    // Assurance auto
+        'healthInsurance', // Mutuelle santé
+        'lifeInsurance'    // Assurance vie
+      ].includes(e.category))
       .reduce((sum, e) => sum + e.monthlyEquivalent, 0);
     
     return {
@@ -126,7 +145,12 @@ export class BudgetDashboardPageComponent implements OnInit {
     
     const today = new Date().getDate();
     const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
-    const fixedCategories = ['housing', 'mortgage', 'insurance', 'carLoan', 'utilities', 'internet', 'phone'];
+    const fixedCategories = [
+      'housing', 'mortgage', 'condoFees', 'propertyTax', 'housingServices',
+      'carLoan', 'consumerLoan', 'debtRepayment',
+      'energy', 'water', 'internet', 'phone', 'tvStreaming',
+      'homeInsurance', 'carInsurance', 'healthInsurance', 'lifeInsurance'
+    ];
     
     const upcomingFixedCharges = expenses.filter(expense => {
       if (!fixedCategories.includes(expense.category)) return false;
