@@ -65,18 +65,52 @@ function updateChangelog(newVersion) {
   let changelog = fs.readFileSync(changelogPath, 'utf8');
 
   const today = getCurrentDate();
-  const unreleasedSection = '## [Unreleased]';
-  const newVersionSection = `## [${newVersion}] - ${today}`;
-
-  if (changelog.includes(unreleasedSection)) {
+  const unreleasedPattern = /## \[Unreleased\]\n\n### Added\n([\s\S]*?)\n\n### Changed\n([\s\S]*?)\n\n### Fixed\n([\s\S]*?)(?=\n## \[|$)/;
+  
+  const match = changelog.match(unreleasedPattern);
+  
+  if (match) {
+    const added = match[1].trim();
+    const changed = match[2].trim();
+    const fixed = match[3].trim();
+    
+    // Build new version section
+    let newVersionContent = `## [${newVersion}] - ${today}\n`;
+    
+    if (added && added !== '-') {
+      newVersionContent += `\n### Added\n${added}\n`;
+    }
+    if (changed && changed !== '-') {
+      newVersionContent += `\n### Changed\n${changed}\n`;
+    }
+    if (fixed && fixed !== '-') {
+      newVersionContent += `\n### Fixed\n${fixed}\n`;
+    }
+    
+    // Replace unreleased with empty sections + new version content
+    const emptyUnreleased = `## [Unreleased]\n\n### Added\n- \n\n### Changed\n- \n\n### Fixed\n- \n`;
+    
     changelog = changelog.replace(
-      unreleasedSection,
-      `${unreleasedSection}\n\n### Added\n- \n\n### Changed\n- \n\n### Fixed\n- \n\n${newVersionSection}`
+      match[0],
+      `${emptyUnreleased}\n${newVersionContent}`
     );
+    
+    fs.writeFileSync(changelogPath, changelog);
+    console.log(`✅ CHANGELOG.md mis à jour - contenu déplacé vers [${newVersion}]`);
+  } else {
+    console.log('⚠️  Format de CHANGELOG.md non reconnu, création de section vide');
+    // Fallback: just add new empty unreleased section
+    const unreleasedSection = '## [Unreleased]';
+    const newVersionSection = `## [${newVersion}] - ${today}`;
+    
+    if (changelog.includes(unreleasedSection)) {
+      changelog = changelog.replace(
+        unreleasedSection,
+        `${unreleasedSection}\n\n### Added\n- \n\n### Changed\n- \n\n### Fixed\n- \n\n${newVersionSection}`
+      );
+      fs.writeFileSync(changelogPath, changelog);
+    }
   }
-
-  fs.writeFileSync(changelogPath, changelog);
-  console.log(`✅ CHANGELOG.md mis à jour avec la version ${newVersion}`);
 }
 
 function updateVersionMd(newVersion) {
