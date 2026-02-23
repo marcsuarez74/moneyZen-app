@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { PlanStore } from '../../../../store/plan.store';
 import { LocalStorageService } from '../../../../services/local-storage.service';
@@ -40,6 +41,7 @@ export interface MonthlyTarget {
     MatSliderModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
     FormsModule,
     CurrencyPipe
   ],

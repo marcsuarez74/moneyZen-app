@@ -28,12 +28,14 @@
         <div class="situation-item expenses">
           <span class="label">Charges fixes obligatoires</span>
           <span class="value">{{ data().fixedExpenses | currency:'EUR' }}</span>
+          <span class="sublabel" matTooltip="Seules les charges incompressibles : loyer, crédits immobiliers/voitures et assurances">💡 Loyer, crédits & assurances uniquement</span>
         </div>
         <div class="situation-item remaining" [class.negative]="data().remainingBudget < 0">
           <span class="label">Reste à vivre actuel</span>
           <span class="value">{{ data().remainingBudget | currency:'EUR' }}</span>
+          <span class="sublabel" matTooltip="Solde après déduction de toutes vos charges (fixes + variables)">💰 Toutes charges déduites</span>
           @if (data().remainingBudget < 0) {
-            <span class="sublabel">⚠️ Vous dépensez plus que vous ne gagnez</span>
+            <span class="sublabel warning">⚠️ Vous dépensez plus que vous ne gagnez</span>
           }
         </div>
       </div>

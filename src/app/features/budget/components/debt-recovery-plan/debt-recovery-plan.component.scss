@@ -11,6 +11,10 @@ h3 mat-icon{font-size:22px}
 .situation-item.negative .value{color:#f44336}
 .situation-item.income .value{color:#4caf50}
 .situation-item.expenses .value{color:#ff9800}
+.situation-item .sublabel{font-size:12px;color:var(--text-secondary);font-style:italic;margin-top:4px}
+.situation-item.expenses .sublabel{color:#ff9800;font-weight:500}
+.situation-item.remaining .sublabel{color:#4caf50;font-weight:500}
+.situation-item.remaining .sublabel.warning{color:#f44336;font-weight:600}
 .strategy-box{background:linear-gradient(135deg,rgba(102,126,234,.1),rgba(118,75,162,.1));border-radius:16px;padding:24px;margin-bottom:24px;border:2px solid rgba(102,126,234,.3)}
 .strategy-content{display:flex;flex-direction:column;gap:16px}
 .strategy-item{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--surface);border-radius:12px;transition:all .3s ease}
