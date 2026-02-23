@@ -63,9 +63,9 @@ export class PaydayCalculatorService {
     // Budget quotidien théorique (si on répartissait équitablement sur tout le mois)
     const dailyBudget = daysInCurrentMonth > 0 ? remainingBudget / daysInCurrentMonth : remainingBudget;
     
-    // Budget quotidien réel pour les jours restants (plus pertinent)
-    const actualDailyBudget = remainingDaysInMonth > 0 
-      ? remainingBudget / remainingDaysInMonth 
+    // Budget quotidien réel pour les jours restants jusqu'à la paie (plus pertinent)
+    const actualDailyBudget = daysUntilPayday > 0 
+      ? remainingBudget / daysUntilPayday 
       : remainingBudget;
     
     return {
