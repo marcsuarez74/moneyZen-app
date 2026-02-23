@@ -6,8 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserFinancialData } from '../../../../models/budget.model';
 
 @Component({
@@ -21,9 +19,7 @@ import { UserFinancialData } from '../../../../models/budget.model';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule,
-    MatSliderModule,
-    MatTooltipModule
+    MatIconModule
   ],
   templateUrl: './edit-income-dialog.component.html',
   styleUrls: ['./edit-income-dialog.component.scss']
@@ -47,16 +43,9 @@ export class EditIncomeDialogComponent {
 
   readonly balanceStatusText = computed(() => {
     const balance = this.incomeForm.get('accountBalance')?.value;
-    if (balance > 0) return 'Compte créditeur';
-    if (balance < 0) return 'Compte débiteur';
+    if (balance > 0) return 'Compte créditeur ✓';
+    if (balance < 0) return 'Compte débiteur ⚠';
     return 'Solde nul';
-  });
-
-  readonly balanceHint = computed(() => {
-    const balance = this.incomeForm.get('accountBalance')?.value;
-    if (balance > 0) return '💰 Votre compte est positif';
-    if (balance < 0) return '⚠️ Attention : vous êtes en découvert';
-    return 'Saisissez votre solde actuel';
   });
 
   incrementPayday(): void {

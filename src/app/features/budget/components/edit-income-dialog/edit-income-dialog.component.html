@@ -1,92 +1,47 @@
-<h2 mat-dialog-title>
-  <div class="title-icon">
-    <mat-icon>edit</mat-icon>
-  </div>
-  Modifier mes revenus
-</h2>
+<h2 mat-dialog-title>Modifier mes revenus</h2>
 
 <mat-dialog-content [formGroup]="incomeForm">
-  <!-- Section Salaire -->
-  <section class="form-section">
-    <div class="section-header">
-      <div class="section-icon income">
-        <mat-icon>payments</mat-icon>
-      </div>
-      <div class="section-title">
-        <h3>Revenus mensuels</h3>
-        <p class="section-desc">Votre revenu principal après impôts</p>
-      </div>
-    </div>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Salaire mensuel net</mat-label>
-      <input matInput type="number" formControlName="salary" placeholder="2500">
-      <span matSuffix>€</span>
-    </mat-form-field>
-  </section>
+  <!-- Salaire -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Salaire mensuel net</mat-label>
+    <input matInput type="number" formControlName="salary" placeholder="2500">
+    <span matSuffix>€</span>
+    <mat-hint>Votre revenu principal après impôts</mat-hint>
+  </mat-form-field>
 
-  <!-- Section Jour de paie -->
-  <section class="form-section">
-    <div class="section-header">
-      <div class="section-icon calendar">
-        <mat-icon>event</mat-icon>
-      </div>
-      <div class="section-title">
-        <h3>Jour de paie</h3>
-        <p class="section-desc">Utilisé pour calculer votre budget quotidien</p>
-      </div>
-    </div>
-    <div class="payday-control">
-      <div class="payday-display">
-        <span class="day-number">{{ incomeForm.get('paydayDay')?.value }}</span>
-        <span class="day-label">
-          {{ incomeForm.get('paydayDay')?.value === 1 ? 'er' : 'ème' }} du mois
-        </span>
-      </div>
-      <div class="payday-buttons">
-        <button mat-icon-button (click)="decrementPayday()" [disabled]="incomeForm.get('paydayDay')?.value <= 1" matTooltip="Diminuer">
-          <mat-icon>remove</mat-icon>
-        </button>
-        <mat-slider min="1" max="31" step="1" discrete>
-          <input matSliderThumb formControlName="paydayDay">
-        </mat-slider>
-        <button mat-icon-button (click)="incrementPayday()" [disabled]="incomeForm.get('paydayDay')?.value >= 31" matTooltip="Augmenter">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section Solde bancaire -->
-  <section class="form-section">
-    <div class="section-header">
-      <div class="section-icon bank" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
-        <mat-icon [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
-          {{ isPositiveBalance() ? 'account_balance' : (incomeForm.get('accountBalance')?.value === 0 ? 'account_balance' : 'warning') }}
-        </mat-icon>
-      </div>
-      <div class="section-title">
-        <h3>Situation bancaire</h3>
-        <p class="section-desc">Votre solde actuel sur votre compte courant</p>
-      </div>
-    </div>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Solde bancaire actuel</mat-label>
-      <input matInput type="number" formControlName="accountBalance" placeholder="0">
-      <span matSuffix>€</span>
-      <mat-hint>{{ balanceHint() }}</mat-hint>
+  <!-- Jour de paie -->
+  <div class="field-row">
+    <mat-form-field appearance="outline" class="payday-field">
+      <mat-label>Jour de paie</mat-label>
+      <input matInput type="number" formControlName="paydayDay" min="1" max="31">
+      <span matSuffix>/mois</span>
+      <mat-hint>Ex: 25 pour le 25 de chaque mois</mat-hint>
     </mat-form-field>
 
-    <div class="balance-summary" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
-      <mat-icon>{{ isPositiveBalance() ? 'check_circle' : (incomeForm.get('accountBalance')?.value === 0 ? 'remove_circle' : 'warning') }}</mat-icon>
-      <span class="balance-text">{{ balanceStatusText() }}</span>
+    <div class="payday-buttons">
+      <button mat-icon-button (click)="decrementPayday()" [disabled]="incomeForm.get('paydayDay')?.value <= 1">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <button mat-icon-button (click)="incrementPayday()" [disabled]="incomeForm.get('paydayDay')?.value >= 31">
+        <mat-icon>add</mat-icon>
+      </button>
     </div>
-  </section>
+  </div>
+
+  <!-- Solde -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Solde bancaire actuel</mat-label>
+    <input matInput type="number" formControlName="accountBalance" placeholder="0">
+    <span matSuffix>€</span>
+    <mat-hint [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
+      {{ balanceStatusText() }}
+    </mat-hint>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Annuler</button>
   <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!incomeForm.valid">
-    <mat-icon>save</mat-icon>
     Enregistrer
   </button>
 </mat-dialog-actions>
