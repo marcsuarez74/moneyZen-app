@@ -18,23 +18,25 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
 ## [1.1.1] - 2026-02-23
 
-### Added
-- 
-
-### Changed
-- 
-
 ### Fixed
-- 
+- Correction du calcul du budget quotidien (utilise maintenant les jours jusqu'à la paie au lieu des jours restants dans le mois)
 
 ## [1.1.0] - 2026-02-23
 
 ### Added
 - Système de release et changelog automatisé
 - Composant VersionDisplay pour afficher la version dans l'application
+- CategorySelectComponent avec tri alphabétique et icônes
+- Tableau éditable dans EditExpensesDialog avec édition inline
+- Support complet des fréquences (monthly, quarterly, yearly, one-time)
+- Badges colorés pour les fréquences dans le tableau
+- Tri par colonnes dans le tableau des charges
 
 ### Changed
 - Position du badge de dépenses dans le header (top: -16px, right: -42px)
+- Amélioration de l'ExpenseFormComponent avec validation renforcée
+- Transformation du EditExpensesDialog en tableau Material complet
+- Tri alphabétique des catégories de dépenses
 
 ## [1.0.0] - 2025-02-23
 
