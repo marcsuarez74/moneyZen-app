@@ -29,4 +29,5 @@ export class DashboardHeaderComponent {
   readonly editIncome = output<void>();
   readonly editExpenses = output<void>();
   readonly createNewBudget = output<void>();
+  readonly importBank = output<void>();
 }
