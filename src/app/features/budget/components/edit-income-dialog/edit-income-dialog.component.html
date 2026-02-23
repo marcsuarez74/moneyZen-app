@@ -13,12 +13,13 @@
     <div class="form-card">
       <!-- Salaire -->
       <div class="input-group">
-        <label class="input-label">
+        <label class="input-label" for="salary-input">
           <mat-icon>payments</mat-icon>
           Revenus mensuels
         </label>
         <div class="input-wrapper">
           <input 
+            id="salary-input"
             type="number" 
             formControlName="salary" 
             placeholder="2500"
@@ -32,11 +33,11 @@
 
       <!-- Jour de paie -->
       <div class="input-group">
-        <label class="input-label">
+        <label class="input-label" for="payday-input">
           <mat-icon>calendar_today</mat-icon>
           Jour de paie
         </label>
-        <div class="payday-selector">
+        <div class="payday-selector" role="group" aria-labelledby="payday-input">
           <button 
             mat-icon-button 
             class="counter-btn" 
@@ -65,12 +66,13 @@
 
       <!-- Solde -->
       <div class="input-group">
-        <label class="input-label">
+        <label class="input-label" for="balance-input">
           <mat-icon>account_balance_wallet</mat-icon>
           Solde bancaire
         </label>
         <div class="input-wrapper" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
           <input 
+            id="balance-input"
             type="number" 
             formControlName="accountBalance" 
             placeholder="0"
