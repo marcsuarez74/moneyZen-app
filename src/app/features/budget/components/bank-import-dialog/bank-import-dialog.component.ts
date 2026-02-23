@@ -101,10 +101,15 @@ export class BankImportDialogComponent {
   }
 
   onFileSelected(event: Event): void {
+    console.log('📂 File selected via input');
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile.set(input.files[0]);
+      const file = input.files[0];
+      console.log('✅ File set:', file.name);
+      this.selectedFile.set(file);
       this.errorMessage.set('');
+    } else {
+      console.log('❌ No files in input');
     }
   }
 
@@ -135,13 +140,19 @@ export class BankImportDialogComponent {
   }
 
   importFile(): void {
+    console.log('🔄 importFile() called');
     const file = this.selectedFile();
-    if (!file) return;
+    if (!file) {
+      console.log('❌ No file selected');
+      return;
+    }
 
+    console.log('📄 File selected:', file.name, 'Size:', file.size, 'Type:', file.type);
     this.isLoading.set(true);
     this.errorMessage.set('');
 
     const isOfx = file.name.toLowerCase().endsWith('.ofx');
+    console.log('🔍 Is OFX:', isOfx);
 
     const importObservable = isOfx 
       ? this.bankImportService.importOfx(file)
@@ -149,6 +160,7 @@ export class BankImportDialogComponent {
 
     importObservable.subscribe({
       next: (result) => {
+        console.log('✅ Import result:', result);
         this.isLoading.set(false);
         
         if (result.success) {
@@ -180,8 +192,10 @@ export class BankImportDialogComponent {
         }
       },
       error: (error) => {
+        console.error('❌ Import error:', error);
         this.isLoading.set(false);
         this.errorMessage.set(error.errors?.[0] || 'Erreur lors de l\'import.');
+        console.log('💥 Error message set:', this.errorMessage());
       }
     });
   }
