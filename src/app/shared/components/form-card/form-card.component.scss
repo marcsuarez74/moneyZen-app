@@ -1,13 +1,137 @@
-.form-card{background:var(--surface);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid var(--border);overflow:hidden;animation:slideUp .5s ease}
-@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.form-card ::ng-deep .mat-mdc-card-header{padding:28px 28px 20px 28px;display:flex;align-items:center;gap:16px}
-.form-card ::ng-deep .mat-mdc-card-header-text{display:flex;flex-direction:column;gap:6px}
-.form-card ::ng-deep .mat-mdc-card-title{margin:0;font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-.5px}
-.form-card ::ng-deep .mat-mdc-card-subtitle{margin:0;font-size:14px;color:var(--text-secondary);font-weight:500}
-mat-icon[mat-card-avatar]{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)!important;color:white!important;border-radius:16px!important;padding:12px!important;font-size:28px!important;width:28px!important;height:28px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 8px 24px rgba(102,126,234,.3)!important}
-.form-card ::ng-deep .mat-mdc-card-content{padding:0 28px 28px 28px}
-.form-card ::ng-deep .mat-mdc-card-actions{padding:20px 28px;border-top:1px solid var(--border);gap:16px;display:flex;justify-content:flex-end}
-.form-card ::ng-deep .mat-mdc-card-actions button{height:48px;border-radius:12px;font-weight:600;padding:0 24px}
-.form-card ::ng-deep .mat-mdc-card-actions button mat-icon{margin:0 8px}
-.form-card ::ng-deep .mat-mdc-card-actions button.mat-mdc-raised-button{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);box-shadow:0 4px 16px rgba(102,126,234,.4)}
-.form-card ::ng-deep .mat-mdc-card-actions button.mat-mdc-raised-button:hover{box-shadow:0 6px 20px rgba(102,126,234,.5)}@media(max-width:600px){.form-card{border-radius:20px}.form-card ::ng-deep .mat-mdc-card-header{padding:20px}.form-card ::ng-deep .mat-mdc-card-content{padding:0 20px 20px 20px}.form-card ::ng-deep .mat-mdc-card-actions{padding:16px 20px;flex-direction:column-reverse}.form-card ::ng-deep .mat-mdc-card-actions button{width:100%}}
+@import '../../../../styles/variables';
+
+// ============================================
+// FORM CARD - Responsive & Dark Theme
+// ============================================
+
+.form-card {
+  background: var(--surface);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  animation: slideUp 0.5s ease;
+  
+  @include media-down($sm) {
+    border-radius: $radius-lg;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-card ::ng-deep {
+  .mat-mdc-card-header {
+    padding: $space-lg $space-lg $space-md;
+    display: flex;
+    align-items: center;
+    gap: $space-md;
+    
+    @include media-down($sm) {
+      padding: $space-md;
+      gap: $space-sm;
+    }
+  }
+  
+  .mat-mdc-card-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .mat-mdc-card-title {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    
+    @include media-down($sm) {
+      font-size: 1.25rem;
+    }
+  }
+  
+  .mat-mdc-card-subtitle {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  
+  .mat-mdc-card-content {
+    padding: 0 $space-lg $space-lg;
+    
+    @include media-down($sm) {
+      padding: 0 $space-md $space-md;
+    }
+  }
+  
+  .mat-mdc-card-actions {
+    padding: $space-md $space-lg;
+    border-top: 1px solid var(--border);
+    gap: $space-md;
+    display: flex;
+    justify-content: flex-end;
+    background: var(--surface-variant);
+    
+    @include media-down($sm) {
+      flex-direction: column-reverse;
+      padding: $space-md;
+      gap: $space-sm;
+    }
+    
+    button {
+      height: 48px;
+      border-radius: $radius-md;
+      font-weight: 600;
+      padding: 0 $space-lg;
+      
+      @include media-down($sm) {
+        width: 100%;
+      }
+      
+      mat-icon {
+        margin: 0 8px;
+      }
+    }
+    
+    button.mat-mdc-raised-button {
+      background: var(--gradient-primary);
+      box-shadow: 0 4px 16px rgba(var(--primary-color-rgb), 0.4);
+      
+      &:hover {
+        box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.5);
+      }
+    }
+  }
+}
+
+mat-icon[mat-card-avatar] {
+  background: var(--gradient-primary) !important;
+  color: var(--text-on-primary) !important;
+  border-radius: $radius-md !important;
+  padding: 12px !important;
+  font-size: 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.3) !important;
+  
+  @include media-down($sm) {
+    padding: 10px !important;
+    font-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 12px !important;
+  }
+}

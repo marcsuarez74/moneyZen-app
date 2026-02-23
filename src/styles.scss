@@ -1,9 +1,13 @@
 @use '@angular/material' as mat;
+@import 'styles/variables';
 
 @include mat.core();
 
-// Use Material 2 theming API which accepts custom palettes
-// MoneyZen Primary Teal Palette with A1/A2/A4 hues for accent
+// ============================================
+// MONEYZEN DESIGN SYSTEM - Thèmes Light & Dark
+// ============================================
+
+// MoneyZen Palette - Primary (Teal)
 $moneyzen-primary: (
   50: #e0f2f1,
   100: #b2dfdb,
@@ -37,7 +41,7 @@ $moneyzen-primary: (
   )
 );
 
-// MoneyZen Accent Green Palette with A1/A2/A4 hues
+// MoneyZen Palette - Accent (Green)
 $moneyzen-accent: (
   50: #e8f5e9,
   100: #c8e6c9,
@@ -71,7 +75,7 @@ $moneyzen-accent: (
   )
 );
 
-// Material 2 theme definition using m2 API
+// Material 2 Theme Definitions
 $light-primary: mat.m2-define-palette($moneyzen-primary);
 $light-accent: mat.m2-define-palette($moneyzen-accent, A200, A100, A400);
 $light-warn: mat.m2-define-palette(mat.$m2-orange-palette);
@@ -86,7 +90,6 @@ $light-theme: mat.m2-define-light-theme((
   density: 0,
 ));
 
-// Dark theme
 $dark-primary: mat.m2-define-palette($moneyzen-primary, 200, 100, 400);
 $dark-accent: mat.m2-define-palette($moneyzen-accent, A200, A100, A400);
 $dark-warn: mat.m2-define-palette(mat.$m2-orange-palette);
@@ -104,54 +107,197 @@ $dark-theme: mat.m2-define-dark-theme((
 // Apply light theme by default
 @include mat.all-component-themes($light-theme);
 
-// CSS Variables for custom components - Light Theme (MoneyZen nature theme)
+// ============================================
+// CSS VARIABLES - Light Theme
+// ============================================
 :root {
-  // MoneyZen Teal/Sarcelle colors
+  // Couleurs principales MoneyZen
   --primary-color: #00796b;
+  --primary-color-rgb: 0, 121, 107;
   --primary-light: #4db6ac;
   --primary-dark: #004d40;
-  --background: #f0f7f5;
-  --surface: #ffffff;
-  --surface-variant: #e8f5f3;
-  --text-primary: #1a3d38;
-  --text-secondary: #5a7c75;
-  --border: #d0e8e3;
-  --shadow: rgba(0, 0, 0, 0.08);
-  --card-bg: #ffffff;
+  --primary-accent: #1de9b6;
+  
+  // Couleurs accent
   --accent-color: #4caf50;
+  --accent-color-rgb: 76, 175, 80;
+  --accent-light: #81c784;
+  --accent-dark: #2e7d32;
+  --accent-accent: #00e676;
+  
+  // Couleurs sémantiques avec variants
+  --success-color: #4caf50;
+  --success-color-rgb: 76, 175, 80;
+  --success-light: rgba(76, 175, 80, 0.15);
+  --success-dark: #2e7d32;
+  
+  --warning-color: #ff9800;
+  --warning-color-rgb: 255, 152, 0;
+  --warning-light: rgba(255, 152, 0, 0.15);
+  --warning-dark: #ef6c00;
+  
+  --error-color: #f44336;
+  --error-color-rgb: 244, 67, 54;
+  --error-light: rgba(244, 67, 54, 0.15);
+  --error-dark: #c62828;
+  
+  --info-color: #2196f3;
+  --info-color-rgb: 33, 150, 243;
+  --info-light: rgba(33, 150, 243, 0.15);
+  --info-dark: #1565c0;
+  
+  // Couleurs de fond
+  --background: #f0f7f5;
+  --background-rgb: 240, 247, 245;
+  --surface: #ffffff;
+  --surface-rgb: 255, 255, 255;
+  --surface-variant: #e8f5f3;
+  --surface-variant-rgb: 232, 245, 243;
+  --card-bg: #ffffff;
+  --card-bg-rgb: 255, 255, 255;
+  
+  // Couleurs de texte
+  --text-primary: #1a3d38;
+  --text-primary-rgb: 26, 61, 56;
+  --text-secondary: #5a7c75;
+  --text-secondary-rgb: 90, 124, 117;
+  --text-disabled: rgba(26, 61, 56, 0.38);
+  --text-on-primary: #ffffff;
+  --text-on-accent: #ffffff;
+  --text-on-success: #ffffff;
+  --text-on-warning: rgba(0, 0, 0, 0.87);
+  --text-on-error: #ffffff;
+  
+  // Bordures et ombres
+  --border: #d0e8e3;
+  --border-variant: #b2dfdb;
+  --shadow-light: rgba(0, 0, 0, 0.04);
+  --shadow: rgba(0, 0, 0, 0.08);
+  --shadow-dark: rgba(0, 0, 0, 0.16);
+  
+  // Gradient MoneyZen
+  --gradient-primary: linear-gradient(135deg, #00796b 0%, #4db6ac 100%);
+  --gradient-accent: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+  --gradient-success: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+  --gradient-warning: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+  --gradient-error: linear-gradient(135deg, #f44336 0%, #ef5350 100%);
 }
 
-// Dark theme styles
+// ============================================
+// CSS VARIABLES - Dark Theme
+// ============================================
 .dark-theme {
+  // Couleurs principales (inversées pour le contraste)
   --primary-color: #4db6ac;
+  --primary-color-rgb: 77, 182, 172;
   --primary-light: #80cbc4;
   --primary-dark: #26a69a;
-  --background: #121414;
-  --surface: #1a1d1d;
-  --surface-variant: #242928;
-  --text-primary: #ffffff;
-  --text-secondary: #b0c4bf;
-  --border: #334240;
-  --shadow: rgba(0, 0, 0, 0.3);
-  --card-bg: #1a1d1d;
-  --accent-color: #81c784;
+  --primary-accent: #1de9b6;
   
-  // Material 3 tokens for icon consistency
+  // Couleurs accent
+  --accent-color: #81c784;
+  --accent-color-rgb: 129, 199, 132;
+  --accent-light: #a5d6a7;
+  --accent-dark: #66bb6a;
+  --accent-accent: #00e676;
+  
+  // Couleurs sémantiques ajustées
+  --success-color: #66bb6a;
+  --success-color-rgb: 102, 187, 106;
+  --success-light: rgba(102, 187, 106, 0.2);
+  --success-dark: #4caf50;
+  
+  --warning-color: #ffb74d;
+  --warning-color-rgb: 255, 183, 77;
+  --warning-light: rgba(255, 183, 77, 0.2);
+  --warning-dark: #ff9800;
+  
+  --error-color: #ef5350;
+  --error-color-rgb: 239, 83, 80;
+  --error-light: rgba(239, 83, 80, 0.2);
+  --error-dark: #f44336;
+  
+  --info-color: #64b5f6;
+  --info-color-rgb: 100, 181, 246;
+  --info-light: rgba(100, 181, 246, 0.2);
+  --info-dark: #42a5f5;
+  
+  // Couleurs de fond - neutres profonds pour le dark mode
+  --background: #0d1211;
+  --background-rgb: 13, 18, 17;
+  --surface: #1a1f1e;
+  --surface-rgb: 26, 31, 30;
+  --surface-variant: #252a29;
+  --surface-variant-rgb: 37, 42, 41;
+  --card-bg: #1e2423;
+  --card-bg-rgb: 30, 36, 35;
+  
+  // Couleurs de texte
+  --text-primary: #e8f5f3;
+  --text-primary-rgb: 232, 245, 243;
+  --text-secondary: #8aa8a2;
+  --text-secondary-rgb: 138, 168, 162;
+  --text-disabled: rgba(232, 245, 243, 0.38);
+  --text-on-primary: #0d1211;
+  --text-on-accent: #0d1211;
+  --text-on-success: #0d1211;
+  --text-on-warning: #0d1211;
+  --text-on-error: #0d1211;
+  
+  // Bordures et ombres ajustées
+  --border: #2d3836;
+  --border-variant: #3a4543;
+  --shadow-light: rgba(0, 0, 0, 0.2);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-dark: rgba(0, 0, 0, 0.5);
+  
+  // Gradients adaptés
+  --gradient-primary: linear-gradient(135deg, #4db6ac 0%, #80cbc4 100%);
+  --gradient-accent: linear-gradient(135deg, #81c784 0%, #a5d6a7 100%);
+  --gradient-success: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+  --gradient-warning: linear-gradient(135deg, #ffb74d 0%, #ffcc80 100%);
+  --gradient-error: linear-gradient(135deg, #ef5350 0%, #e57373 100%);
+  
+  // Material Design tokens
   --md-sys-color-primary: #4db6ac;
-  --md-sys-color-on-primary: black;
-  --md-sys-color-secondary: #80cbc4;
-  --md-sys-color-on-secondary: black;
-  --md-sys-color-tertiary: #81c784;
-  --md-sys-color-on-tertiary: black;
+  --md-sys-color-on-primary: #0d1211;
+  --md-sys-color-primary-container: #004d40;
+  --md-sys-color-on-primary-container: #4db6ac;
+  --md-sys-color-secondary: #81c784;
+  --md-sys-color-on-secondary: #0d1211;
+  --md-sys-color-secondary-container: #1b5e20;
+  --md-sys-color-on-secondary-container: #81c784;
+  --md-sys-color-surface: #1a1f1e;
+  --md-sys-color-on-surface: #e8f5f3;
+  --md-sys-color-surface-variant: #252a29;
+  --md-sys-color-on-surface-variant: #8aa8a2;
+  --md-sys-color-outline: #2d3836;
   
   @include mat.all-component-colors($dark-theme);
 }
 
-// Global styles
+// ============================================
+// GLOBAL STYLES
+// ============================================
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  @include media-down($md) {
+    font-size: 15px;
+  }
+  
+  @include media-down($sm) {
+    font-size: 14px;
+  }
 }
 
 html, body {
@@ -164,6 +310,7 @@ body {
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 // Material Icons
@@ -181,17 +328,29 @@ body {
   direction: ltr;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  
+  @include media-down($sm) {
+    font-size: 20px;
+  }
 }
 
-// Utility classes
+// ============================================
+// UTILITY CLASSES
+// ============================================
 .text-center { text-align: center; }
 .w-100 { width: 100%; }
+.h-100 { height: 100%; }
 .flex { display: flex; }
 .flex-1 { flex: 1; }
 .items-center { align-items: center; }
 .justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-1 { gap: 8px; }
 .gap-2 { gap: 16px; }
 .gap-3 { gap: 24px; }
+.gap-4 { gap: 32px; }
 
 .mt-1 { margin-top: 8px; }
 .mt-2 { margin-top: 16px; }
@@ -208,43 +367,119 @@ body {
 .p-3 { padding: 24px; }
 .p-4 { padding: 32px; }
 
-// Responsive
-@media (max-width: 600px) {
-  .hide-mobile { display: none !important; }
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-@media (min-width: 601px) {
-  .hide-desktop { display: none !important; }
+// ============================================
+// RESPONSIVE UTILITIES
+// ============================================
+
+.hide-xs {
+  @include media-down($sm) {
+    display: none !important;
+  }
 }
 
-// Custom scrollbar styling - discrete and elegant
+.hide-sm {
+  @include media-between($sm, $md) {
+    display: none !important;
+  }
+}
+
+.hide-md {
+  @include media-between($md, $lg) {
+    display: none !important;
+  }
+}
+
+.hide-lg {
+  @include media-between($lg, $xl) {
+    display: none !important;
+  }
+}
+
+.hide-xl {
+  @include media-up($xl) {
+    display: none !important;
+  }
+}
+
+.show-xs {
+  @include media-up($sm) {
+    display: none !important;
+  }
+}
+
+.show-sm {
+  @include media-down($sm) {
+    display: none !important;
+  }
+  @include media-up($md) {
+    display: none !important;
+  }
+}
+
+.show-md {
+  @include media-down($md) {
+    display: none !important;
+  }
+  @include media-up($lg) {
+    display: none !important;
+  }
+}
+
+.show-lg {
+  @include media-down($lg) {
+    display: none !important;
+  }
+  @include media-up($xl) {
+    display: none !important;
+  }
+}
+
+.show-xl {
+  @include media-down($xl) {
+    display: none !important;
+  }
+}
+
+// ============================================
+// CUSTOM SCROLLBAR
+// ============================================
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--surface-variant);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--text-secondary);
-  border-radius: 3px;
-  opacity: 0.3;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
-  opacity: 0.6;
+  border-radius: 4px;
+  opacity: 0.4;
+  
+  &:hover {
+    background: var(--primary-color);
+    opacity: 0.6;
+  }
 }
 
 // Firefox scrollbar
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--text-secondary) transparent;
+  scrollbar-color: var(--text-secondary) var(--surface-variant);
 }
 
-// MoneyZen specific accent colors for nature theme
+// ============================================
+// MONEYZEN SPECIFIC STYLES
+// ============================================
+
 .moneyzen-accent {
   color: var(--accent-color);
 }
@@ -258,21 +493,119 @@ body {
 }
 
 .nature-gradient {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  background: var(--gradient-primary);
 }
 
-// Card styles with nature accents
+.nature-gradient-accent {
+  background: var(--gradient-accent);
+}
+
+// Nature Card - adapté pour le dark mode
 .nature-card {
   border-left: 4px solid var(--primary-color);
-  background: linear-gradient(to right, rgba(0, 121, 107, 0.05) 0%, transparent 100%);
+  background: linear-gradient(to right, rgba(var(--primary-color-rgb), 0.1) 0%, transparent 100%);
 }
 
-// Loading animation
+// ============================================
+// ANIMATIONS
+// ============================================
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .pulse {
   animation: pulse 2s infinite;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.slide-up {
+  animation: slideUp 0.4s ease;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.4s ease;
+}
+
+// ============================================
+// DIALOG STYLES - Amélioration responsive
+// ============================================
+@media (max-width: 768px) {
+  .cdk-overlay-pane {
+    max-width: 100vw !important;
+    width: 100% !important;
+    padding: 0 8px !important;
+  }
+  
+  .mat-mdc-dialog-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 24px !important;
+    margin: 8px !important;
+  }
+}
+
+// ============================================
+// TABLE RESPONSIVE
+// ============================================
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+  
+  table {
+    min-width: 600px;
+  }
+}
+
+// ============================================
+// SNACKBAR STYLES
+// ============================================
+.mat-mdc-snack-bar-container {
+  &.success-snackbar {
+    --mdc-snackbar-container-color: var(--success-color);
+    --mdc-snackbar-supporting-text-color: var(--text-on-success);
+    --mat-mdc-snack-bar-button-color: var(--text-on-success);
+  }
+  
+  &.error-snackbar {
+    --mdc-snackbar-container-color: var(--error-color);
+    --mdc-snackbar-supporting-text-color: var(--text-on-error);
+    --mat-mdc-snack-bar-button-color: var(--text-on-error);
+  }
+  
+  &.warning-snackbar {
+    --mdc-snackbar-container-color: var(--warning-color);
+    --mdc-snackbar-supporting-text-color: var(--text-on-warning);
+    --mat-mdc-snack-bar-button-color: var(--text-on-warning);
+  }
 }
