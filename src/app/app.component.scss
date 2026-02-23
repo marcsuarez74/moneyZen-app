@@ -1,18 +1,27 @@
+@import '../styles/variables';
+
+// ============================================
+// APP COMPONENT - Responsive & Dark Theme
+// ============================================
+
 .app-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  background: var(--background);
 }
 
 .main-toolbar {
   position: relative;
   z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   
   .menu-button {
     margin-right: 8px;
     
-    @media (min-width: 768px) {
+    @include media-up($md) {
       display: none !important;
     }
   }
@@ -22,6 +31,11 @@
     font-weight: 500;
     letter-spacing: 1px;
     font-size: 1.4rem;
+    color: var(--text-primary);
+    
+    @include media-down($sm) {
+      font-size: 1.2rem;
+    }
   }
   
   .spacer {
@@ -31,13 +45,23 @@
   .desktop-nav {
     display: flex;
     gap: 8px;
-    margin-right: 16px;
+    margin-right: $space-md;
     
-    @media (max-width: 768px) {
+    @include media-down($md) {
       display: none;
     }
     
     a {
+      color: var(--text-secondary);
+      
+      &.active {
+        color: var(--primary-color);
+      }
+      
+      &:hover {
+        color: var(--text-primary);
+      }
+      
       mat-icon {
         margin-right: 8px;
       }
@@ -48,17 +72,29 @@
 .sidenav-container {
   flex: 1;
   overflow: auto;
+  background: var(--background);
 }
 
 .mobile-sidenav {
   min-width: 250px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
   
-  @media (min-width: 769px) {
+  @include media-up($md) {
     display: none;
   }
   
-  .active {
-    background-color: rgba(25, 118, 210, 0.12);
+  .mat-mdc-list-item {
+    color: var(--text-secondary);
+    
+    &:hover {
+      background: var(--surface-variant);
+    }
+    
+    &.active {
+      background: rgba(var(--primary-color-rgb), 0.12);
+      color: var(--primary-color);
+    }
   }
 }
 
@@ -70,12 +106,20 @@
 
 .page-container {
   flex: 1;
-  padding: 24px;
+  padding: $space-xl;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
   
-  @media (max-width: 768px) {
-    padding: 16px;
+  @include media-down($lg) {
+    padding: $space-lg;
+  }
+  
+  @include media-down($md) {
+    padding: $space-md;
+  }
+  
+  @include media-down($sm) {
+    padding: $space-sm;
   }
 }
