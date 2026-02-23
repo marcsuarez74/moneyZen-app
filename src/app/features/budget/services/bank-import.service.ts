@@ -155,7 +155,8 @@ export class BankImportService {
   }
 
   /**
-   * Importe un fichier OFX (XML)
+   * Importe un fichier OFX (XML/SGML)
+   * Le format OFX peut être : XML pur, SGML, ou mixte
    */
   importOfx(file: File): Observable<ImportResult> {
     return new Observable(observer => {
@@ -169,45 +170,100 @@ export class BankImportService {
             return;
           }
 
+          console.log('📄 OFX Content preview:', content.substring(0, 500));
+          console.log('📄 OFX Content length:', content.length);
+
+          // Nettoyer le contenu OFX (enlever l'en-tête SGML si présent)
+          let cleanedContent = this.cleanOfxContent(content);
+          console.log('🧹 Cleaned content preview:', cleanedContent.substring(0, 500));
+
           const parser = new DOMParser();
-          const doc = parser.parseFromString(content, 'text/xml');
+          const doc = parser.parseFromString(cleanedContent, 'text/xml');
           
-          // Parsing des transactions OFX
+          // Vérifier s'il y a des erreurs de parsing
+          const parserError = doc.querySelector('parsererror');
+          if (parserError) {
+            console.warn('⚠️ XML parsing error, trying alternative method...');
+            // Essayer avec text/html si text/xml échoue
+            const docHtml = parser.parseFromString(cleanedContent, 'text/html');
+          }
+          
+          // Parsing des transactions OFX - essayer plusieurs sélecteurs
           const transactions: ImportedTransaction[] = [];
-          const transactionNodes = doc.querySelectorAll('STMTTRN');
+          
+          // Essayer différents sélecteurs car les banques utilisent différentes conventions
+          let transactionNodes: NodeListOf<Element> = doc.querySelectorAll('STMTTRN');
+          console.log('🔍 Found with STMTTRN (uppercase):', transactionNodes.length);
+          
+          if (transactionNodes.length === 0) {
+            transactionNodes = doc.querySelectorAll('stmttrn');
+            console.log('🔍 Found with stmttrn (lowercase):', transactionNodes.length);
+          }
+          
+          if (transactionNodes.length === 0) {
+            transactionNodes = doc.querySelectorAll('*:not(:has(>STMTTRN)) > *');
+            console.log('🔍 Trying generic selector, found:', transactionNodes.length);
+          }
 
-          transactionNodes.forEach((node, index) => {
-            try {
-              const dateNode = node.querySelector('DTPOSTED');
-              const amountNode = node.querySelector('TRNAMT');
-              const nameNode = node.querySelector('NAME');
-              const memoNode = node.querySelector('MEMO');
+          if (transactionNodes.length === 0) {
+            // Dernière tentative : parsing manuel avec regex
+            console.log('🔄 Trying regex parsing...');
+            const regexTransactions = this.parseOfxWithRegex(cleanedContent);
+            transactions.push(...regexTransactions);
+          } else {
+            transactionNodes.forEach((node, index) => {
+              try {
+                // Essayer différentes variations de casse pour les nœuds
+                const dateNode = this.findNodeIgnoreCase(node, 'DTPOSTED');
+                const amountNode = this.findNodeIgnoreCase(node, 'TRNAMT');
+                const nameNode = this.findNodeIgnoreCase(node, 'NAME') || 
+                               this.findNodeIgnoreCase(node, 'PAYEE');
+                const memoNode = this.findNodeIgnoreCase(node, 'MEMO');
 
-              if (!dateNode || !amountNode) return;
+                console.log(`📝 Transaction ${index}:`, {
+                  dateNode: dateNode?.textContent,
+                  amountNode: amountNode?.textContent,
+                  nameNode: nameNode?.textContent,
+                  memoNode: memoNode?.textContent
+                });
 
-              const dateStr = dateNode.textContent || '';
-              const amountStr = amountNode.textContent || '0';
-              const description = nameNode?.textContent || memoNode?.textContent || 'Transaction';
+                if (!dateNode || !amountNode) {
+                  console.warn(`⚠️ Missing date or amount for transaction ${index}`);
+                  return;
+                }
 
-              // Format OFX : YYYYMMDD ou YYYYMMDDHHMMSS
-              const year = parseInt(dateStr.substring(0, 4));
-              const month = parseInt(dateStr.substring(4, 6)) - 1;
-              const day = parseInt(dateStr.substring(6, 8));
+                const dateStr = this.getTextContent(dateNode) || '';
+                const amountStr = this.getTextContent(amountNode) || '0';
+                const description = this.getTextContent(nameNode) || 
+                                  this.getTextContent(memoNode) || 
+                                  'Transaction';
 
-              const amount = parseFloat(amountStr);
+                console.log(`📊 Raw values:`, { dateStr, amountStr, description });
 
-              transactions.push({
-                id: `ofx_${index}_${Date.now()}`,
-                date: new Date(year, month, day),
-                description: description.trim(),
-                amount: Math.abs(amount),
-                type: amount >= 0 ? 'credit' : 'debit',
-                rawData: [dateStr, description, amountStr]
-              });
-            } catch (error) {
-              console.warn('Erreur parsing transaction OFX:', error);
-            }
-          });
+                // Format OFX : YYYYMMDD ou YYYYMMDDHHMMSS[.TZ]
+                const date = this.parseOfxDate(dateStr);
+                const amount = parseFloat(amountStr.replace(',', '.'));
+
+                if (isNaN(amount)) {
+                  console.warn(`⚠️ Invalid amount: ${amountStr}`);
+                  return;
+                }
+
+                transactions.push({
+                  id: `ofx_${index}_${Date.now()}`,
+                  date,
+                  description: description.trim(),
+                  amount: Math.abs(amount),
+                  type: amount >= 0 ? 'credit' : 'debit',
+                  rawData: [dateStr, description, amountStr]
+                });
+              } catch (error) {
+                console.warn(`⚠️ Erreur parsing transaction OFX #${index}:`, error);
+              }
+            });
+          }
+
+          console.log(`✅ Total transactions found: ${transactions.length}`);
 
           const totalCredits = transactions
             .filter(t => t.type === 'credit')
@@ -223,12 +279,13 @@ export class BankImportService {
             totalImported: transactions.length,
             totalCredits,
             totalDebits,
-            errors: []
+            errors: transactions.length === 0 ? ['Aucune transaction trouvée dans le fichier'] : []
           };
 
           observer.next(result);
           observer.complete();
         } catch (error) {
+          console.error('❌ OFX import error:', error);
           observer.error({ 
             success: false, 
             errors: [error instanceof Error ? error.message : 'Erreur parsing OFX'] 
@@ -446,5 +503,135 @@ export class BankImportService {
     }
 
     return mapping;
+  }
+
+  // ============ OFX Helper Methods ============
+
+  /**
+   * Nettoie le contenu OFX pour le rendre parsable en XML
+   * OFX peut contenir un en-tête SGML qu'il faut enlever
+   */
+  private cleanOfxContent(content: string): string {
+    // Enlever l'en-tête SGML si présent
+    // Format typique : OFXHEADER:100 DATA:OFXSGML VERSION:102 SECURITY:NONE ENCODING:USASCII
+    let cleaned = content;
+    
+    // Chercher la balise <OFX> et tout garder après
+    const ofxMatch = content.match(/<OFX[^>]*>/i);
+    if (ofxMatch) {
+      const startIndex = content.indexOf(ofxMatch[0]);
+      cleaned = content.substring(startIndex);
+    }
+    
+    // Remplacer les caractères problématiques
+    cleaned = cleaned.replace(/&/g, '&amp;');
+    
+    // Assurer que les balises orphan sont fermées (OFX SGML n'exige pas toujours les balises fermantes)
+    // C'est un peu risqué mais on va essayer de parser quand même
+    
+    return cleaned;
+  }
+
+  /**
+   * Parse OFX avec des regex si le DOM parsing échoue
+   */
+  private parseOfxWithRegex(content: string): ImportedTransaction[] {
+    const transactions: ImportedTransaction[] = [];
+    
+    // Regex pour trouver les blocs STMTTRN
+    const stmttrnRegex = /<STMTTRN>([\s\S]*?)<\/STMTTRN>/gi;
+    let match;
+    let index = 0;
+    
+    while ((match = stmttrnRegex.exec(content)) !== null) {
+      const block = match[1];
+      
+      try {
+        const dtposted = block.match(/<DTPOSTED>([^<]+)/i)?.[1] || '';
+        const trnamt = block.match(/<TRNAMT>([^<]+)/i)?.[1] || '0';
+        const name = block.match(/<NAME>([^<]+)/i)?.[1] || '';
+        const memo = block.match(/<MEMO>([^<]+)/i)?.[1] || '';
+        
+        if (!dtposted || !trnamt) continue;
+        
+        const date = this.parseOfxDate(dtposted);
+        const amount = parseFloat(trnamt.replace(',', '.'));
+        const description = name || memo || 'Transaction';
+        
+        transactions.push({
+          id: `ofx_regex_${index}_${Date.now()}`,
+          date,
+          description: description.trim(),
+          amount: Math.abs(amount),
+          type: amount >= 0 ? 'credit' : 'debit',
+          rawData: [dtposted, description, trnamt]
+        });
+        
+        index++;
+      } catch (error) {
+        console.warn('Erreur regex parsing:', error);
+      }
+    }
+    
+    return transactions;
+  }
+
+  /**
+   * Trouve un nœud en ignorant la casse
+   */
+  private findNodeIgnoreCase(parent: Element, tagName: string): Element | null {
+    // Essayer d'abord exact
+    let node = parent.querySelector(tagName);
+    if (node) return node;
+    
+    // Essayer en minuscule
+    node = parent.querySelector(tagName.toLowerCase());
+    if (node) return node;
+    
+    // Essayer en majuscule
+    node = parent.querySelector(tagName.toUpperCase());
+    if (node) return node;
+    
+    // Chercher manuellement dans les enfants
+    const children = parent.children;
+    const tagNameLower = tagName.toLowerCase();
+    
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      if (child.tagName.toLowerCase() === tagNameLower) {
+        return child;
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Récupère le texte d'un nœud de manière sûre
+   */
+  private getTextContent(node: Element | null): string | null {
+    if (!node) return null;
+    return node.textContent || node.innerHTML || null;
+  }
+
+  /**
+   * Parse une date OFX (format: YYYYMMDD ou YYYYMMDDHHMMSS[.TZ])
+   */
+  private parseOfxDate(dateStr: string): Date {
+    // Nettoyer la chaîne
+    const clean = dateStr.trim();
+    
+    if (clean.length >= 8) {
+      const year = parseInt(clean.substring(0, 4));
+      const month = parseInt(clean.substring(4, 6)) - 1;
+      const day = parseInt(clean.substring(6, 8));
+      
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+        return new Date(year, month, day);
+      }
+    }
+    
+    // Fallback
+    return new Date(clean);
   }
 }
