@@ -60,12 +60,17 @@ export class PaydayCalculatorService {
     // Jours restants dans le mois (de maintenant jusqu'à la fin du mois)
     const remainingDaysInMonth = daysInCurrentMonth - currentDay;
     
-    // Budget quotidien théorique (si on répartissait équitablement sur tout le mois)
-    const dailyBudget = daysInCurrentMonth > 0 ? remainingBudget / daysInCurrentMonth : remainingBudget;
+    // Nombre de jours total dans la période entre deux paies
+    const daysInFullPeriod = Math.ceil((nextPayday.getTime() - lastPayday.getTime()) / millisecondsPerDay);
     
-    // Budget quotidien réel pour les jours restants jusqu'à la paie (plus pertinent)
-    const actualDailyBudget = daysUntilPayday > 0 
-      ? remainingBudget / daysUntilPayday 
+    // Budget quotidien théorique basé sur la période complète entre deux paies
+    const dailyBudget = daysInFullPeriod > 0 ? remainingBudget / daysInFullPeriod : remainingBudget;
+    
+    // Budget quotidien réel : utilise le max entre la période complète et les jours restants
+    // pour éviter les pics artificiels quand on approche de la paie
+    const daysForCalculation = Math.max(daysInFullPeriod, daysUntilPayday);
+    const actualDailyBudget = daysForCalculation > 0 
+      ? remainingBudget / daysForCalculation 
       : remainingBudget;
     
     return {
