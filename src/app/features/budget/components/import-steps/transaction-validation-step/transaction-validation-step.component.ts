@@ -51,7 +51,7 @@ export interface ImportResult {
 })
 export class TransactionValidationStepComponent {
   @Input() importResult: ImportResult | null = null;
-  @Input() selectedTransactions: Set<string> = new Set();
+  @Input() selectedTransactions: Set<string> = new Set<string>();
   
   @Output() toggleSelection = new EventEmitter<string>();
   @Output() selectAll = new EventEmitter<void>();

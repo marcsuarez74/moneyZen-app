@@ -19,7 +19,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {
   BankImportService,
-  ImportedTransaction,
   ImportResult
 } from '../../services/bank-import.service';
 import { EXPENSE_CATEGORIES, ExpenseCategory, Expense } from '../../../../models/budget.model';
