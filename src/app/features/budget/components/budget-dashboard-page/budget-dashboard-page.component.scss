@@ -1,86 +1,101 @@
-// Main Page Layout
+@import '../../../../../styles/variables';
+
+// ============================================
+// BUDGET DASHBOARD PAGE - Responsive & Dark Theme
+// ============================================
+
 .budget-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+  background: var(--background);
 }
 
-// Dashboard Layout
+// Layout principal
 .dashboard-layout {
   flex: 1;
-  padding: 32px 0;
+  padding: $space-xl 0;
+  
+  @include media-down($md) {
+    padding: $space-lg 0;
+  }
+  
+  @include media-down($sm) {
+    padding: $space-md 0;
+  }
 }
 
 .dashboard-container {
-  max-width: 1400px;
+  max-width: $xxl;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 $space-xl;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: $space-xl;
+  
+  @include media-down($lg) {
+    padding: 0 $space-lg;
+  }
+  
+  @include media-down($md) {
+    padding: 0 $space-md;
+    gap: $space-lg;
+  }
+  
+  @include media-down($sm) {
+    padding: 0 $space-sm;
+    gap: $space-md;
+  }
 }
 
-// Sections
+// Sections avec animations
 .dashboard-section {
-  animation: fadeInUp 0.6s ease forwards;
+  animation: slideUp 0.6s ease forwards;
   opacity: 0;
   
-  &.section-alert {
-    animation-delay: 0.1s;
-  }
-  
-  &.section-insights {
-    animation-delay: 0.2s;
-  }
-  
-  &.section-stats {
-    animation-delay: 0.3s;
-  }
-  
-  &.section-content {
-    animation-delay: 0.4s;
-  }
+  &.section-alert { animation-delay: 0.1s; }
+  &.section-insights { animation-delay: 0.2s; }
+  &.section-stats { animation-delay: 0.3s; }
+  &.section-content { animation-delay: 0.4s; }
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Content Tabs Section
+// Onglets de contenu
 .content-tabs {
   background: var(--surface);
-  border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
   overflow: hidden;
   border: 1px solid var(--border);
 }
 
-// Modern Tabs Styling
+// Onglets Material Design modernisés
 .modern-tabs {
   ::ng-deep {
     .mat-mdc-tab-header {
-      background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+      background: var(--surface-variant);
       border-bottom: 1px solid var(--border);
     }
 
     .mat-mdc-tab {
       height: 64px;
-      padding: 0 28px;
+      padding: 0 $space-lg;
       opacity: 1;
+      
+      @include media-down($md) {
+        height: 56px;
+        padding: 0 $space-md;
+      }
+      
+      @include media-down($sm) {
+        height: 48px;
+        padding: 0 $space-sm;
+      }
       
       .mdc-tab__text-label {
         color: var(--text-secondary);
         font-weight: 500;
-        font-size: 15px;
-        transition: all 0.3s ease;
+        font-size: 0.9375rem;
+        transition: all $transition-base;
       }
       
       &:hover .mdc-tab__text-label {
@@ -89,12 +104,12 @@
       
       &.mdc-tab--active {
         .mdc-tab__text-label {
-          color: #667eea;
+          color: var(--primary-color);
           font-weight: 600;
         }
         
         .mdc-tab-indicator__content--underline {
-          border-color: #667eea;
+          border-color: var(--primary-color);
           border-top-width: 3px;
         }
       }
@@ -120,68 +135,84 @@
   align-items: center;
   justify-content: center;
   background: var(--surface-variant);
-  transition: all 0.3s ease;
+  transition: all $transition-base;
+  
+  @include media-down($sm) {
+    width: 32px;
+    height: 32px;
+  }
   
   mat-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
     color: var(--text-secondary);
+    
+    @include media-down($sm) {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
   }
 }
 
 .modern-tabs ::ng-deep .mat-mdc-tab.mdc-tab--active .tab-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   
   mat-icon {
-    color: white;
+    color: var(--text-on-primary);
   }
 }
 
 .tab-text {
-  @media (max-width: 600px) {
+  @include media-down($sm) {
     display: none;
   }
 }
 
 .tab-badge {
-  background: linear-gradient(135deg, #ff4081 0%, #ff6e40 100%);
-  color: white;
+  background: var(--gradient-error);
+  color: var(--text-on-error);
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 12px;
   font-weight: 700;
   margin-left: 4px;
-  box-shadow: 0 2px 8px rgba(255, 64, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(var(--error-color-rgb), 0.3);
 }
 
 .tab-panel {
-  padding: 32px;
+  padding: $space-xl;
   
-  @media (max-width: 768px) {
-    padding: 20px;
+  @include media-down($md) {
+    padding: $space-lg;
+  }
+  
+  @include media-down($sm) {
+    padding: $space-md;
   }
 }
 
-// Scenarios Grid
+// Grille des scénarios
 .scenarios-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: $space-lg;
 
-  @media (max-width: 1024px) {
+  @include media-down($lg) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 640px) {
+  @include media-down($md) {
     grid-template-columns: 1fr;
+    gap: $space-md;
   }
 }
 
 .scenario-card {
   background: var(--surface);
-  border-radius: 20px;
-  padding: 28px;
+  border-radius: $radius-xl;
+  padding: $space-lg;
   border: 2px solid var(--border);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
@@ -199,7 +230,7 @@
 
   &:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: $shadow-lg;
     
     &::before {
       height: 6px;
@@ -208,42 +239,51 @@
 
   &.conservateur {
     &::before {
-      background: linear-gradient(90deg, #ef5350, #ff8a80);
+      background: var(--gradient-error);
     }
     
     .scenario-icon {
-      background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-      color: #c62828;
+      background: var(--error-light);
+      color: var(--error-dark);
     }
   }
 
   &.realiste {
     &::before {
-      background: linear-gradient(90deg, #ffa726, #ffcc80);
+      background: var(--gradient-warning);
     }
     
     .scenario-icon {
-      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-      color: #ef6c00;
+      background: var(--warning-light);
+      color: var(--warning-dark);
     }
   }
 
   &.optimise {
     &::before {
-      background: linear-gradient(90deg, #66bb6a, #a5d6a7);
+      background: var(--gradient-success);
     }
     
     .scenario-icon {
-      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-      color: #2e7d32;
+      background: var(--success-light);
+      color: var(--success-dark);
     }
+  }
+
+  @include media-down($sm) {
+    padding: $space-md;
+    border-radius: $radius-lg;
   }
 
   .scenario-header {
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-bottom: 24px;
+    margin-bottom: $space-lg;
+
+    @include media-down($sm) {
+      margin-bottom: $space-md;
+    }
 
     .scenario-icon {
       width: 48px;
@@ -253,128 +293,76 @@
       align-items: center;
       justify-content: center;
       
+      @include media-down($sm) {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+      }
+      
       mat-icon {
         font-size: 24px;
         width: 24px;
         height: 24px;
+        
+        @include media-down($sm) {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
       }
     }
 
     h3 {
       margin: 0;
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 700;
       color: var(--text-primary);
+      
+      @include media-down($sm) {
+        font-size: 1rem;
+      }
     }
   }
 
   .scenario-body {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: $space-md;
   }
 
   .scenario-metric {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding: 16px;
+    padding: $space-md;
     background: var(--surface-variant);
     border-radius: 14px;
 
+    @include media-down($sm) {
+      padding: $space-sm;
+    }
+
     .metric-label {
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: var(--text-secondary);
       font-weight: 500;
     }
 
     .metric-value {
-      font-size: 24px;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--text-primary);
       letter-spacing: -0.5px;
 
+      @include media-down($sm) {
+        font-size: 1.25rem;
+      }
+
       &.main {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--gradient-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-      }
-    }
-  }
-}
-
-// Responsive
-@media (max-width: 1200px) {
-  .dashboard-container {
-    padding: 0 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .dashboard-layout {
-    padding: 20px 0;
-  }
-
-  .dashboard-container {
-    padding: 0 16px;
-    gap: 20px;
-  }
-  
-  .modern-tabs ::ng-deep {
-    .mat-mdc-tab {
-      height: 56px;
-      padding: 0 16px;
-    }
-  }
-  
-  .tab-icon {
-    width: 32px;
-    height: 32px;
-    
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-  }
-  
-  .tab-panel {
-    padding: 20px;
-  }
-  
-  .scenarios-grid {
-    gap: 16px;
-  }
-  
-  .scenario-card {
-    padding: 20px;
-    border-radius: 16px;
-    
-    .scenario-header {
-      margin-bottom: 16px;
-      
-      .scenario-icon {
-        width: 40px;
-        height: 40px;
-        
-        mat-icon {
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-        }
-      }
-      
-      h3 {
-        font-size: 16px;
-      }
-    }
-    
-    .scenario-metric {
-      padding: 12px;
-      
-      .metric-value {
-        font-size: 20px;
       }
     }
   }

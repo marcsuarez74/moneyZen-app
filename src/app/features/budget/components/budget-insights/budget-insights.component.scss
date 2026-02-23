@@ -1,63 +1,58 @@
+@import '../../../../../styles/variables';
+
+// ============================================
+// BUDGET INSIGHTS - Responsive & Dark Theme
+// ============================================
+
 .insights-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: $space-md;
 }
 
 .insight-card {
   background: var(--surface);
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: $radius-lg;
+  padding: $space-md;
   border: 2px solid transparent;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: $shadow-sm;
   animation: slideInRight 0.5s ease forwards;
   animation-delay: var(--delay, 0s);
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: all $transition-base;
   
   &:hover {
     transform: translateX(4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-md;
   }
   
   &.warning {
-    border-color: #f44336;
-    background: linear-gradient(135deg, #ffebee 0%, #ffffff 100%);
+    border-color: var(--error-color);
+    background: var(--error-light);
   }
   
   &.positive {
-    border-color: #4caf50;
-    background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
+    border-color: var(--success-color);
+    background: var(--success-light);
   }
   
   &.info {
-    border-color: #2196f3;
-    background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+    border-color: var(--info-color);
+    background: var(--info-light);
   }
   
   &.opportunity {
-    border-color: #ff9800;
-    background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+    border-color: var(--warning-color);
+    background: var(--warning-light);
   }
 }
 
 .insight-content {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: $space-md;
   
-  @media (max-width: 600px) {
+  @include media-down($sm) {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -66,36 +61,47 @@
 .insight-icon {
   width: 56px;
   height: 56px;
-  border-radius: 16px;
+  border-radius: $radius-md;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   
+  @include media-down($sm) {
+    width: 48px;
+    height: 48px;
+  }
+  
   mat-icon {
     font-size: 28px;
     width: 28px;
     height: 28px;
+    
+    @include media-down($sm) {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
   }
   
   &.warning {
-    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    color: #c62828;
+    background: var(--error-light);
+    color: var(--error-dark);
   }
   
   &.positive {
-    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-    color: #2e7d32;
+    background: var(--success-light);
+    color: var(--success-dark);
   }
   
   &.info {
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-    color: #1565c0;
+    background: var(--info-light);
+    color: var(--info-dark);
   }
   
   &.opportunity {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-    color: #e65100;
+    background: var(--warning-light);
+    color: var(--warning-dark);
   }
 }
 
@@ -106,19 +112,19 @@
   .insight-header {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: $space-sm;
     margin-bottom: 8px;
     flex-wrap: wrap;
     
     h3 {
       margin: 0;
-      font-size: 17px;
+      font-size: 1.0625rem;
       font-weight: 700;
       color: var(--text-primary);
     }
     
     .priority-badge {
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
       padding: 4px 12px;
       border-radius: 20px;
@@ -126,30 +132,30 @@
       letter-spacing: 0.5px;
       
       &.warning {
-        background: #f44336;
-        color: white;
+        background: var(--error-color);
+        color: var(--text-on-error);
       }
       
       &.positive {
-        background: #4caf50;
-        color: white;
+        background: var(--success-color);
+        color: var(--text-on-success);
       }
       
       &.info {
-        background: #2196f3;
-        color: white;
+        background: var(--info-color);
+        color: var(--text-on-info);
       }
       
       &.opportunity {
-        background: #ff9800;
-        color: white;
+        background: var(--warning-color);
+        color: var(--text-on-warning);
       }
     }
   }
   
   .insight-description {
     margin: 0;
-    font-size: 14px;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     line-height: 1.6;
   }
@@ -157,18 +163,18 @@
 
 .action-btn {
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: $radius-md;
   font-weight: 600;
+  
+  @include media-down($sm) {
+    align-self: stretch;
+    margin-top: 8px;
+  }
   
   mat-icon {
     margin-left: 6px;
     font-size: 18px;
     width: 18px;
     height: 18px;
-  }
-  
-  @media (max-width: 600px) {
-    align-self: stretch;
-    margin-top: 8px;
   }
 }

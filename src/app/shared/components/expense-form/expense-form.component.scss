@@ -1,11 +1,23 @@
+@import '../../../../styles/variables';
+
+// ============================================
+// EXPENSE FORM - Responsive & Dark Theme
+// ============================================
+
 .expense-form-container {
   background: var(--surface);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
+  border-radius: $radius-lg;
+  padding: $space-lg;
+  margin-bottom: $space-lg;
   border: 1px solid var(--border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: $shadow-sm;
+  transition: all $transition-base;
+  
+  @include media-down($sm) {
+    padding: $space-md;
+    border-radius: $radius-md;
+    margin-bottom: $space-md;
+  }
 
   &.open {
     animation: slideDown 0.3s ease;
@@ -27,9 +39,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
+  margin-bottom: $space-md;
+  padding-bottom: $space-md;
   border-bottom: 1px solid var(--border);
+  
+  @include media-down($sm) {
+    margin-bottom: $space-sm;
+    padding-bottom: $space-sm;
+  }
 }
 
 .form-title {
@@ -37,7 +54,7 @@
   align-items: center;
   gap: 12px;
   margin: 0;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);
 
@@ -46,39 +63,59 @@
     font-size: 24px;
     width: 24px;
     height: 24px;
+    
+    @include media-down($sm) {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  @include media-down($sm) {
+    font-size: 1rem;
+    gap: 8px;
   }
 }
 
 .close-btn {
   color: var(--text-secondary);
-  transition: color 0.2s;
+  transition: color $transition-fast;
 
   &:hover {
     color: var(--text-primary);
+  }
+  
+  @include media-down($sm) {
+    width: 36px;
+    height: 36px;
   }
 }
 
 .expense-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: $space-md;
+  
+  @include media-down($sm) {
+    gap: $space-sm;
+  }
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 2fr 1.5fr;
-  gap: 16px;
+  gap: $space-md;
   align-items: flex-start;
 
-  @media (max-width: 768px) {
+  @include media-down($md) {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: $space-sm;
   }
 
   &:last-of-type {
     grid-template-columns: 1fr 1fr;
 
-    @media (max-width: 768px) {
+    @include media-down($md) {
       grid-template-columns: 1fr;
     }
   }
@@ -88,12 +125,31 @@
   width: 100%;
 
   ::ng-deep {
+    .mat-mdc-floating-label {
+      color: var(--text-secondary);
+    }
+    
+    .mat-mdc-form-field-focus-overlay {
+      background: var(--primary-color);
+    }
+    
+    .mdc-text-field--focused {
+      .mat-mdc-floating-label {
+        color: var(--primary-color);
+      }
+    }
+
     .mat-mdc-form-field-infix {
       min-height: 56px;
     }
 
     .mat-mdc-text-field-wrapper {
       background: var(--surface-variant);
+      border-radius: 8px;
+    }
+    
+    .mat-mdc-form-field-subscript-wrapper {
+      padding: 0 4px;
     }
   }
 }
@@ -110,16 +166,43 @@ app-category-select {
   padding-top: 8px;
   margin-top: 8px;
   border-top: 1px solid var(--border);
+  
+  @include media-down($sm) {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
 
   .submit-btn {
     white-space: nowrap;
     min-width: 140px;
+    border-radius: $radius-md;
+    background: var(--gradient-primary) !important;
+    color: var(--text-on-primary) !important;
+    
+    @include media-down($sm) {
+      width: 100%;
+      min-width: auto;
+    }
 
     mat-icon {
       margin-right: 8px;
       font-size: 20px;
       width: 20px;
       height: 20px;
+      
+      @include media-down($sm) {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  
+  .cancel-btn {
+    color: var(--text-secondary);
+    
+    @include media-down($sm) {
+      width: 100%;
     }
   }
 }
@@ -128,13 +211,19 @@ app-category-select {
 mat-option {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: $space-sm;
 
   mat-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
     color: var(--primary-color);
+    
+    @include media-down($sm) {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
   }
 }
 
