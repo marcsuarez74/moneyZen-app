@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -9,12 +9,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Expense, EXPENSE_CATEGORIES } from '../../../../models/budget.model';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { Expense, EXPENSE_CATEGORIES, ExpenseCategory } from '../../../../models/budget.model';
 
-/**
- * DIALOG - Édition des dépenses/charges
- * Permet d'ajouter, modifier et supprimer des dépenses
- */
+interface TableExpense extends Expense {
+  isEditing?: boolean;
+}
+
 @Component({
   selector: 'app-edit-expenses-dialog',
   standalone: true,
@@ -29,275 +32,128 @@ import { Expense, EXPENSE_CATEGORIES } from '../../../../models/budget.model';
     MatIconModule,
     MatDividerModule,
     MatTooltipModule,
+    MatTableModule,
+    MatSortModule,
+    MatToolbarModule,
     CurrencyPipe
   ],
-  template: `
-    <h2 mat-dialog-title>
-      <mat-icon>edit</mat-icon>
-      Modifier mes charges
-    </h2>
-    
-    <mat-dialog-content>
-      <div class="expenses-list">
-        @for (expense of expenses(); track expense.id) {
-          <div class="expense-item">
-            <div class="expense-fields">
-              <mat-form-field appearance="outline" class="field-name">
-                <mat-label>Nom</mat-label>
-                <input matInput [(ngModel)]="expense.name" placeholder="Loyer">
-              </mat-form-field>
-              
-              <mat-form-field appearance="outline" class="field-category">
-                <mat-label>Catégorie</mat-label>
-                <mat-select [(ngModel)]="expense.category">
-                  @for (cat of categories; track cat.value) {
-                    <mat-option [value]="cat.value">
-                      <mat-icon>{{ cat.icon }}</mat-icon>
-                      {{ cat.label }}
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-              
-              <mat-form-field appearance="outline" class="field-amount">
-                <mat-label>Montant</mat-label>
-                <input matInput type="number" [(ngModel)]="expense.amount">
-                <span matSuffix>€</span>
-              </mat-form-field>
-              
-              <mat-form-field appearance="outline" class="field-frequency">
-                <mat-label>Fréquence</mat-label>
-                <mat-select [(ngModel)]="expense.frequency">
-                  <mat-option value="monthly">Mensuel</mat-option>
-                  <mat-option value="quarterly">Trimestriel</mat-option>
-                  <mat-option value="yearly">Annuel</mat-option>
-                  <mat-option value="one-time">Ponctuel</mat-option>
-                </mat-select>
-              </mat-form-field>
-              
-              <div class="monthly-equivalent">
-                <span class="label">Mensuel:</span>
-                <span class="value">{{ expense.monthlyEquivalent | currency:'EUR' }}</span>
-              </div>
-            </div>
-            
-            <button mat-icon-button 
-                    color="warn" 
-                    (click)="removeExpense(expense.id)"
-                    matTooltip="Supprimer cette charge">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-          
-          @if (!$last) {
-            <mat-divider></mat-divider>
-          }
-        }
-      </div>
-      
-      <div class="total-section">
-        <div class="total-item">
-          <span>Total mensuel:</span>
-          <strong>{{ totalMonthly() | currency:'EUR' }}</strong>
-        </div>
-      </div>
-    </mat-dialog-content>
-    
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="addNewExpense()">
-        <mat-icon>add</mat-icon>
-        Ajouter une charge
-      </button>
-      <div class="spacer"></div>
-      <button mat-button (click)="onCancel()">Annuler</button>
-      <button mat-raised-button color="primary" (click)="onSave()">
-        <mat-icon>save</mat-icon>
-        Enregistrer
-      </button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    h2 {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0;
-      padding: 16px 24px;
-      
-      mat-icon {
-        color: var(--primary-color);
-      }
-    }
-    
-    mat-dialog-content {
-      min-width: 700px;
-      max-height: 60vh;
-      padding: 24px;
-      overflow-y: auto;
-      
-      @media (max-width: 768px) {
-        min-width: 100%;
-        padding: 16px;
-      }
-    }
-    
-    .expenses-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .expense-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px;
-      background: var(--surface-variant);
-      border-radius: 8px;
-      
-      &:hover {
-        background: var(--surface);
-      }
-      
-      .expense-fields {
-        display: grid;
-        grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr;
-        gap: 12px;
-        flex: 1;
-        
-        @media (max-width: 900px) {
-          grid-template-columns: 1fr 1fr;
-        }
-        
-        .field-name { grid-column: 1; }
-        .field-category { grid-column: 2; }
-        .field-amount { grid-column: 3; }
-        .field-frequency { grid-column: 4; }
-        
-        @media (max-width: 900px) {
-          .field-name { grid-column: 1 / -1; }
-          .field-category { grid-column: 1; }
-          .field-amount { grid-column: 2; }
-          .field-frequency { grid-column: 1; }
-        }
-      }
-      
-      mat-form-field {
-        margin-bottom: -20px;
-      }
-      
-      .monthly-equivalent {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 8px;
-        background: rgba(76, 175, 80, 0.1);
-        border-radius: 4px;
-        min-width: 100px;
-        
-        .label {
-          font-size: 11px;
-          color: var(--text-secondary);
-        }
-        
-        .value {
-          font-size: 14px;
-          font-weight: 600;
-          color: #4caf50;
-        }
-      }
-    }
-    
-    .expense-actions {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-    
-    .total-section {
-      margin-top: 24px;
-      padding: 16px;
-      background: var(--surface);
-      border-radius: 8px;
-      
-      .total-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        
-        span {
-          font-size: 16px;
-          color: var(--text-secondary);
-        }
-        
-        strong {
-          font-size: 20px;
-          color: var(--text-primary);
-        }
-      }
-    }
-    
-    mat-dialog-actions {
-      padding: 16px 24px;
-      
-      .spacer {
-        flex: 1;
-      }
-    }
-  `]
+  templateUrl: './edit-expenses-dialog.component.html',
+  styleUrls: ['./edit-expenses-dialog.component.scss']
 })
 export class EditExpensesDialogComponent {
   private dialogRef = inject(MatDialogRef<EditExpensesDialogComponent>);
-  
+
   readonly data = inject<{ expenses: Expense[] }>(MAT_DIALOG_DATA);
-  
-  readonly expenses = signal<Expense[]>([...this.data.expenses]);
+
+  readonly expenses = signal<TableExpense[]>([...this.data.expenses]);
   readonly categories = EXPENSE_CATEGORIES;
-  
-  readonly totalMonthly = () => 
-    this.expenses().reduce((sum, e) => sum + e.monthlyEquivalent, 0);
-  
+  readonly displayedColumns = ['name', 'category', 'amount', 'frequency', 'monthlyEquivalent', 'actions'];
+
+  // Tri alphabétique des catégories pour le select
+  readonly sortedCategories = computed(() => {
+    return [...this.categories].sort((a, b) => a.label.localeCompare(b.label, 'fr'));
+  });
+
+  readonly totalMonthly = computed(() =>
+    this.expenses().reduce((sum, e) => sum + e.monthlyEquivalent, 0)
+  );
+
+  readonly totalAnnual = computed(() => this.totalMonthly() * 12);
+
   addNewExpense(): void {
-    const newExpense: Expense = {
+    const newExpense: TableExpense = {
       id: 'exp_' + Date.now(),
       name: 'Nouvelle charge',
       category: 'other',
       amount: 0,
       frequency: 'monthly',
-      monthlyEquivalent: 0
+      monthlyEquivalent: 0,
+      isEditing: true
     };
     this.expenses.update(exp => [...exp, newExpense]);
   }
-  
+
   removeExpense(id: string): void {
     this.expenses.update(exp => exp.filter(e => e.id !== id));
   }
-  
+
+  toggleEdit(expense: TableExpense): void {
+    expense.isEditing = !expense.isEditing;
+    if (!expense.isEditing) {
+      // Recalculer l'équivalent mensuel quand on quitte l'édition
+      expense.monthlyEquivalent = this.calculateMonthlyEquivalent(expense);
+    }
+  }
+
+  updateExpenseField(expense: TableExpense, field: keyof TableExpense, value: any): void {
+    (expense as any)[field] = value;
+    expense.monthlyEquivalent = this.calculateMonthlyEquivalent(expense);
+  }
+
+  getCategoryLabel(category: ExpenseCategory): string {
+    const cat = this.categories.find(c => c.value === category);
+    return cat?.label || category;
+  }
+
+  getCategoryIcon(category: ExpenseCategory): string {
+    const cat = this.categories.find(c => c.value === category);
+    return cat?.icon || 'help';
+  }
+
+  sortData(sort: Sort): void {
+    const data = this.expenses();
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+
+    const sorted = [...data].sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'name': return this.compare(a.name, b.name, isAsc);
+        case 'category': return this.compare(this.getCategoryLabel(a.category), this.getCategoryLabel(b.category), isAsc);
+        case 'amount': return this.compare(a.amount, b.amount, isAsc);
+        case 'frequency': return this.compare(a.frequency, b.frequency, isAsc);
+        case 'monthlyEquivalent': return this.compare(a.monthlyEquivalent, b.monthlyEquivalent, isAsc);
+        default: return 0;
+      }
+    });
+
+    this.expenses.set(sorted);
+  }
+
+  private compare(a: number | string, b: number | string, isAsc: boolean): number {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  getFrequencyLabel(frequency: Expense['frequency']): string {
+    const labels: Record<string, string> = {
+      monthly: 'Mensuel',
+      quarterly: 'Trimestriel',
+      yearly: 'Annuel',
+      'one-time': 'Ponctuel'
+    };
+    return labels[frequency] || frequency;
+  }
+
   onCancel(): void {
     this.dialogRef.close();
   }
-  
+
   onSave(): void {
-    // Recalculer les équivalents mensuels
     const updatedExpenses = this.expenses().map(expense => ({
       ...expense,
       monthlyEquivalent: this.calculateMonthlyEquivalent(expense)
     }));
     this.dialogRef.close(updatedExpenses);
   }
-  
+
   private calculateMonthlyEquivalent(expense: Expense): number {
     switch (expense.frequency) {
-      case 'monthly':
-        return expense.amount;
-      case 'quarterly':
-        return expense.amount / 3;
-      case 'yearly':
-        return expense.amount / 12;
-      case 'one-time':
-        return 0; // On ne compte pas les dépenses ponctuelles dans le mensuel
-      default:
-        return expense.amount;
+      case 'monthly': return expense.amount;
+      case 'quarterly': return expense.amount / 3;
+      case 'yearly': return expense.amount / 12;
+      case 'one-time': return 0;
+      default: return expense.amount;
     }
   }
 }

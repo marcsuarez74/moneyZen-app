@@ -13,7 +13,7 @@ interface NewExpense {
   name: string;
   category: ExpenseCategory;
   amount: number;
-  frequency: 'monthly' | 'yearly';
+  frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time';
 }
 
 @Component({

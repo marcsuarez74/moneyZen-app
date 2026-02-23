@@ -1,0 +1,152 @@
+<mat-toolbar color="primary" class="dialog-header">
+  <mat-icon>edit</mat-icon>
+  <span>Modifier mes charges</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="onCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div mat-dialog-content class="dialog-content">
+  <div class="table-container">
+    <table mat-table [dataSource]="expenses()" matSort (matSortChange)="sortData($event)" class="expenses-table">
+
+      <!-- Nom Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom</th>
+        <td mat-cell *matCellDef="let expense">
+          @if (expense.isEditing) {
+            <mat-form-field appearance="outline" class="inline-field">
+              <input matInput [(ngModel)]="expense.name" placeholder="Nom de la charge">
+            </mat-form-field>
+          } @else {
+            <div class="expense-name">
+              <mat-icon class="category-icon">{{ getCategoryIcon(expense.category) }}</mat-icon>
+              <span>{{ expense.name }}</span>
+            </div>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Catégorie Column -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Catégorie</th>
+        <td mat-cell *matCellDef="let expense">
+          @if (expense.isEditing) {
+            <mat-form-field appearance="outline" class="inline-field">
+              <mat-select [(ngModel)]="expense.category">
+                @for (cat of sortedCategories(); track cat.value) {
+                  <mat-option [value]="cat.value">
+                    <mat-icon>{{ cat.icon }}</mat-icon>
+                    {{ cat.label }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          } @else {
+            <div class="category-chip">
+              <mat-icon>{{ getCategoryIcon(expense.category) }}</mat-icon>
+              <span>{{ getCategoryLabel(expense.category) }}</span>
+            </div>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Montant Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Montant</th>
+        <td mat-cell *matCellDef="let expense">
+          @if (expense.isEditing) {
+            <mat-form-field appearance="outline" class="inline-field amount-field">
+              <input matInput type="number" [(ngModel)]="expense.amount">
+              <span matSuffix>€</span>
+            </mat-form-field>
+          } @else {
+            <span class="amount-value">{{ expense.amount | currency:'EUR' }}</span>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Fréquence Column -->
+      <ng-container matColumnDef="frequency">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fréq.</th>
+        <td mat-cell *matCellDef="let expense">
+          @if (expense.isEditing) {
+            <mat-form-field appearance="outline" class="inline-field frequency-field">
+              <mat-select [(ngModel)]="expense.frequency">
+                <mat-option value="monthly">Mensuel</mat-option>
+                <mat-option value="quarterly">Trimestriel</mat-option>
+                <mat-option value="yearly">Annuel</mat-option>
+                <mat-option value="one-time">Ponctuel</mat-option>
+              </mat-select>
+            </mat-form-field>
+          } @else {
+            <span class="frequency-badge" [class]="'freq-' + expense.frequency">
+              {{ getFrequencyLabel(expense.frequency) }}
+            </span>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Mensuel Column -->
+      <ng-container matColumnDef="monthlyEquivalent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Mensuel</th>
+        <td mat-cell *matCellDef="let expense">
+          <span class="monthly-value" [class.zero]="expense.monthlyEquivalent === 0">
+            {{ expense.monthlyEquivalent | currency:'EUR' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let expense">
+          <div class="action-buttons">
+            <button mat-icon-button
+                    [color]="expense.isEditing ? 'primary' : ''"
+                    (click)="toggleEdit(expense)"
+                    matTooltip="{{ expense.isEditing ? 'Terminer' : 'Modifier' }}">
+              <mat-icon>{{ expense.isEditing ? 'check' : 'edit' }}</mat-icon>
+            </button>
+            <button mat-icon-button
+                    color="warn"
+                    (click)="removeExpense(expense.id)"
+                    matTooltip="Supprimer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [class.editing-row]="row.isEditing"></tr>
+    </table>
+  </div>
+
+  <!-- Total Section -->
+  <div class="total-section">
+    <div class="total-row">
+      <span class="total-label">Total mensuel :</span>
+      <span class="total-value">{{ totalMonthly() | currency:'EUR' }}</span>
+    </div>
+    <div class="total-row annual">
+      <span class="total-label">Total annuel :</span>
+      <span class="total-value">{{ totalAnnual() | currency:'EUR' }}</span>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button (click)="addNewExpense()">
+    <mat-icon>add</mat-icon>
+    Ajouter une charge
+  </button>
+  <div class="spacer"></div>
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSave()">
+    <mat-icon>save</mat-icon>
+    Enregistrer
+  </button>
+</div>

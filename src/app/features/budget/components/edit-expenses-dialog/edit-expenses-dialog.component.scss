@@ -1,0 +1,267 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.dialog-header {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  span {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+.dialog-content {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.table-container {
+  overflow: auto;
+  max-height: 50vh;
+  flex: 1;
+}
+
+.expenses-table {
+  width: 100%;
+
+  th {
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--surface-variant);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  tr {
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--surface-variant);
+    }
+
+    &.editing-row {
+      background-color: rgba(33, 150, 243, 0.1);
+
+      td {
+        padding: 4px 8px;
+      }
+    }
+  }
+}
+
+.expense-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .category-icon {
+    color: var(--primary-color);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--surface-variant);
+  border-radius: 16px;
+  font-size: 13px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+  }
+}
+
+.inline-field {
+  width: 100%;
+  margin-bottom: -1.25em;
+
+  &.amount-field {
+    width: 100px;
+  }
+
+  &.frequency-field {
+    width: 120px;
+  }
+
+  ::ng-deep {
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      padding: 0 8px;
+    }
+
+    .mat-mdc-form-field-infix {
+      min-height: 40px;
+      padding: 8px 0;
+    }
+  }
+}
+
+.amount-value {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.frequency-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.freq-monthly {
+    background: rgba(76, 175, 80, 0.15);
+    color: #2e7d32;
+  }
+
+  &.freq-quarterly {
+    background: rgba(255, 152, 0, 0.15);
+    color: #ef6c00;
+  }
+
+  &.freq-yearly {
+    background: rgba(33, 150, 243, 0.15);
+    color: #1565c0;
+  }
+
+  &.freq-one-time {
+    background: rgba(158, 158, 158, 0.15);
+    color: #616161;
+  }
+}
+
+.monthly-value {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-variant-numeric: tabular-nums;
+
+  &.zero {
+    color: var(--text-secondary);
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 4px;
+
+  button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.total-section {
+  padding: 16px 24px;
+  background: var(--surface-variant);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 32px;
+  justify-content: flex-end;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.total-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  &.annual {
+    .total-value {
+      color: var(--accent-color);
+    }
+  }
+}
+
+.total-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.total-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+// Style pour le select des catégories
+::ng-deep .category-select-panel {
+  .mat-mdc-optgroup-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--primary-color);
+    background: var(--surface-variant);
+  }
+
+  .mat-mdc-option {
+    .mdc-list-item__primary-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: var(--text-secondary);
+    }
+  }
+}

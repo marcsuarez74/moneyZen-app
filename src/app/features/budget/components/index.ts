@@ -14,3 +14,6 @@ export { EditExpensesDialogComponent } from './edit-expenses-dialog/edit-expense
 // Setup components
 export { BudgetSetupComponent } from './budget-setup/budget-setup.component';
 export { BudgetDashboardPageComponent } from './budget-dashboard-page/budget-dashboard-page.component';
+
+// Shared components  
+export { CategorySelectComponent } from '../../../shared/components/category-select/category-select.component';
