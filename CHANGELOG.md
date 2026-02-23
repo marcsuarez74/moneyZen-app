@@ -8,13 +8,53 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
-- 
 
 ### Changed
-- 
 
 ### Fixed
-- 
+
+## [1.2.0] - 2026-02-23
+
+### ✨ Nouveautés - Import Bancaire
+- Import automatique des transactions bancaires via fichiers CSV et OFX
+- Wizard d'import en 4 étapes : Sélection de banque, Guide d'export, Upload, Validation
+- Support des banques françaises (BNP, Société Générale, Crédit Agricole, BoursoBank, Revolut, N26)
+- Détection automatique du format de fichier
+- Catégorisation automatique des transactions par intelligence de pattern
+- Détection des doublons potentiels
+- Tableau de validation avec sélection/désélection des transactions
+
+### 🎨 Design System Fintech
+- Modernisation complète de la section Budget avec style Fintech
+- Dégradés violet-violet foncé (#667eea → #764ba2) cohérents sur tous les composants
+- Bordures arrondies 16px et ombres modernes
+- Animations fluides (slide-up, hover effects)
+- Typographie moderne avec titres en dégradé
+- Checkboxes stylisées avec dégradés
+- Cards avec effets de survol modernes
+
+### 📁 Architecture Composants
+- Séparation des composants en fichiers .ts/.html/.scss distincts
+- Modularisation du wizard d'import bancaire en 4 composants séparés
+- BankSelectionStep : Sélection de la banque avec cards
+- ExportGuideStep : Guide d'export personnalisé par banque
+- FileUploadStep : Zone d'upload drag-and-drop
+- TransactionValidationStep : Validation des transactions avant import
+- BankImportDialog : Modal d'import avec design Material
+
+### 🔧 Améliorations Techniques
+- Styles SCSS propres avec structure hiérarchique
+- Performance optimisée avec détection OnPush
+- Responsive design pour mobile et desktop
+- Gestion d'erreurs améliorée pour les formats de fichiers
+- Validation des extensions CSV/OFX
+
+### Composants modernisés
+- BudgetDashboardPage, BudgetStatsDisplay, BudgetInsights
+- BudgetRecommendations, BudgetSetup, DashboardHeader
+- ExpenseBreakdown, EditExpenseDialog, EditIncomeDialog
+- DebtRecoveryPlan, WelcomeCard
+- Shared components (FormCard, StepIndicator)
 
 ## [1.1.3] - 2026-02-23
 
