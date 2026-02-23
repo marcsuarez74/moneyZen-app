@@ -1,47 +1,98 @@
-<h2 mat-dialog-title>Modifier mes revenus</h2>
-
-<mat-dialog-content [formGroup]="incomeForm">
-  <!-- Salaire -->
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Salaire mensuel net</mat-label>
-    <input matInput type="number" formControlName="salary" placeholder="2500">
-    <span matSuffix>€</span>
-    <mat-hint>Votre revenu principal après impôts</mat-hint>
-  </mat-form-field>
-
-  <!-- Jour de paie -->
-  <div class="field-row">
-    <mat-form-field appearance="outline" class="payday-field">
-      <mat-label>Jour de paie</mat-label>
-      <input matInput type="number" formControlName="paydayDay" min="1" max="31">
-      <span matSuffix>/mois</span>
-      <mat-hint>Ex: 25 pour le 25 de chaque mois</mat-hint>
-    </mat-form-field>
-
-    <div class="payday-buttons">
-      <button mat-icon-button (click)="decrementPayday()" [disabled]="incomeForm.get('paydayDay')?.value <= 1">
-        <mat-icon>remove</mat-icon>
-      </button>
-      <button mat-icon-button (click)="incrementPayday()" [disabled]="incomeForm.get('paydayDay')?.value >= 31">
-        <mat-icon>add</mat-icon>
-      </button>
+<div class="fintech-dialog">
+  <div class="dialog-header">
+    <div class="header-bg"></div>
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>edit</mat-icon>
+      </div>
+      <h2>Modifier mes revenus</h2>
     </div>
   </div>
 
-  <!-- Solde -->
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Solde bancaire actuel</mat-label>
-    <input matInput type="number" formControlName="accountBalance" placeholder="0">
-    <span matSuffix>€</span>
-    <mat-hint [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
-      {{ balanceStatusText() }}
-    </mat-hint>
-  </mat-form-field>
-</mat-dialog-content>
+  <mat-dialog-content [formGroup]="incomeForm">
+    <div class="form-card">
+      <!-- Salaire -->
+      <div class="input-group">
+        <label class="input-label">
+          <mat-icon>payments</mat-icon>
+          Revenus mensuels
+        </label>
+        <div class="input-wrapper">
+          <input 
+            type="number" 
+            formControlName="salary" 
+            placeholder="2500"
+            class="fintech-input"
+            [class.filled]="incomeForm.get('salary')?.value"
+          >
+          <span class="currency">€</span>
+        </div>
+        <span class="input-hint">Salaire net après impôts</span>
+      </div>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Annuler</button>
-  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!incomeForm.valid">
-    Enregistrer
-  </button>
-</mat-dialog-actions>
+      <!-- Jour de paie -->
+      <div class="input-group">
+        <label class="input-label">
+          <mat-icon>calendar_today</mat-icon>
+          Jour de paie
+        </label>
+        <div class="payday-selector">
+          <button 
+            mat-icon-button 
+            class="counter-btn" 
+            (click)="decrementPayday()"
+            [disabled]="incomeForm.get('paydayDay')?.value <= 1"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          
+          <div class="payday-display">
+            <span class="day-number">{{ incomeForm.get('paydayDay')?.value }}</span>
+            <span class="day-suffix">{{ incomeForm.get('paydayDay')?.value === 1 ? 'er' : '' }}</span>
+          </div>
+          
+          <button 
+            mat-icon-button 
+            class="counter-btn" 
+            (click)="incrementPayday()"
+            [disabled]="incomeForm.get('paydayDay')?.value >= 31"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <span class="input-hint">du mois</span>
+      </div>
+
+      <!-- Solde -->
+      <div class="input-group">
+        <label class="input-label">
+          <mat-icon>account_balance_wallet</mat-icon>
+          Solde bancaire
+        </label>
+        <div class="input-wrapper" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
+          <input 
+            type="number" 
+            formControlName="accountBalance" 
+            placeholder="0"
+            class="fintech-input"
+            [class.positive]="isPositiveBalance()"
+            [class.negative]="!isPositiveBalance()"
+          >
+          <span class="currency">€</span>
+        </div>
+        <div class="balance-badge" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
+          <mat-icon>{{ isPositiveBalance() ? 'trending_up' : 'trending_down' }}</mat-icon>
+          {{ balanceStatusText() }}
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button class="btn-secondary" (click)="onCancel()">Annuler</button>
+    <button mat-raised-button class="btn-primary" (click)="onSave()" [disabled]="!incomeForm.valid">
+      <mat-icon>save</mat-icon>
+      Enregistrer
+    </button>
+  </mat-dialog-actions>
+</div>

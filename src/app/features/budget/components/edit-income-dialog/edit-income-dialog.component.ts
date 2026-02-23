@@ -43,9 +43,9 @@ export class EditIncomeDialogComponent {
 
   readonly balanceStatusText = computed(() => {
     const balance = this.incomeForm.get('accountBalance')?.value;
-    if (balance > 0) return 'Compte créditeur ✓';
-    if (balance < 0) return 'Compte débiteur ⚠';
-    return 'Solde nul';
+    if (balance > 0) return 'Solde positif';
+    if (balance < 0) return 'En découvert';
+    return 'Solde vide';
   });
 
   incrementPayday(): void {
