@@ -1,11 +1,11 @@
 {
-  "version": "1.1.2",
+  "version": "1.1.3",
   "date": "2026-02-23",
   "name": "MoneyZen",
   "description": "Application de gestion budgétaire personnelle",
   "repository": "https://github.com/marcsuarez/budget-app",
   "author": "Marc Suarez",
   "license": "MIT",
-  "commit": "28adc8f",
+  "commit": "df72c35",
   "branch": "main"
 }
