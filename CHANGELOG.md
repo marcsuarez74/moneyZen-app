@@ -8,15 +8,19 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ## [Unreleased]
 
 ### Added
-- 
+- Test feature for changelog extraction
+- Test documentation update
 
 ### Changed
-- 
+- Test change in workflow
 
 ### Fixed
-- 
+- Fixed minor bug in test module
 
 ## [1.1.2] - 2026-02-23
+
+### Fixed
+- Correction du script changelog
 
 ## [1.1.1] - 2026-02-23
 
