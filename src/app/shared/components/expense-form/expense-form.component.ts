@@ -9,12 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { EXPENSE_CATEGORIES, ExpenseCategory, Expense } from '../../../models/budget.model';
 
-type ExpenseFormData = {
+interface ExpenseFormData {
   name: string;
   category: ExpenseCategory;
   amount: number;
   frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time';
-};
+}
 
 @Component({
   selector: 'app-expense-form',

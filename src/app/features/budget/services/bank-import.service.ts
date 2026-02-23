@@ -294,7 +294,7 @@ export class BankImportService {
   private parseDate(dateStr: string, format: string): Date {
     const cleanDate = dateStr.trim();
     if (format === 'DD/MM/YYYY') {
-      const parts = cleanDate.split(/[/.,\-]+/);
+      const parts = cleanDate.split(/[/.,-]+/);
       if (parts.length === 3) {
         return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
       }
