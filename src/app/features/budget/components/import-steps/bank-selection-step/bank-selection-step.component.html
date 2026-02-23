@@ -1,0 +1,36 @@
+<div class="bank-selection-container">
+  <div class="step-header">
+    <h2 class="step-title">Sélectionnez votre banque</h2>
+    <p class="step-description">Choisissez votre établissement bancaire pour obtenir un guide d'export personnalisé</p>
+  </div>
+
+  <div class="banks-grid">
+    <mat-card 
+      *ngFor="let bank of banks" 
+      class="bank-card"
+      [class.selected]="false"
+      (click)="onSelectBank(bank)"
+      [style.--bank-color]="bank.color">
+      
+      <div class="bank-icon-wrapper" [style.background-color]="bank.color + '20'">
+        <mat-icon [style.color]="bank.color">{{ bank.icon }}</mat-icon>
+      </div>
+      
+      <div class="bank-info">
+        <h3 class="bank-name">{{ bank.name }}</h3>
+        <span class="bank-badge">Guide disponible</span>
+      </div>
+      
+      <div class="bank-arrow">
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="other-banks-section">
+    <p class="other-banks-text">
+      <mat-icon>info</mat-icon>
+      Votre banque n'est pas dans la liste ? L'import fonctionne avec tous les fichiers CSV ou OFX standards
+    </p>
+  </div>
+</div>

@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BudgetStore } from '../../../../store/budget.store';
 import { LocalStorageService } from '../../../../services/local-storage.service';
-import { BudgetOptimizationService } from '../../../../services/budget-optimization.service';
 import { UserFinancialData, Expense, EXPENSE_CATEGORIES } from '../../../../models/budget.model';
 
 @Component({
@@ -35,10 +34,10 @@ export class BudgetSetupComponent implements OnInit {
   private fb = inject(FormBuilder);
   private budgetStore = inject(BudgetStore);
   private storageService = inject(LocalStorageService);
-  private optimizationService = inject(BudgetOptimizationService);
   private router = inject(Router);
   
   currentStep = 1;
+  totalSteps = 2;
   
   financialForm: FormGroup = this.fb.group({
     salary: [null, [Validators.required, Validators.min(0)]],
@@ -65,7 +64,7 @@ export class BudgetSetupComponent implements OnInit {
     { name: 'Assurance auto', category: 'insurance', amount: 600, frequency: 'yearly' },
     { name: 'Assurance habitation', category: 'insurance', amount: 300, frequency: 'yearly' },
     { name: 'Mutuelle', category: 'health', amount: 50, frequency: 'monthly' },
-    { name: 'Loisirs', category: 'leisure', amount: 100, frequency: 'monthly' }
+    { name: 'Loisirs', category: 'other', amount: 100, frequency: 'monthly' }
   ];
   
   ngOnInit(): void {

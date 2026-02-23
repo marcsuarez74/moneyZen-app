@@ -1,267 +1,42 @@
-:host {
-  display: flex;
-  flex-direction: column;
-  max-height: 90vh;
-}
-
-.dialog-header {
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  mat-icon {
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
-  }
-
-  span {
-    font-size: 20px;
-    font-weight: 500;
-  }
-
-  .spacer {
-    flex: 1;
-  }
-}
-
-.dialog-content {
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.table-container {
-  overflow: auto;
-  max-height: 50vh;
-  flex: 1;
-}
-
-.expenses-table {
-  width: 100%;
-
-  th {
-    font-weight: 600;
-    color: var(--text-primary);
-    background: var(--surface-variant);
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.5px;
-  }
-
-  td {
-    vertical-align: middle;
-  }
-
-  tr {
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: var(--surface-variant);
-    }
-
-    &.editing-row {
-      background-color: rgba(33, 150, 243, 0.1);
-
-      td {
-        padding: 4px 8px;
-      }
-    }
-  }
-}
-
-.expense-name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  .category-icon {
-    color: var(--primary-color);
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-  }
-}
-
-.category-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  background: var(--surface-variant);
-  border-radius: 16px;
-  font-size: 13px;
-
-  mat-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-    color: var(--text-secondary);
-  }
-}
-
-.inline-field {
-  width: 100%;
-  margin-bottom: -1.25em;
-
-  &.amount-field {
-    width: 100px;
-  }
-
-  &.frequency-field {
-    width: 120px;
-  }
-
-  ::ng-deep {
-    .mat-mdc-form-field-subscript-wrapper {
-      display: none;
-    }
-
-    .mat-mdc-text-field-wrapper {
-      padding: 0 8px;
-    }
-
-    .mat-mdc-form-field-infix {
-      min-height: 40px;
-      padding: 8px 0;
-    }
-  }
-}
-
-.amount-value {
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.frequency-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-
-  &.freq-monthly {
-    background: rgba(76, 175, 80, 0.15);
-    color: #2e7d32;
-  }
-
-  &.freq-quarterly {
-    background: rgba(255, 152, 0, 0.15);
-    color: #ef6c00;
-  }
-
-  &.freq-yearly {
-    background: rgba(33, 150, 243, 0.15);
-    color: #1565c0;
-  }
-
-  &.freq-one-time {
-    background: rgba(158, 158, 158, 0.15);
-    color: #616161;
-  }
-}
-
-.monthly-value {
-  font-weight: 600;
-  color: var(--primary-color);
-  font-variant-numeric: tabular-nums;
-
-  &.zero {
-    color: var(--text-secondary);
-  }
-}
-
-.action-buttons {
-  display: flex;
-  gap: 4px;
-
-  button {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-  }
-}
-
-.total-section {
-  padding: 16px 24px;
-  background: var(--surface-variant);
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 32px;
-  justify-content: flex-end;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    gap: 8px;
-  }
-}
-
-.total-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  &.annual {
-    .total-value {
-      color: var(--accent-color);
-    }
-  }
-}
-
-.total-label {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.total-value {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--primary-color);
-  font-variant-numeric: tabular-nums;
-}
-
-.dialog-actions {
-  padding: 16px 24px;
-  border-top: 1px solid var(--border);
-
-  .spacer {
-    flex: 1;
-  }
-}
-
-// Style pour le select des catégories
-::ng-deep .category-select-panel {
-  .mat-mdc-optgroup-label {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--primary-color);
-    background: var(--surface-variant);
-  }
-
-  .mat-mdc-option {
-    .mdc-list-item__primary-text {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      color: var(--text-secondary);
-    }
-  }
-}
+:host{display:flex;flex-direction:column;max-height:90vh}
+.dialog-header{padding:20px 24px;display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#667eea,#764ba2);color:white}
+.dialog-header mat-icon{font-size:28px;width:28px;height:28px}
+.dialog-header span{font-size:20px;font-weight:700;letter-spacing:-0.3px}
+.spacer{flex:1}
+.dialog-content{padding:0;overflow:hidden;display:flex;flex-direction:column;flex:1}
+.table-container{overflow:auto;max-height:50vh;flex:1}
+.expenses-table{width:100%}
+.expenses-table th{font-weight:700;color:var(--text-primary);background:linear-gradient(180deg,var(--surface-variant),var(--surface));text-transform:uppercase;font-size:12px;letter-spacing:0.5px;padding:16px}
+.expenses-table td{padding:12px 16px;vertical-align:middle}
+.expenses-table tr{transition:all .2s}
+.expenses-table tr:hover{background-color:rgba(102,126,234,.1)}
+.expenses-table tr.editing-row{background:linear-gradient(135deg,rgba(102,126,234,.15),rgba(118,75,162,.15));border-left:4px solid #667eea}
+.expense-name{display:flex;align-items:center;gap:10px}
+.category-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(102,126,234,.15),rgba(118,75,162,.15));display:flex;align-items:center;justify-content:center;color:#667eea;font-size:18px}
+.category-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:var(--surface-variant);border-radius:20px;font-size:13px;font-weight:600;border:1px solid var(--border)}
+.category-chip mat-icon{font-size:16px;width:16px;height:16px;color:#667eea}
+.inline-field{width:100%;margin-bottom:-1.25em}
+.inline-field.amount-field{width:110px}
+.inline-field.frequency-field{width:130px}
+.inline-field ::ng-deep .mat-mdc-form-field-subscript-wrapper{display:none}
+.inline-field ::ng-deep .mat-mdc-text-field-wrapper{padding:0 12px;border-radius:10px}
+.inline-field ::ng-deep .mat-mdc-form-field-infix{min-height:44px;padding:10px 0}
+.amount-value{font-weight:700;font-variant-numeric:tabular-nums;font-size:15px}
+.frequency-badge{display:inline-flex;align-items:center;padding:6px 14px;border-radius:16px;font-size:12px;font-weight:700}
+.frequency-badge.freq-monthly{background:linear-gradient(135deg,rgba(76,175,80,.2),rgba(139,195,74,.2));color:#2e7d32}
+.frequency-badge.freq-quarterly{background:linear-gradient(135deg,rgba(255,152,0,.2),rgba(255,193,7,.2));color:#ef6c00}
+.frequency-badge.freq-yearly{background:linear-gradient(135deg,rgba(33,150,243,.2),rgba(100,181,246,.2));color:#1565c0}
+.frequency-badge.freq-one-time{background:linear-gradient(135deg,rgba(158,158,158,.2),rgba(224,224,224,.2));color:#616161}
+.monthly-value{font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-variant-numeric:tabular-nums}
+.monthly-value.zero{color:var(--text-secondary)}
+.action-buttons{display:flex;gap:6px}
+.action-buttons button{width:36px;height:36px;padding:0;border-radius:10px}
+.action-buttons button mat-icon{font-size:20px;width:20px;height:20px}
+.total-section{padding:20px 24px;background:linear-gradient(180deg,var(--surface-variant),var(--surface));border-top:2px solid var(--border);display:flex;gap:40px;justify-content:flex-end}
+.total-row{display:flex;align-items:center;gap:12px}
+.total-row.annual .total-value{background:linear-gradient(135deg,#ff4081,#ff6e40);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.total-label{font-size:14px;color:var(--text-secondary);font-weight:600}
+.total-value{font-size:26px;font-weight:700;color:#667eea;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.dialog-actions{padding:20px 24px;border-top:2px solid var(--border);gap:12px}
+.dialog-actions button{border-radius:10px}
+@media(max-width:600px){.total-section{flex-direction:column;gap:12px}.total-value{font-size:22px}}
