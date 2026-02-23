@@ -1,0 +1,58 @@
+<div class="breakdown-container">
+  <!-- Header -->
+  <header class="breakdown-header">
+    <h2 class="header-title">
+      <mat-icon>donut_large</mat-icon>
+      Répartition des dépenses
+    </h2>
+    <div class="header-summary">
+      <span class="summary-total">{{ totalExpenses() | currency:'EUR' }}</span>
+      <span class="summary-label">ce mois-ci</span>
+    </div>
+  </header>
+  
+  <!-- Categories List -->
+  <div class="categories-list">
+    @for (item of breakdownItems(); track item.category; let i = $index) {
+      <div class="category-item" [style.--delay]="i * 0.1 + 's'">
+        <div class="category-icon" [style.background]="getCategoryStyle(item.category).bg">
+          <mat-icon [style.color]="getCategoryStyle(item.category).text">{{ item.icon }}</mat-icon>
+        </div>
+        
+        <div class="category-details">
+          <div class="category-info">
+            <div class="info-main">
+              <span class="category-name">{{ item.name }}</span>
+              <span class="category-amount">{{ item.amount | currency:'EUR' }}</span>
+            </div>
+            <div class="info-meta">
+              <span class="category-percent">{{ item.percent }}%</span>
+              @if (isOverBudget(item)) {
+                <span class="over-budget-badge">⚠️ Dépassement</span>
+              }
+            </div>
+          </div>
+          
+          <div class="category-bar">
+            <div class="progress-track">
+              <div 
+                class="progress-fill" 
+                [style.width.%]="getProgressWidth(item)"
+                [style.background]="getCategoryStyle(item.category).bar">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  
+  <!-- Footer -->
+  @if (hasUncategorizedExpenses()) {
+    <div class="uncategorized-warning">
+      <mat-icon>warning_amber</mat-icon>
+      <span>Certaines dépenses n'ont pas de catégorie définie</span>
+      <button class="action-link">Catégoriser</button>
+    </div>
+  }
+</div>

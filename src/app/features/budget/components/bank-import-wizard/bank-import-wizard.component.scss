@@ -1,0 +1,427 @@
+$violet: #667eea;
+$purple: #764ba2;
+$success-color: #4caf50;
+$error-color: #f44336;
+$warning-color: #ff9800;
+$radius: 16px;
+
+:host {
+  display: block;
+
+  ::ng-deep {
+    mat-checkbox.mat-mdc-checkbox {
+      --mdc-checkbox-selected-checkmark-color: white;
+      --mdc-checkbox-selected-focus-icon-color: #667eea;
+      --mdc-checkbox-selected-hover-icon-color: #764ba2;
+      --mdc-checkbox-selected-icon-color: #667eea;
+
+      .mdc-checkbox__background {
+        border-color: rgba(102, 126, 234, 0.4);
+      }
+
+      &.mat-mdc-checkbox-checked .mdc-checkbox__background {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-color: #667eea;
+      }
+    }
+  }
+}
+
+.wizard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+
+  .wizard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, $violet, $purple);
+    color: white;
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .header-icon {
+        font-size: 28px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .header-text {
+        h2 {
+          margin: 0;
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: white;
+        }
+
+        .subtitle {
+          margin: 4px 0 0 0;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    button[mat-icon-button] {
+      color: rgba(255, 255, 255, 0.8);
+
+      &:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 24px;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba($violet, 0.03), rgba($purple, 0.03));
+    border-bottom: 1px solid rgba($violet, 0.1);
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.4;
+      transition: all 0.3s ease;
+
+      &.active, &.completed {
+        opacity: 1;
+      }
+
+      &.clickable {
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+
+      .step-number {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid rgba($violet, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.875rem;
+
+        &.active {
+          background: linear-gradient(135deg, $violet, $purple);
+          border-color: transparent;
+          color: white;
+        }
+
+        &.completed {
+          background: $success-color;
+          border-color: transparent;
+          color: white;
+        }
+      }
+
+      .step-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+
+        &.active {
+          color: $violet;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .progress-line {
+      width: 60px;
+      height: 2px;
+      background: rgba($violet, 0.15);
+      border-radius: 2px;
+
+      &.active {
+        background: linear-gradient(135deg, $violet, $purple);
+      }
+    }
+  }
+
+  .step-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+
+    .step-header {
+      text-align: center;
+      margin-bottom: 24px;
+
+      h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+    }
+
+    .banks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bank-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 40px rgba($violet, 0.15);
+          border-color: $violet;
+        }
+
+        mat-card-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 24px;
+          gap: 12px;
+
+          .bank-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            mat-icon {
+              font-size: 24px;
+            }
+          }
+        }
+      }
+    }
+
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba($violet, 0.1), rgba($purple, 0.05));
+      border-radius: $radius;
+      border-left: 3px solid $violet;
+
+      mat-icon {
+        color: $violet;
+        font-size: 20px;
+      }
+
+      strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.875rem;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.8125rem;
+        color: var(--text-secondary);
+      }
+    }
+
+    .upload-zone {
+      border: 2px dashed rgba($violet, 0.3);
+      border-radius: $radius;
+      padding: 48px 24px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba($violet, 0.05), rgba($purple, 0.03));
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        border-color: $violet;
+        background: linear-gradient(135deg, rgba($violet, 0.08), rgba($purple, 0.05));
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+        color: $violet;
+      }
+    }
+
+    .analysis-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+
+      @media (max-width: 900px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .analysis-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: white;
+        border-radius: $radius;
+        border: 1px solid rgba($violet, 0.15);
+
+        .card-icon {
+          width: 36px;
+          height: 36px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+
+          &.credit {
+            background: linear-gradient(135deg, $success-color, rgba($success-color, 0.8));
+            color: white;
+          }
+
+          &.debit {
+            background: linear-gradient(135deg, $error-color, rgba($error-color, 0.8));
+            color: white;
+          }
+
+          &.balance {
+            background: linear-gradient(135deg, $violet, $purple);
+            color: white;
+          }
+        }
+
+        .card-value {
+          font-size: 1rem;
+          font-weight: 700;
+        }
+
+        .card-label {
+          font-size: 0.6875rem;
+          color: var(--text-secondary);
+        }
+      }
+    }
+
+    .transactions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .transaction-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid rgba($violet, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: linear-gradient(135deg, rgba($violet, 0.05), rgba($purple, 0.03));
+          border-color: $violet;
+        }
+
+        &.selected {
+          background: linear-gradient(135deg, rgba($violet, 0.1), rgba($purple, 0.05));
+          border: 2px solid $violet;
+        }
+
+        .transaction-info {
+          flex: 1;
+          min-width: 0;
+
+          .description {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .transaction-amount {
+          font-weight: 700;
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+
+  button[mat-raised-button] {
+    background: linear-gradient(135deg, $violet, $purple) !important;
+    color: white !important;
+    border-radius: 12px;
+    padding: 8px 24px;
+
+    &:hover {
+      box-shadow: 0 8px 25px rgba($violet, 0.4) !important;
+    }
+  }
+
+  .step-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    border-top: 1px solid rgba($violet, 0.1);
+    background: linear-gradient(135deg, rgba($violet, 0.03), rgba($purple, 0.03));
+
+    &.final {
+      border-radius: $radius;
+      background: linear-gradient(135deg, rgba($violet, 0.08), rgba($purple, 0.05));
+      border: 1px solid rgba($violet, 0.15);
+    }
+  }
+
+  .selection-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba($violet, 0.1), rgba($purple, 0.05));
+    border-radius: $radius;
+    border-left: 3px solid $violet;
+    margin-top: 16px;
+
+    .total-selected {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .total-amount {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: $violet;
+    }
+  }
+}

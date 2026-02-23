@@ -1,0 +1,31 @@
+h2{display:flex;align-items:center;gap:12px;margin:0;padding:24px;border-bottom:1px solid var(--border);font-size:20px;font-weight:700}
+.title-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center}
+.title-icon mat-icon{color:white;font-size:24px}
+mat-dialog-content{min-width:450px;padding:24px}
+@media(max-width:600px){mat-dialog-content{min-width:auto;width:100%}}
+.form-section{margin-bottom:28px}
+h3{display:flex;align-items:center;gap:10px;margin:0 0 16px;font-size:15px;color:var(--text-secondary);font-weight:600}
+.section-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.section-icon.income{background:linear-gradient(135deg,#a8edea,#fed6e3)}
+.section-icon.income mat-icon{color:#0d7377}
+.section-icon.calendar{background:linear-gradient(135deg,#fff3e0,#ffe0b2)}
+.section-icon.calendar mat-icon{color:#e65100}
+.section-icon.bank{background:linear-gradient(135deg,#e3f2fd,#bbdefb)}
+.section-icon.bank mat-icon{color:#1565c0}
+.full-width{width:100%}
+.payday-control{background:linear-gradient(135deg,#f8f9fa,#e9ecef);padding:20px;border-radius:16px;margin-bottom:8px;border:1px solid var(--border)}
+.payday-control mat-slider{width:100%}
+.payday-display{display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:12px}
+.day-number{font-size:36px;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.day-label{font-size:16px;color:var(--text-secondary);font-weight:500}
+.payday-help{margin:12px 0 0;font-size:13px;color:var(--text-secondary);font-style:italic;padding:12px;background:rgba(102,126,234,.1);border-radius:8px}
+.balance-indicator{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:16px;background:var(--surface-variant);border-radius:12px;border:2px solid transparent;transition:all .3s ease}
+.balance-indicator.positive{border-color:#4caf50;background:linear-gradient(135deg,rgba(76,175,80,.1),#fff)}
+.balance-indicator.negative{border-color:#f44336;background:linear-gradient(135deg,rgba(244,67,54,.1),#fff)}
+.balance-status{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700}
+.balance-status mat-icon{font-size:18px}
+.balance-indicator.positive .balance-status{color:#4caf50}
+.balance-indicator.negative .balance-status{color:#f44336}
+mat-dialog-actions{padding:16px 24px;border-top:1px solid var(--border);gap:12px}
+mat-dialog-actions button{border-radius:10px}
+mat-dialog-actions button mat-icon{margin-right:6px}

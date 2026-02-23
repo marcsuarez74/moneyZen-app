@@ -10,7 +10,7 @@ export { DebtRecoveryPlanComponent } from './debt-recovery-plan/debt-recovery-pl
 // Dialog components
 export { EditIncomeDialogComponent } from './edit-income-dialog/edit-income-dialog.component';
 export { EditExpensesDialogComponent } from './edit-expenses-dialog/edit-expenses-dialog.component';
-export { BankImportDialogComponent } from './bank-import-dialog/bank-import-dialog.component';
+export { BankImportWizardComponent } from './bank-import-wizard/bank-import-wizard.component';
 
 // Setup components
 export { BudgetSetupComponent } from './budget-setup/budget-setup.component';
