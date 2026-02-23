@@ -1,0 +1,86 @@
+// ============================================
+// MoneyZen SCSS Variables
+// Variables pour le responsive et le dark theme
+// ============================================
+
+// Breakpoints standardisés (Mobile First)
+$xs: 0;           // Très petits appareils
+$sm: 576px;       // Mobile
+$md: 768px;       // Tablette portrait
+$lg: 992px;       // Tablette paysage / petit desktop
+$xl: 1200px;      // Desktop standard
+$xxl: 1400px;     // Grands écrans
+
+// Mixins pour les media queries responsives
+@mixin media-up($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin media-down($breakpoint) {
+  @media (max-width: $breakpoint - 1) {
+    @content;
+  }
+}
+
+@mixin media-between($min, $max) {
+  @media (min-width: $min) and (max-width: $max - 1) {
+    @content;
+  }
+}
+
+// Couleurs MoneyZen - Primary
+$moneyzen-teal: #00796b;
+$moneyzen-teal-light: #4db6ac;
+$moneyzen-teal-dark: #004d40;
+$moneyzen-teal-accent: #1de9b6;
+
+// Couleurs MoneyZen - Accent (Green)
+$moneyzen-green: #4caf50;
+$moneyzen-green-light: #81c784;
+$moneyzen-green-dark: #2e7d32;
+$moneyzen-green-accent: #00e676;
+
+// Couleurs sémantiques
+$success: #4caf50;
+$warning: #ff9800;
+$error: #f44336;
+$info: #2196f3;
+
+// Couleurs de l'ancien thème violet (dégradés)
+$violet: #667eea;
+$purple: #764ba2;
+
+// Espacements
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-2xl: 48px;
+$space-3xl: 64px;
+
+// Rayons de bordure
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 24px;
+$radius-2xl: 32px;
+
+// Ombres
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+$shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
+
+// Transitions
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;
+$transition-slow: 400ms ease;
+
+// Z-index
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-modal: 1050;
+$z-tooltip: 1070;
