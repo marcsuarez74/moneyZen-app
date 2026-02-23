@@ -49,7 +49,12 @@
             <span class="expense-badge">{{ expenseCount() }}</span>
           }
         </button>
-        
+
+        <button mat-stroked-button (click)="importBank.emit()" class="action-btn">
+          <mat-icon>upload_file</mat-icon>
+          <span class="btn-text">Importer</span>
+        </button>
+
         <button mat-raised-button color="primary" (click)="createNewBudget.emit()" class="action-btn primary">
           <mat-icon>add</mat-icon>
           <span class="btn-text">Nouveau budget</span>

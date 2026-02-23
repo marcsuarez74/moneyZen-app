@@ -19,6 +19,7 @@ import { BudgetInsightsComponent } from '../budget-insights/budget-insights.comp
 import { DebtRecoveryPlanComponent, RecoveryPlanData } from '../debt-recovery-plan/debt-recovery-plan.component';
 import { EditIncomeDialogComponent } from '../edit-income-dialog/edit-income-dialog.component';
 import { EditExpensesDialogComponent } from '../edit-expenses-dialog/edit-expenses-dialog.component';
+import { BankImportDialogComponent } from '../bank-import-dialog/bank-import-dialog.component';
 import { DashboardHeaderComponent } from '../dashboard-header/dashboard-header.component';
 import { WelcomeCardComponent } from '../welcome-card/welcome-card.component';
 import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
@@ -58,6 +59,7 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
         (editIncome)="openEditIncome()"
         (editExpenses)="openEditExpenses()"
         (createNewBudget)="createNewBudget()"
+        (importBank)="openBankImport()"
       ></app-dashboard-header>
 
       <!-- Empty State -->
@@ -561,7 +563,7 @@ export class BudgetDashboardPageComponent implements OnInit {
       maxHeight: '90vh',
       data: { expenses: this.budgetStore.expenses() }
     });
-    
+
     dialogRef.afterClosed().subscribe((result: Expense[] | undefined) => {
       if (result) {
         this.budgetStore.setExpenses(result);
@@ -569,7 +571,25 @@ export class BudgetDashboardPageComponent implements OnInit {
       }
     });
   }
-  
+
+  openBankImport(): void {
+    const dialogRef = this.dialog.open(BankImportDialogComponent, {
+      width: '950px',
+      maxHeight: '90vh',
+      data: { existingExpenses: this.budgetStore.expenses() }
+    });
+
+    dialogRef.afterClosed().subscribe((result: Expense[] | undefined) => {
+      if (result && result.length > 0) {
+        // Ajouter les nouvelles dépenses aux existantes
+        const currentExpenses = this.budgetStore.expenses();
+        const updatedExpenses = [...currentExpenses, ...result];
+        this.budgetStore.setExpenses(updatedExpenses);
+        this.saveAndRecalculate();
+      }
+    });
+  }
+
   private saveAndRecalculate(): void {
     // Sauvegarder
     this.storageService.saveBudgetState({
