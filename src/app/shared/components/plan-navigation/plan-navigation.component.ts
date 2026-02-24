@@ -178,11 +178,13 @@ export interface PlanSection {
       .nav-item {
         justify-content: flex-start;
         width: 100%;
-        padding: 10px 12px;
+        padding: 10px 10px;
         border-radius: 10px;
         text-align: left;
         border: none;
         border-left: 3px solid transparent;
+        min-height: 44px;
+        height: auto;
 
         &:hover {
           background: var(--fintech-surface-variant, #f5f5f5);
@@ -192,12 +194,17 @@ export interface PlanSection {
 
         mat-icon {
           font-size: 20px;
-          width: 20px;
-          height: 20px;
+          width: 22px;
+          height: 22px;
+          min-width: 22px;
+          flex-shrink: 0;
         }
 
         .nav-label {
           font-size: 0.875rem;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          hyphens: auto;
         }
       }
     }
