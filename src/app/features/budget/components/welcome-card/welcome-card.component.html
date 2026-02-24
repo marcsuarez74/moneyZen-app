@@ -28,6 +28,15 @@
           <mat-icon>add</mat-icon>
           Configurer mon budget
         </a>
+        
+        <button 
+          mat-stroked-button 
+          class="restore-button"
+          (click)="openImportDialog()">
+          <mat-icon>restore</mat-icon>
+          Restaurer une sauvegarde
+        </button>
+        
         <p class="privacy-note">
           <mat-icon>lock</mat-icon>
           Vos données restent sur votre appareil - 100% confidentiel
