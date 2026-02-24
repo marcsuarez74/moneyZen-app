@@ -1,7 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { SwUpdate } from '@angular/service-worker';
+import { of } from 'rxjs';
 import { AppComponent } from './app.component';
+
+// Mock pour SwUpdate
+class MockSwUpdate {
+  isEnabled = false;
+  versionUpdates = of();
+  checkForUpdate() {
+    return Promise.resolve(false);
+  }
+  activateUpdate() {
+    return Promise.resolve(false);
+  }
+}
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -9,7 +23,8 @@ describe('AppComponent', () => {
       imports: [AppComponent],
       providers: [
         provideRouter([]),
-        provideHttpClient()
+        provideHttpClient(),
+        { provide: SwUpdate, useClass: MockSwUpdate }
       ]
     }).compileComponents();
   });
