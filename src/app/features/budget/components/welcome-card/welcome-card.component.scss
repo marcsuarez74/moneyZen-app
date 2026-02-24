@@ -157,36 +157,65 @@
     }
   }
   
-  .cta-section {
-    .cta-button {
-      width: 100%;
-      height: 56px;
-      font-size: 1.0625rem;
-      font-weight: 600;
-      border-radius: $radius-lg;
-      background: var(--gradient-primary);
-      box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.4);
-      margin-bottom: $space-md;
-      transition: all $transition-base;
-      
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 32px rgba(var(--primary-color-rgb), 0.5);
+    .cta-section {
+      .cta-button {
+        width: 100%;
+        height: 56px;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        border-radius: $radius-lg;
+        background: var(--gradient-primary);
+        box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.4);
+        margin-bottom: $space-md;
+        transition: all $transition-base;
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 32px rgba(var(--primary-color-rgb), 0.5);
+        }
+        
+        @include media-down($sm) {
+          height: 50px;
+          font-size: 1rem;
+          border-radius: 14px;
+        }
+        
+        mat-icon {
+          margin-right: 10px;
+          font-size: 22px;
+        }
       }
       
-      @include media-down($sm) {
-        height: 50px;
+      .restore-button {
+        width: 100%;
+        height: 48px;
         font-size: 1rem;
-        border-radius: 14px;
+        font-weight: 600;
+        border-radius: $radius-lg;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        background: transparent;
+        margin-bottom: $space-md;
+        transition: all $transition-base;
+        
+        &:hover {
+          background: rgba(var(--primary-color-rgb), 0.1);
+          transform: translateY(-1px);
+        }
+        
+        @include media-down($sm) {
+          height: 44px;
+          font-size: 0.9375rem;
+          border-radius: 14px;
+        }
+        
+        mat-icon {
+          margin-right: 10px;
+          font-size: 20px;
+        }
       }
       
-      mat-icon {
-        margin-right: 10px;
-        font-size: 22px;
-      }
-    }
-    
-    .privacy-note {
+      .privacy-note {
       display: flex;
       align-items: center;
       justify-content: center;
