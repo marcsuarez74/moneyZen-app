@@ -15,6 +15,7 @@ import { BudgetStore } from '../../../../store/budget.store';
 import { ExpenseRecordStore } from '../../../../store/expense-record.store';
 import { QuickExpenseComponent } from '../quick-expense/quick-expense.component';
 import { RecentExpensesComponent } from '../recent-expenses/recent-expenses.component';
+import { PlanNavigationComponent, PlanSection } from '../../../../shared/components/plan-navigation/plan-navigation.component';
 
 export interface RecoveryPlanData {
   overdraftAmount: number;
@@ -60,7 +61,8 @@ export interface MonthlyTarget {
     FormsModule,
     CurrencyPipe,
     QuickExpenseComponent,
-    RecentExpensesComponent
+    RecentExpensesComponent,
+    PlanNavigationComponent
   ],
   templateUrl: './debt-recovery-plan.component.html',
   styleUrls: ['./debt-recovery-plan.component.scss']
@@ -284,6 +286,18 @@ export class DebtRecoveryPlanComponent implements OnInit {
     const recommendedMonths = Math.ceil(this.data().overdraftAmount / availableForRecovery);
     return Math.max(3, Math.min(12, recommendedMonths));
   });
+
+  // Configuration des sections pour la navigation
+  readonly planSections = computed((): PlanSection[] => [
+    { id: 'plan-info', label: 'Fonctionnement', icon: 'info', visible: true },
+    { id: 'plan-next-step', label: 'Prochaine étape', icon: 'event_available', visible: this.planInfo().daysUntilStart >= 0 },
+    { id: 'plan-situation', label: 'Votre situation', icon: 'account_balance', visible: true },
+    { id: 'plan-strategy', label: 'Stratégie', icon: 'lightbulb', visible: true },
+    { id: 'plan-expenses', label: 'Suivi des dépenses', icon: 'add_circle', visible: true },
+    { id: 'plan-duration', label: 'Durée', icon: 'schedule', visible: true },
+    { id: 'plan-evolution', label: 'Évolution', icon: 'flag', visible: true },
+    { id: 'plan-tips', label: 'Conseils', icon: 'tips_and_updates', visible: true }
+  ]);
 
   ngOnInit(): void {
     // Charger les dépenses ponctuelles
