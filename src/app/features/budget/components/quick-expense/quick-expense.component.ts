@@ -333,6 +333,7 @@ export class QuickExpenseComponent implements OnInit {
   // Inputs pour le calcul du budget
   monthlyBudget = input<number>(0);
   dailyBudget = input<number>(0);
+  paydayDay = input<number>(1);
 
   // Données du store
   currentMonthTotal = this.expenseStore.currentMonthTotal;
@@ -344,12 +345,26 @@ export class QuickExpenseComponent implements OnInit {
   adjustedDailyBudget = () => {
     const monthlyRemaining = this.remainingMonthlyBudget();
     const today = new Date();
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    const currentDay = today.getDate();
-    const daysRemaining = Math.max(1, lastDayOfMonth - currentDay + 1);
+    const paydayDay = this.paydayDay();
+    
+    // Calculer la prochaine date de paie
+    let nextPayday = new Date(today.getFullYear(), today.getMonth(), paydayDay);
+    
+    // Si aujourd'hui est le jour de paie ou si elle est passée, prendre celle du mois prochain
+    const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const currentPayday = new Date(today.getFullYear(), today.getMonth(), paydayDay);
+    
+    if (todayWithoutTime.getTime() >= currentPayday.getTime()) {
+      nextPayday = new Date(today.getFullYear(), today.getMonth() + 1, paydayDay);
+    }
+    
+    // Nombre de jours jusqu'à la prochaine paie (incluant aujourd'hui)
+    const nextPaydayWithoutTime = new Date(nextPayday.getFullYear(), nextPayday.getMonth(), nextPayday.getDate());
+    const diffTime = nextPaydayWithoutTime.getTime() - todayWithoutTime.getTime();
+    const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     
     if (monthlyRemaining <= 0) return 0;
-    return monthlyRemaining / daysRemaining;
+    return monthlyRemaining / Math.max(1, daysRemaining);
   };
   expensePercentage = () => {
     const budget = this.monthlyBudget();
