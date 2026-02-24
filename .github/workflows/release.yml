@@ -155,6 +155,11 @@ jobs:
       - name: Build for production
         run: npm run build:prod
 
+      - name: Copy index.html to 404.html
+        run: |
+          cp ./dist/budget-app/browser/index.html ./dist/budget-app/browser/404.html
+          echo "✅ 404.html created for SPA routing support"
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
