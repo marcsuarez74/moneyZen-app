@@ -17,6 +17,14 @@ export interface RecoveryPlanData {
   monthlyIncome: number;
   fixedExpenses: number;
   remainingBudget: number;
+  paydayDay?: number; // Jour du mois de la paie (1-31)
+}
+
+export interface RecoveryPlanInfo {
+  startDate: Date;
+  startDateFormatted: string;
+  daysUntilStart: number;
+  currentMonthInfo: string;
 }
 
 export interface MonthlyTarget {
@@ -63,6 +71,50 @@ export class DebtRecoveryPlanComponent {
   readonly Math = Math;
   readonly selectedDuration = signal(6);
   readonly daysInMonth = signal(30);
+
+  // Informations sur le plan de redressement
+  readonly planInfo = computed((): RecoveryPlanInfo => {
+    const today = new Date();
+    const paydayDay = this.data().paydayDay || 1;
+
+    // Créer une date sans l'heure pour comparer uniquement les jours
+    const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    // Calculer la prochaine date de paie
+    let nextPayday = new Date(today.getFullYear(), today.getMonth(), paydayDay);
+
+    // Si aujourd'hui est le jour de paie
+    if (todayWithoutTime.getTime() === nextPayday.getTime()) {
+      // C'est aujourd'hui !
+    }
+    // Si la paie de ce mois est déjà passée, prendre celle du mois prochain
+    else if (nextPayday < todayWithoutTime) {
+      nextPayday = new Date(today.getFullYear(), today.getMonth() + 1, paydayDay);
+    }
+    // Sinon, c'est plus tard dans le mois
+
+    // Calculer le nombre de jours jusqu'à la prochaine paie
+    const diffTime = nextPayday.getTime() - todayWithoutTime.getTime();
+    const daysUntilStart = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Formater la date
+    const startDateFormatted = nextPayday.toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    
+    // Info sur le mois actuel
+    const currentMonthInfo = today.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+    
+    return {
+      startDate: nextPayday,
+      startDateFormatted,
+      daysUntilStart,
+      currentMonthInfo
+    };
+  });
 
   readonly targetMonths = computed(() => this.selectedDuration());
 
@@ -116,11 +168,25 @@ export class DebtRecoveryPlanComponent {
     const remainingBudget = this.data().remainingBudget;
     const minLiving = this.minimumLivingCost();
     let currentOverdraft = this.data().overdraftAmount;
+    const planStartDate = this.planInfo().startDate;
 
     for (let i = 1; i <= this.targetMonths(); i++) {
-      const date = new Date();
-      date.setMonth(date.getMonth() + i - 1);
-      const monthName = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+      const startDate = new Date(planStartDate);
+      startDate.setMonth(startDate.getMonth() + i - 1);
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 1);
+
+      const startDateStr = startDate.toLocaleDateString('fr-FR', { 
+        day: 'numeric', 
+        month: 'long',
+        year: startDate.getFullYear() !== endDate.getFullYear() ? 'numeric' : undefined
+      });
+      const endDateStr = endDate.toLocaleDateString('fr-FR', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      });
+      const monthName = `${startDateStr} - ${endDateStr}`;
 
       const monthsLeft = this.targetMonths() - i + 1;
       const minRequiredRecovery = currentOverdraft / monthsLeft;
@@ -176,6 +242,7 @@ export class DebtRecoveryPlanComponent {
 
   adoptPlan(): void {
     const userData = this.budgetStore.userData();
+    const planInfo = this.planInfo();
 
     this.acceptPlan.emit({
       duration: this.targetMonths(),
@@ -191,6 +258,7 @@ export class DebtRecoveryPlanComponent {
       monthlyBudget: this.recommendedMonthlyBudget(),
       dailyBudget: this.recommendedDailyBudget(),
       paydayDay: userData?.paydayDay || 1,
+      startDate: planInfo.startDate.toISOString(),
       targets: this.monthlyTargets()
     });
 
@@ -201,6 +269,11 @@ export class DebtRecoveryPlanComponent {
     });
 
     console.log('✅ Plan sauvegardé avec succès !');
-    alert(`Plan adopté et sauvegardé ! Vous allez remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois avec un budget de ${this.recommendedMonthlyBudget().toFixed(0)}€ par mois pour vos dépenses extra (${this.recommendedDailyBudget().toFixed(0)}€/jour). Le plan se mettra à jour automatiquement chaque mois après votre paie.`);
+    
+    const alertMessage = planInfo.daysUntilStart > 0 
+      ? `Plan adopté et sauvegardé ! 🎯\n\nVotre plan démarrera le ${planInfo.startDateFormatted}.\n\n📊 Objectif : remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois.\n💰 Budget mensuel : ${this.recommendedMonthlyBudget().toFixed(0)}€\n📅 Budget quotidien : ${this.recommendedDailyBudget().toFixed(0)}€/jour\n\n⚠️ N'oubliez pas : Mettez à jour votre solde bancaire le jour de votre paie pour un suivi précis !`
+      : `Plan adopté et sauvegardé ! 🎯\n\nVotre plan démarre aujourd'hui !\n\n📊 Objectif : remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois.\n💰 Budget mensuel : ${this.recommendedMonthlyBudget().toFixed(0)}€\n📅 Budget quotidien : ${this.recommendedDailyBudget().toFixed(0)}€/jour\n\n⚠️ N'oubliez pas : Mettez à jour votre solde bancaire le jour de votre paie pour un suivi précis !`;
+    
+    alert(alertMessage);
   }
 }
