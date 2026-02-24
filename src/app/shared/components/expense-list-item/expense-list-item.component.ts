@@ -71,21 +71,29 @@ import { ExpenseRecord } from '../../../models/expense-record.model';
   `,
   styles: [`
     .expense-item {
-      background: var(--surface-color, #ffffff);
+      background: var(--fintech-surface, #ffffff);
       border-radius: 12px;
       padding: 16px;
+      margin-bottom: 12px;
       transition: all 0.2s ease;
-      border: 1px solid transparent;
+      border: 1px solid var(--fintech-border, #e0e0e0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 
       &:hover {
-        background: var(--surface-hover, #f5f5f5);
-        border-color: var(--border-color, #e0e0e0);
+        background: var(--fintech-surface-variant, #f8f9fa);
+        border-color: var(--fintech-primary, #667eea);
         transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
       }
 
       &.editing {
-        border-color: var(--primary-color, #1976d2);
-        background: var(--primary-light, #e3f2fd);
+        border-color: var(--fintech-primary, #667eea);
+        background: rgba(102, 126, 234, 0.08);
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
       }
     }
 
@@ -101,9 +109,9 @@ import { ExpenseRecord } from '../../../models/expense-record.model';
     }
 
     .expense-description {
-      font-weight: 500;
+      font-weight: 600;
       font-size: 1rem;
-      color: var(--text-primary, #212121);
+      color: var(--fintech-text-primary, #212121);
       margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
@@ -112,13 +120,14 @@ import { ExpenseRecord } from '../../../models/expense-record.model';
 
     .expense-date {
       font-size: 0.875rem;
-      color: var(--text-secondary, #757575);
+      color: var(--fintech-text-secondary, #666666);
+      font-weight: 500;
     }
 
     .expense-amount {
       font-size: 1.125rem;
-      font-weight: 600;
-      color: #d32f2f;
+      font-weight: 700;
+      color: var(--fintech-error, #d32f2f);
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.5px;
     }
@@ -127,6 +136,15 @@ import { ExpenseRecord } from '../../../models/expense-record.model';
       opacity: 0;
       transition: opacity 0.2s ease;
 
+      button {
+        color: var(--fintech-text-secondary, #666666);
+        
+        &:hover {
+          background: rgba(102, 126, 234, 0.1);
+          color: var(--fintech-primary, #667eea);
+        }
+      }
+
       .expense-item:hover & {
         opacity: 1;
       }
@@ -134,13 +152,61 @@ import { ExpenseRecord } from '../../../models/expense-record.model';
 
     .delete-action {
       .warn-text {
-        color: #d32f2f;
+        color: var(--fintech-error, #d32f2f);
+        font-weight: 600;
+      }
+    }
+
+    // ============================================
+    // DARK THEME
+    // ============================================
+    :host-context(.dark-theme) {
+      .expense-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: #667eea;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+        }
+
+        &.editing {
+          background: rgba(102, 126, 234, 0.15);
+          border-color: #667eea;
+          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+        }
+      }
+
+      .expense-description {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .expense-date {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .expense-amount {
+        color: #ff6b6b;
+      }
+
+      .expense-actions {
+        button {
+          color: rgba(255, 255, 255, 0.6);
+          
+          &:hover {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+          }
+        }
       }
     }
 
     @media (max-width: 600px) {
       .expense-item {
         padding: 12px;
+        margin-bottom: 10px;
       }
 
       .expense-main {
@@ -157,6 +223,12 @@ import { ExpenseRecord } from '../../../models/expense-record.model';
 
       .expense-actions {
         opacity: 1;
+        
+        button {
+          width: 36px;
+          height: 36px;
+          line-height: 36px;
+        }
       }
     }
 

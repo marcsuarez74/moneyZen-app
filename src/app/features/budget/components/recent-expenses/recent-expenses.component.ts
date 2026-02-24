@@ -21,6 +21,7 @@ import { ExpenseListItemComponent } from '../../../../shared/components/expense-
 import { ExpenseCategoryChipComponent } from '../../../../shared/components/expense-category-chip/expense-category-chip.component';
 import { ExpenseRecordStore } from '../../../../store/expense-record.store';
 import { ExpenseRecord, ExpenseCategory, ExpenseRecordFormData } from '../../../../models/expense-record.model';
+import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
 
 @Component({
   selector: 'app-recent-expenses',
@@ -45,11 +46,12 @@ import { ExpenseRecord, ExpenseCategory, ExpenseRecordFormData } from '../../../
     ExpenseCategoryChipComponent
   ],
   providers: [provideNativeDateAdapter()],
-  styleUrls: ['./recent-expenses.component.scss'],
   template: `
     <mat-card class="recent-expenses-card">
       <mat-card-header>
-        <mat-icon mat-card-avatar>receipt_long</mat-icon>
+        <div class="header-icon-wrapper" mat-card-avatar>
+          <mat-icon>receipt_long</mat-icon>
+        </div>
         <mat-card-title>Mes dépenses</mat-card-title>
         <mat-card-subtitle>
           {{ filteredExpenses().length }} dépense{{ filteredExpenses().length > 1 ? 's' : '' }}
@@ -149,7 +151,311 @@ import { ExpenseRecord, ExpenseCategory, ExpenseRecordFormData } from '../../../
         </button>
       </mat-card-actions>
     </mat-card>
-  `
+  `,
+  styles: [`
+    // ============================================
+    // CARD PRINCIPAL
+    // ============================================
+    .recent-expenses-card {
+      background: var(--fintech-surface, #ffffff);
+      border-radius: 24px;
+      box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--fintech-border, #e0e0e0);
+      overflow: hidden;
+    }
+
+    // ============================================
+    // HEADER
+    // ============================================
+    mat-card-header {
+      padding: 24px 24px 16px 24px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.02) 100%);
+      border-bottom: 1px solid var(--fintech-border, #e0e0e0);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      ::ng-deep .mat-mdc-card-header-text {
+        flex: 1;
+      }
+
+      ::ng-deep .mat-mdc-card-avatar {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+      }
+    }
+
+    .header-icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border-radius: 12px;
+
+      mat-icon {
+        color: var(--fintech-primary, #667eea);
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    mat-card-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--fintech-text-primary, #212121);
+      margin: 0 0 4px 0;
+    }
+
+    mat-card-subtitle {
+      color: var(--fintech-text-secondary, #666666);
+      font-size: 0.9375rem;
+    }
+
+    mat-card-content {
+      padding: 0;
+    }
+
+    // ============================================
+    // ONGLETS
+    // ============================================
+    .period-tabs {
+      background: var(--fintech-surface-variant, #f5f5f5);
+      border-bottom: 1px solid var(--fintech-border, #e0e0e0);
+
+      ::ng-deep {
+        .mat-mdc-tab {
+          height: 56px;
+          font-weight: 600;
+          font-size: 0.875rem;
+          color: var(--fintech-text-secondary, #666666);
+
+          &.mdc-tab--active {
+            color: var(--fintech-primary, #667eea);
+          }
+        }
+
+        .mdc-tab__ripple {
+          display: none;
+        }
+      }
+    }
+
+    // ============================================
+    // LISTE DES DÉPENSES
+    // ============================================
+    .expenses-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding: 20px;
+      background: var(--fintech-surface, #ffffff);
+
+      app-expense-list-item {
+        display: block;
+      }
+    }
+
+    // ============================================
+    // ÉTAT VIDE
+    // ============================================
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px 24px;
+      text-align: center;
+      color: var(--fintech-text-secondary, #666666);
+
+      mat-icon {
+        font-size: 72px;
+        width: 72px;
+        height: 72px;
+        margin-bottom: 20px;
+        opacity: 0.3;
+        color: var(--fintech-primary, #667eea);
+      }
+
+      p {
+        font-size: 1.125rem;
+        margin-bottom: 24px;
+      }
+
+      button {
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 600;
+      }
+    }
+
+    // ============================================
+    // PANEL D'ÉDITION
+    // ============================================
+    .edit-panel {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
+      border-top: 3px solid var(--fintech-primary, #667eea);
+      padding: 24px;
+      margin: 0 20px 20px 20px;
+      border-radius: 16px;
+
+      h4 {
+        margin: 0 0 20px 0;
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--fintech-text-primary, #212121);
+      }
+
+      .edit-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+
+        mat-form-field {
+          width: 100%;
+        }
+      }
+
+      .edit-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+
+        button {
+          border-radius: 12px;
+          padding: 12px 24px;
+          font-weight: 600;
+        }
+      }
+    }
+
+    // ============================================
+    // ACTIONS
+    // ============================================
+    mat-card-actions {
+      padding: 16px 24px 24px 24px;
+      border-top: 1px solid var(--fintech-border, #e0e0e0);
+
+      button {
+        border-radius: 12px;
+        font-weight: 600;
+      }
+    }
+
+    // ============================================
+    // DARK THEME
+    // ============================================
+    :host-context(.dark-theme) {
+      .recent-expenses-card {
+        background: linear-gradient(145deg, #1e1e2e 0%, #252538 100%);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      mat-card-header {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+        border-color: rgba(255, 255, 255, 0.08);
+
+        .header-icon-wrapper {
+          background: rgba(102, 126, 234, 0.15);
+        }
+
+        mat-card-title {
+          color: rgba(255, 255, 255, 0.95);
+        }
+
+        mat-card-subtitle {
+          color: rgba(255, 255, 255, 0.6);
+        }
+      }
+
+      .period-tabs {
+        background: rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.08);
+
+        ::ng-deep .mat-mdc-tab {
+          color: rgba(255, 255, 255, 0.6);
+
+          &.mdc-tab--active {
+            color: #667eea;
+          }
+        }
+      }
+
+      .expenses-list {
+        background: transparent;
+      }
+
+      .empty-state {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .edit-panel {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%);
+
+        h4 {
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+
+      mat-card-actions {
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    // ============================================
+    // RESPONSIVE
+    // ============================================
+    @media (max-width: 600px) {
+      mat-card-header {
+        padding: 20px 20px 12px 20px;
+
+        .header-icon-wrapper {
+          width: 42px;
+          height: 42px;
+
+          mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+
+        mat-card-title {
+          font-size: 1.25rem;
+        }
+      }
+
+      .expenses-list {
+        max-height: 400px;
+        padding: 16px;
+      }
+
+      .edit-panel {
+        margin: 0 16px 16px 16px;
+        padding: 20px;
+
+        .edit-form {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      mat-card-actions {
+        padding: 12px 16px 20px 16px;
+      }
+    }
+  `]
 })
 export class RecentExpensesComponent implements OnInit {
   private expenseStore = inject(ExpenseRecordStore);
@@ -166,7 +472,8 @@ export class RecentExpensesComponent implements OnInit {
   editDescription = signal('');
   editDate = signal<Date>(new Date());
 
-  categories: ExpenseCategory[] = ['food', 'transport', 'leisure', 'shopping', 'health', 'education', 'other'];
+  // Toutes les catégories disponibles pour l'édition
+  categories: ExpenseCategory[] = EXPENSE_CATEGORIES.map(cat => cat.value);
 
   // Computed expenses based on selected period
   filteredExpenses = () => {

@@ -11,14 +11,16 @@
   flex-direction: column;
   gap: 20px;
   padding: 24px;
-  background: var(--fintech-surface);
+  background: var(--fintech-surface, #ffffff);
   border-radius: 20px;
   box-shadow: 
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--fintech-border);
+  border: 1px solid var(--fintech-border, #e0e0e0);
   position: relative;
   overflow: hidden;
+  margin: 0;
+  box-sizing: border-box;
 
   &::before {
     content: '';
@@ -27,7 +29,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--gradient-fintech-primary);
+    background: var(--gradient-fintech-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
   }
 }
 
@@ -37,27 +39,33 @@
 
   ::ng-deep {
     .mat-mdc-form-field-flex {
-      background: var(--fintech-surface-variant);
+      background: var(--fintech-surface-variant, #f5f5f5);
       border-radius: 16px;
       padding: 8px 16px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .mat-mdc-text-field-wrapper {
       background: transparent;
+      padding: 0;
+      margin: 0;
     }
 
     .mat-mdc-form-field-infix {
       padding: 20px 0;
+      width: 100%;
+      min-width: 0 !important;
     }
 
     input {
       font-size: 2rem;
       font-weight: 700;
-      color: var(--fintech-text-primary);
+      color: var(--fintech-text-primary, #212121);
       letter-spacing: -0.02em;
       
       &::placeholder {
-        color: var(--fintech-text-tertiary);
+        color: var(--fintech-text-tertiary, #9e9e9e);
         opacity: 0.5;
       }
     }
@@ -68,13 +76,19 @@
 
     .mdc-text-field--outlined {
       --mdc-outlined-text-field-container-shape: 16px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .mat-mdc-notched-outline {
+      display: none;
     }
   }
 
   span[matSuffix] {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--fintech-primary);
+    color: var(--fintech-primary, #667eea);
     margin-right: 8px;
   }
 }
@@ -85,7 +99,7 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--fintech-text-secondary);
+    color: var(--fintech-text-secondary, #666666);
     margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -106,24 +120,40 @@
 
   ::ng-deep {
     .mat-mdc-form-field-flex {
-      background: var(--fintech-surface-variant);
+      background: var(--fintech-surface-variant, #f5f5f5);
       border-radius: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 16px;
     }
 
     .mat-mdc-text-field-wrapper {
       background: transparent;
+      padding: 0;
+      margin: 0;
+    }
+
+    .mat-mdc-form-field-infix {
+      width: 100%;
+      min-width: 0 !important;
     }
 
     input {
-      color: var(--fintech-text-primary);
+      color: var(--fintech-text-primary, #212121);
       font-weight: 500;
     }
 
     .mdc-text-field--outlined {
       --mdc-outlined-text-field-container-shape: 12px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
 
     .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mat-mdc-notched-outline {
       display: none;
     }
   }
@@ -180,8 +210,8 @@
   }
 
   &:disabled {
-    background: var(--fintech-border);
-    color: var(--fintech-text-tertiary);
+    background: var(--fintech-border, #e0e0e0);
+    color: var(--fintech-text-tertiary, #9e9e9e);
     box-shadow: none;
     cursor: not-allowed;
   }
@@ -245,6 +275,13 @@
     ::ng-deep {
       .mat-mdc-form-field-flex {
         background: rgba(0, 0, 0, 0.3);
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .mat-mdc-form-field-infix {
+        width: 100%;
+        min-width: 0 !important;
       }
 
       input {
@@ -258,13 +295,13 @@
   }
 
   .section-label {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .add-button {
     &:disabled {
-      background: rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.4);
     }
   }
 }

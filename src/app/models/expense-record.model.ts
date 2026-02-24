@@ -1,16 +1,16 @@
 /**
  * Modèle pour les dépenses ponctuelles (transactions réelles)
  * Différent des dépenses fixes mensuelles (Expense)
+ * Utilise les mêmes catégories que les charges fixes pour la cohérence
  */
 
-export type ExpenseCategory = 
-  | 'food'
-  | 'transport'
-  | 'leisure'
-  | 'shopping'
-  | 'health'
-  | 'education'
-  | 'other';
+import { 
+  ExpenseCategory, 
+  EXPENSE_CATEGORIES 
+} from './budget.model';
+
+// Ré-export du type pour compatibilité
+export type { ExpenseCategory };
 
 export interface ExpenseRecord {
   id: string;
@@ -29,35 +29,41 @@ export interface ExpenseRecordFormData {
   date: string;
 }
 
-export const EXPENSE_CATEGORY_LABELS: Record<ExpenseCategory, string> = {
-  food: 'Alimentation',
-  transport: 'Transport',
-  leisure: 'Loisirs',
-  shopping: 'Shopping',
-  health: 'Santé',
-  education: 'Éducation',
-  other: 'Autre'
+// Labels dynamiques basés sur EXPENSE_CATEGORIES
+export const EXPENSE_CATEGORY_LABELS: Record<ExpenseCategory, string> = 
+  EXPENSE_CATEGORIES.reduce((acc, cat) => {
+    acc[cat.value] = cat.label;
+    return acc;
+  }, {} as Record<ExpenseCategory, string>);
+
+// Icônes dynamiques basées sur EXPENSE_CATEGORIES
+export const EXPENSE_CATEGORY_ICONS: Record<ExpenseCategory, string> = 
+  EXPENSE_CATEGORIES.reduce((acc, cat) => {
+    acc[cat.value] = cat.icon;
+    return acc;
+  }, {} as Record<ExpenseCategory, string>);
+
+// Couleurs par groupe de catégories
+const CATEGORY_GROUP_COLORS: Record<string, string> = {
+  'Logement': '#FF6B6B',
+  'Transport': '#4ECDC4',
+  'Alimentation': '#FFEAA7',
+  'Services': '#96CEB4',
+  'Assurances': '#DDA0DD',
+  'Santé': '#FFB6C1',
+  'Éducation': '#98D8C8',
+  'Loisirs': '#45B7D1',
+  'Personnel': '#FFD93D',
+  'Crédits': '#FF8C94',
+  'Épargne': '#95E1D3',
+  'Divers': '#B0B0B0'
 };
 
-export const EXPENSE_CATEGORY_ICONS: Record<ExpenseCategory, string> = {
-  food: 'restaurant',
-  transport: 'directions_car',
-  leisure: 'sports_esports',
-  shopping: 'shopping_bag',
-  health: 'favorite',
-  education: 'school',
-  other: 'more_horiz'
-};
-
-export const EXPENSE_CATEGORY_COLORS: Record<ExpenseCategory, string> = {
-  food: '#FF6B6B',
-  transport: '#4ECDC4',
-  leisure: '#45B7D1',
-  shopping: '#96CEB4',
-  health: '#FFEAA7',
-  education: '#DDA0DD',
-  other: '#B0B0B0'
-};
+export const EXPENSE_CATEGORY_COLORS: Record<ExpenseCategory, string> = 
+  EXPENSE_CATEGORIES.reduce((acc, cat) => {
+    acc[cat.value] = CATEGORY_GROUP_COLORS[cat.group] || '#B0B0B0';
+    return acc;
+  }, {} as Record<ExpenseCategory, string>);
 
 /**
  * Génère un ID unique pour une dépense
@@ -88,18 +94,16 @@ export function calculateTotalExpenses(
 export function calculateExpensesByCategory(
   expenses: ExpenseRecord[]
 ): Record<ExpenseCategory, number> {
-  const result: Record<ExpenseCategory, number> = {
-    food: 0,
-    transport: 0,
-    leisure: 0,
-    shopping: 0,
-    health: 0,
-    education: 0,
-    other: 0
-  };
+  // Initialise toutes les catégories à 0
+  const result: Record<ExpenseCategory, number> = EXPENSE_CATEGORIES.reduce((acc, cat) => {
+    acc[cat.value] = 0;
+    return acc;
+  }, {} as Record<ExpenseCategory, number>);
 
   expenses.forEach(expense => {
-    result[expense.category] += expense.amount;
+    if (result[expense.category] !== undefined) {
+      result[expense.category] += expense.amount;
+    }
   });
 
   return result;

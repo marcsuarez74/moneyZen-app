@@ -66,6 +66,7 @@ export interface MonthlyTarget {
 export class DebtRecoveryPlanComponent implements OnInit {
   @ViewChild('durationSection') durationSection!: ElementRef;
   @ViewChild('recoveryCard') recoveryCard!: ElementRef;
+  @ViewChild('recentExpenses', { read: ElementRef }) recentExpenses!: ElementRef;
 
   private planStore = inject(PlanStore);
   private budgetStore = inject(BudgetStore);
@@ -266,6 +267,10 @@ export class DebtRecoveryPlanComponent implements OnInit {
 
   scrollToDuration(): void {
     this.durationSection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  scrollToRecentExpenses(): void {
+    this.recentExpenses?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   adoptPlan(): void {

@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { ExpenseCategoryChipComponent } from '../expense-category-chip/expense-category-chip.component';
 import { ExpenseCategory, ExpenseRecordFormData, EXPENSE_CATEGORY_LABELS } from '../../../models/expense-record.model';
+import { EXPENSE_CATEGORIES } from '../../../models/budget.model';
 
 @Component({
   selector: 'app-quick-expense-form',
@@ -223,9 +224,39 @@ export class QuickExpenseFormComponent {
   selectedCategory = signal<ExpenseCategory | null>(null);
   showSuccess = signal(false);
 
-  // Categories list
+  // Catégories pertinentes pour les dépenses ponctuelles quotidiennes
+  // Filtre parmi toutes les catégories disponibles
   categories: ExpenseCategory[] = [
-    'food', 'transport', 'leisure', 'shopping', 'health', 'education', 'other'
+    // Alimentation
+    'food',
+    'restaurants',
+    // Transport
+    'transport',
+    'publicTransport',
+    'fuel',
+    // Loisirs
+    'leisure',
+    'sport',
+    'gym',
+    'culture',
+    'streaming',
+    // Shopping & Personnel
+    'clothing',
+    'beauty',
+    'personalServices',
+    // Santé
+    'health',
+    'pharmacy',
+    'medicalExpenses',
+    // Loisirs créatifs
+    'hobbies',
+    // Éducation
+    'education',
+    'schoolSupplies',
+    // Divers
+    'pets',
+    'gifts',
+    'other'
   ];
 
   categoryLabels = EXPENSE_CATEGORY_LABELS;

@@ -3,7 +3,7 @@
  * Utilise ExpenseRecordStore pour la logique métier
  * S'intègre dans le plan de redressement
  */
-import { Component, inject, OnInit, input } from '@angular/core';
+import { Component, inject, OnInit, input, output } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -111,14 +111,15 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
   `,
   styles: [`
     .quick-expense-card {
-      background: var(--surface-color, #ffffff);
+      background: var(--fintech-surface, #ffffff);
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       overflow: hidden;
+      border: 1px solid var(--fintech-border, #e0e0e0);
     }
 
     mat-card-header {
-      background: linear-gradient(135deg, var(--primary-color, #1976d2) 0%, var(--primary-dark, #1565c0) 100%);
+      background: var(--gradient-fintech-primary);
       color: white;
       padding: 20px;
 
@@ -146,10 +147,11 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
     }
 
     .budget-preview {
-      background: var(--surface-variant, #f5f5f5);
+      background: var(--fintech-surface-variant, #f5f5f5);
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 24px;
+      border: 1px solid var(--fintech-border, #e0e0e0);
     }
 
     .budget-item {
@@ -157,7 +159,7 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
       justify-content: space-between;
       align-items: center;
       padding: 8px 0;
-      border-bottom: 1px solid var(--border-color, #e0e0e0);
+      border-bottom: 1px solid var(--fintech-border);
 
       &:last-child {
         border-bottom: none;
@@ -166,17 +168,17 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
 
     .budget-label {
       font-size: 0.9375rem;
-      color: var(--text-secondary, #666);
+      color: var(--fintech-text-secondary, #666666);
     }
 
     .budget-value {
       font-size: 1.125rem;
       font-weight: 600;
-      color: var(--success-color, #2e7d32);
+      color: var(--fintech-success, #2e7d32);
       font-variant-numeric: tabular-nums;
 
       &.negative {
-        color: #d32f2f;
+        color: var(--fintech-error, #d32f2f);
       }
     }
 
@@ -186,11 +188,12 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
         align-items: center;
         gap: 8px;
         font-weight: 500;
+        color: var(--fintech-text-primary, #212121);
       }
 
       .help-icon {
         font-size: 14px;
-        color: var(--primary-color, #1976d2);
+        color: var(--fintech-primary, #667eea);
         cursor: help;
         opacity: 0.7;
         transition: opacity 0.2s;
@@ -208,7 +211,7 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
 
       .budget-sublabel {
         font-size: 0.875rem;
-        color: var(--text-secondary, #757575);
+        color: var(--fintech-text-tertiary, #9e9e9e);
         font-weight: 400;
       }
     }
@@ -216,7 +219,7 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
     .progress-section {
       margin-top: 16px;
       padding-top: 16px;
-      border-top: 1px solid var(--border-color, #e0e0e0);
+      border-top: 1px solid var(--fintech-border);
     }
 
     .progress-label {
@@ -225,7 +228,7 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
       align-items: center;
       margin-bottom: 8px;
       font-weight: 500;
-      color: var(--text-primary, #212121);
+      color: var(--fintech-text-primary, #212121);
     }
 
     mat-progress-bar {
@@ -238,7 +241,7 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
       justify-content: space-between;
       margin-top: 8px;
       font-size: 0.875rem;
-      color: var(--text-secondary, #757575);
+      color: var(--fintech-text-secondary, #666666);
     }
 
     app-quick-expense-form {
@@ -250,7 +253,7 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
       h4 {
         font-size: 1rem;
         font-weight: 600;
-        color: var(--text-primary, #212121);
+        color: var(--fintech-text-primary, #212121);
         margin: 0 0 16px 0;
       }
 
@@ -265,9 +268,9 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
         align-items: center;
         gap: 12px;
         padding: 8px 12px;
-        background: var(--surface-color, #ffffff);
+        background: var(--fintech-surface, #ffffff);
         border-radius: 8px;
-        border: 1px solid var(--border-color, #e0e0e0);
+        border: 1px solid var(--fintech-border, #e0e0e0);
 
         app-expense-category-chip {
           flex-shrink: 0;
@@ -278,13 +281,14 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
           text-align: right;
           font-weight: 600;
           font-variant-numeric: tabular-nums;
+          color: var(--fintech-text-primary, #212121);
         }
 
         .category-percent {
           width: 50px;
           text-align: right;
           font-size: 0.875rem;
-          color: var(--text-secondary, #757575);
+          color: var(--fintech-text-tertiary, #9e9e9e);
         }
       }
     }
@@ -298,6 +302,59 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
           font-size: 18px;
           width: 18px;
           height: 18px;
+        }
+      }
+    }
+
+    // ============================================
+    // DARK THEME
+    // ============================================
+    :host-context(.dark-theme) {
+      .quick-expense-card {
+        background: linear-gradient(145deg, #1e1e2e 0%, #252538 100%);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      }
+
+      .budget-preview {
+        background: rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .budget-label {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .daily-budget {
+        .budget-label {
+          color: rgba(255, 255, 255, 0.85);
+        }
+      }
+
+      .progress-label {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .progress-details {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .category-breakdown {
+        h4 {
+          color: rgba(255, 255, 255, 0.85);
+        }
+      }
+
+      .category-row {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+
+        .category-amount {
+          color: rgba(255, 255, 255, 0.85);
+        }
+
+        .category-percent {
+          color: rgba(255, 255, 255, 0.5);
         }
       }
     }
@@ -334,6 +391,9 @@ export class QuickExpenseComponent implements OnInit {
   monthlyBudget = input<number>(0);
   dailyBudget = input<number>(0);
   paydayDay = input<number>(1);
+
+  // Output events
+  viewAllExpensesClicked = output<void>();
 
   // Données du store
   currentMonthTotal = this.expenseStore.currentMonthTotal;
@@ -376,7 +436,7 @@ export class QuickExpenseComponent implements OnInit {
     return Math.min(100, (this.currentMonthTotal() / budget) * 100);
   };
 
-  // Top 3 catégories par montant
+  // Top catégories par montant (afficher les 6 premières)
   topCategories = () => {
     const byCategory = calculateExpensesByCategory(this.expenseStore.currentMonthExpenses());
     const total = this.currentMonthTotal();
@@ -389,7 +449,7 @@ export class QuickExpenseComponent implements OnInit {
         percentage: total > 0 ? (amount / total) * 100 : 0
       }))
       .sort((a, b) => b.amount - a.amount)
-      .slice(0, 3);
+      .slice(0, 6);
   };
 
   ngOnInit(): void {
@@ -403,8 +463,7 @@ export class QuickExpenseComponent implements OnInit {
   }
 
   viewAllExpenses(): void {
-    // Émettre un événement ou naviguer vers la page des dépenses
-    // Pour l'instant, on peut utiliser un router ou un event
+    this.viewAllExpensesClicked.emit();
   }
 
   private calculateRemainingDaily(): number {
