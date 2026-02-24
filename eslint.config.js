@@ -1,17 +1,17 @@
 // @ts-check
 const eslint = require("@eslint/js");
-const { defineConfig } = require("eslint/config");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
+const prettier = require("eslint-config-prettier");
 
-module.exports = defineConfig([
+module.exports = tseslint.config(
   {
     files: ["**/*.ts"],
     extends: [
       eslint.configs.recommended,
-      tseslint.configs.recommended,
-      tseslint.configs.stylistic,
-      angular.configs.tsRecommended,
+      ...tseslint.configs.recommended,
+      ...tseslint.configs.stylistic,
+      ...angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
     rules: {
@@ -31,22 +31,20 @@ module.exports = defineConfig([
           style: "kebab-case",
         },
       ],
-      // Désactiver temporairement les règles strictes pour build
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-      "@angular-eslint/prefer-inject": "off",
-      "@angular-eslint/prefer-standalone": "off",
+      // Code quality
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
   {
     files: ["**/*.html"],
     extends: [
-      angular.configs.templateRecommended,
-      angular.configs.templateAccessibility,
+      ...angular.configs.templateRecommended,
+      ...angular.configs.templateAccessibility,
     ],
-    rules: {
-      // Désactiver temporairement le nouveau control flow (migration future)
-      "@angular-eslint/template/prefer-control-flow": "off",
-    },
-  }
-]);
+    rules: {},
+  },
+  // Apply prettier last to override other configs
+  prettier
+);

@@ -21,10 +21,16 @@ import {
       [style.background-color]="backgroundColor()"
       [style.color]="textColor()"
       (click)="onClick()"
+      (keyup.enter)="onClick()"
+      (keyup.space)="onClick()"
       class="category-chip"
       [class.selectable]="selectable()"
-      [class.selected]="selected()">
-      <mat-icon>{{ icon() }}</mat-icon>
+      [class.selected]="selected()"
+      [attr.tabindex]="selectable() ? 0 : -1"
+      [attr.role]="selectable() ? 'radio' : 'presentation'"
+      [attr.aria-checked]="selectable() ? selected() : null"
+      [attr.aria-label]="label()">
+      <mat-icon aria-hidden="true">{{ icon() }}</mat-icon>
       <span class="label">{{ label() }}</span>
     </div>
   `,
@@ -57,9 +63,16 @@ import {
       &.selectable {
         cursor: pointer;
 
-        &:hover {
+        &:hover, &:focus {
           filter: brightness(1.1);
           transform: translateY(-1px);
+          outline: 2px solid currentColor;
+          outline-offset: 2px;
+        }
+
+        &:focus-visible {
+          outline: 2px solid currentColor;
+          outline-offset: 2px;
         }
 
         &.selected {

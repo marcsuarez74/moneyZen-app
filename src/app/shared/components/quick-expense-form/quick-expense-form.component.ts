@@ -13,7 +13,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { ExpenseCategoryChipComponent } from '../expense-category-chip/expense-category-chip.component';
 import { ExpenseCategory, ExpenseRecordFormData, EXPENSE_CATEGORY_LABELS } from '../../../models/expense-record.model';
-import { EXPENSE_CATEGORIES } from '../../../models/budget.model';
 
 @Component({
   selector: 'app-quick-expense-form',
@@ -49,9 +48,9 @@ import { EXPENSE_CATEGORIES } from '../../../models/budget.model';
       </mat-form-field>
 
       <!-- Catégories -->
-      <div class="categories-section">
-        <label class="section-label">Catégorie</label>
-        <div class="categories-grid">
+      <div class="categories-section" role="group" aria-labelledby="category-label">
+        <span id="category-label" class="section-label">Catégorie</span>
+        <div class="categories-grid" role="radiogroup" aria-label="Sélectionnez une catégorie">
           @for (category of categories; track category) {
             <app-expense-category-chip
               [category]="category"
