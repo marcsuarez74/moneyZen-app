@@ -29,6 +29,8 @@ export interface RecoveryPlanInfo {
   startDateFormatted: string;
   daysUntilStart: number;
   currentMonthInfo: string;
+  hasStarted: boolean;
+  endDateFormatted: string;
 }
 
 export interface MonthlyTarget {
@@ -85,29 +87,55 @@ export class DebtRecoveryPlanComponent implements OnInit {
   readonly planInfo = computed((): RecoveryPlanInfo => {
     const today = new Date();
     const paydayDay = this.data().paydayDay || 1;
+    const durationMonths = this.selectedDuration();
 
     // Créer une date sans l'heure pour comparer uniquement les jours
     const todayWithoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
+    // Calculer la date de paie de ce mois
+    const currentMonthPayday = new Date(today.getFullYear(), today.getMonth(), paydayDay);
+    
+    // Déterminer si le plan a déjà commencé (la paie de ce mois est déjà passée)
+    const hasStarted = todayWithoutTime > currentMonthPayday;
+    
     // Calculer la prochaine date de paie
-    let nextPayday = new Date(today.getFullYear(), today.getMonth(), paydayDay);
-
-    // Si aujourd'hui est le jour de paie
-    if (todayWithoutTime.getTime() === nextPayday.getTime()) {
-      // C'est aujourd'hui !
-    }
-    // Si la paie de ce mois est déjà passée, prendre celle du mois prochain
-    else if (nextPayday < todayWithoutTime) {
+    let nextPayday: Date;
+    if (hasStarted) {
+      // Le plan a déjà commencé ce mois-ci, donc la "prochaine paie" est celle du mois prochain
+      // mais le plan considère que ça a commencé à la paie de ce mois
       nextPayday = new Date(today.getFullYear(), today.getMonth() + 1, paydayDay);
+    } else if (todayWithoutTime.getTime() === currentMonthPayday.getTime()) {
+      // C'est aujourd'hui le jour de paie
+      nextPayday = new Date(today.getFullYear(), today.getMonth() + 1, paydayDay);
+    } else {
+      // La paie est encore dans le futur de ce mois
+      nextPayday = new Date(currentMonthPayday);
     }
-    // Sinon, c'est plus tard dans le mois
 
     // Calculer le nombre de jours jusqu'à la prochaine paie
     const diffTime = nextPayday.getTime() - todayWithoutTime.getTime();
     const daysUntilStart = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     
-    // Formater la date
-    const startDateFormatted = nextPayday.toLocaleDateString('fr-FR', {
+    // Formater la date de début
+    const startDateFormatted = hasStarted 
+      ? currentMonthPayday.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        })
+      : nextPayday.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+    
+    // Calculer la date de fin (date de début + durée en mois)
+    const endDate = new Date(hasStarted ? currentMonthPayday : nextPayday);
+    endDate.setMonth(endDate.getMonth() + durationMonths);
+    
+    const endDateFormatted = endDate.toLocaleDateString('fr-FR', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -118,10 +146,12 @@ export class DebtRecoveryPlanComponent implements OnInit {
     const currentMonthInfo = today.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
     
     return {
-      startDate: nextPayday,
+      startDate: hasStarted ? currentMonthPayday : nextPayday,
       startDateFormatted,
       daysUntilStart,
-      currentMonthInfo
+      currentMonthInfo,
+      hasStarted,
+      endDateFormatted
     };
   });
 
