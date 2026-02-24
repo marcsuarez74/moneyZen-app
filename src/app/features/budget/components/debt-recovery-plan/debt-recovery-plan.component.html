@@ -187,7 +187,8 @@
       <div class="expense-tracker-content">
         <app-quick-expense
           [monthlyBudget]="recommendedMonthlyBudget()"
-          [dailyBudget]="recommendedDailyBudget()">
+          [dailyBudget]="recommendedDailyBudget()"
+          [paydayDay]="data().paydayDay || 1">
         </app-quick-expense>
         
         <app-recent-expenses></app-recent-expenses>
