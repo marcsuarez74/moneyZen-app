@@ -103,12 +103,13 @@
           <mat-icon>upload_file</mat-icon>
         </button>
 
-        <app-backup-export-button
-          variant="icon-only"
-          [showLabel]="false"
-          icon="download"
-          tooltipText="Exporter une sauvegarde">
-        </app-backup-export-button>
+        <button
+          mat-icon-button
+          class="action-btn"
+          (click)="exportBackup()"
+          matTooltip="Exporter une sauvegarde">
+          <mat-icon>download</mat-icon>
+        </button>
 
         <div class="divider"></div>
 
