@@ -96,12 +96,18 @@ categories-list {
   display: flex;
   align-items: center;
   gap: $space-md;
+  margin-bottom: $space-md;
   animation: slideUp 0.6s ease forwards;
   animation-delay: var(--delay, 0s);
   opacity: 0;
   
   @include media-down($sm) {
     gap: $space-sm;
+    margin-bottom: $space-sm;
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
   }
 }
 

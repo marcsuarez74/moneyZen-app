@@ -40,14 +40,16 @@
           </section>
         }
 
-        <section class="dashboard-section section-stats">
-          <app-budget-stats-display
-            [summary]="budgetStore.budgetSummary()!"
-            [userData]="budgetStore.userData()!"
-            [analysis]="budgetAnalysis()"
-            [paydayInfo]="paydayInfo()">
-          </app-budget-stats-display>
-        </section>
+        @if (budgetStore.budgetSummary(); as summary) {
+          <section class="dashboard-section section-stats">
+            <app-budget-stats-display
+              [summary]="summary"
+              [userData]="budgetStore.userData()"
+              [analysis]="budgetAnalysis()"
+              [paydayInfo]="paydayInfo()">
+            </app-budget-stats-display>
+          </section>
+        }
 
         <section class="dashboard-section section-content">
           <div class="content-tabs">
@@ -62,11 +64,13 @@
                   </div>
                 </ng-template>
                 <div class="tab-panel">
-                  <app-expense-breakdown
-                    [summary]="budgetStore.budgetSummary()!"
-                    [expenses]="budgetStore.expenses()"
-                    [thresholds]="categoryThresholds">
-                  </app-expense-breakdown>
+                  @if (budgetStore.budgetSummary(); as summary) {
+                    <app-expense-breakdown
+                      [summary]="summary"
+                      [expenses]="budgetStore.expenses()"
+                      [thresholds]="categoryThresholds">
+                    </app-expense-breakdown>
+                  }
                 </div>
               </mat-tab>
 
@@ -83,10 +87,12 @@
                   </div>
                 </ng-template>
                 <div class="tab-panel">
-                  <app-budget-recommendations
-                    [analysis]="budgetAnalysis()"
-                    [summary]="budgetStore.budgetSummary()!">
-                  </app-budget-recommendations>
+                  @if (budgetStore.budgetSummary(); as summary) {
+                    <app-budget-recommendations
+                      [analysis]="budgetAnalysis()"
+                      [summary]="summary">
+                    </app-budget-recommendations>
+                  }
                 </div>
               </mat-tab>
 

@@ -37,12 +37,13 @@ export class EditIncomeDialogComponent {
   });
 
   readonly isPositiveBalance = computed(() => {
-    const balance = this.incomeForm.get('accountBalance')?.value;
-    return balance >= 0;
+    const balance = Number(this.incomeForm.get('accountBalance')?.value ?? 0);
+    return !isNaN(balance) && balance >= 0;
   });
 
   readonly balanceStatusText = computed(() => {
-    const balance = this.incomeForm.get('accountBalance')?.value;
+    const balance = Number(this.incomeForm.get('accountBalance')?.value ?? 0);
+    if (isNaN(balance)) return 'Solde invalide';
     if (balance > 0) return 'Solde positif';
     if (balance < 0) return 'En découvert';
     return 'Solde vide';
@@ -63,7 +64,7 @@ export class EditIncomeDialogComponent {
   }
 
   toggleBalanceSign(): void {
-    const currentValue = this.incomeForm.get('accountBalance')?.value || 0;
+    const currentValue = Number(this.incomeForm.get('accountBalance')?.value || 0);
     this.incomeForm.get('accountBalance')?.setValue(-currentValue);
   }
 
@@ -73,11 +74,27 @@ export class EditIncomeDialogComponent {
 
   onSave(): void {
     if (this.incomeForm.valid) {
+      // S'assurer que accountBalance n'est jamais null
+      let accountBalance = this.incomeForm.value.accountBalance;
+      if (accountBalance === null || accountBalance === undefined || accountBalance === '') {
+        accountBalance = 0;
+      }
+      accountBalance = Number(accountBalance);
+      
+      const salary = Number(this.incomeForm.value.salary ?? 0);
+      const paydayDay = Number(this.incomeForm.value.paydayDay ?? 1);
+      
+      // Vérifier que les valeurs sont valides
+      if (isNaN(accountBalance) || isNaN(salary) || isNaN(paydayDay)) {
+        console.error('Valeurs invalides détectées:', { accountBalance, salary, paydayDay });
+        return;
+      }
+      
       const result: UserFinancialData = {
-        salary: this.incomeForm.value.salary,
-        accountBalance: this.incomeForm.value.accountBalance,
-        isPositiveBalance: this.incomeForm.value.accountBalance >= 0,
-        paydayDay: this.incomeForm.value.paydayDay
+        salary: salary,
+        accountBalance: accountBalance,
+        isPositiveBalance: accountBalance >= 0,
+        paydayDay: paydayDay
       };
       this.dialogRef.close(result);
     }
