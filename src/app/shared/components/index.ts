@@ -9,3 +9,4 @@ export { InstallPromptComponent } from './install-prompt/install-prompt.componen
 export { ExpenseCategoryChipComponent } from './expense-category-chip/expense-category-chip.component';
 export { QuickExpenseFormComponent } from './quick-expense-form/quick-expense-form.component';
 export { ExpenseListItemComponent } from './expense-list-item/expense-list-item.component';
+export { PlanNavigationComponent, PlanSection } from './plan-navigation/plan-navigation.component';

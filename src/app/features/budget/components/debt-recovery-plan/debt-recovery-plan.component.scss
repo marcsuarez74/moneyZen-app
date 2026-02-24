@@ -4,6 +4,68 @@
 // DEBT RECOVERY PLAN - Responsive & Dark Theme
 // ============================================
 
+// ============================================
+// LAYOUT AVEC NAVIGATION
+// ============================================
+.plan-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+  }
+}
+
+.plan-navigation-sidebar {
+  width: 100%;
+  order: -1;
+  
+  @media (min-width: 1024px) {
+    width: 240px;
+    flex-shrink: 0;
+    order: 0;
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--fintech-border, #e0e0e0);
+      border-radius: 2px;
+    }
+  }
+}
+
+.recovery-card {
+  flex: 1;
+  min-width: 0;
+}
+
+// ============================================
+// DARK THEME LAYOUT
+// ============================================
+:host-context(.dark-theme) {
+  .plan-navigation-sidebar {
+    @media (min-width: 1024px) {
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
 .recovery-card {
   border-left: 4px solid var(--error-color);
   background: var(--surface);
