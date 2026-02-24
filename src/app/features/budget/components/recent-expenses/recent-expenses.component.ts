@@ -45,6 +45,7 @@ import { ExpenseRecord, ExpenseCategory, ExpenseRecordFormData } from '../../../
     ExpenseCategoryChipComponent
   ],
   providers: [provideNativeDateAdapter()],
+  styleUrls: ['./recent-expenses.component.scss'],
   template: `
     <mat-card class="recent-expenses-card">
       <mat-card-header>
@@ -148,136 +149,7 @@ import { ExpenseRecord, ExpenseCategory, ExpenseRecordFormData } from '../../../
         </button>
       </mat-card-actions>
     </mat-card>
-  `,
-  styles: [`
-    .recent-expenses-card {
-      background: var(--surface-color, #ffffff);
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    mat-card-header {
-      padding: 20px 20px 0 20px;
-
-      mat-icon {
-        color: var(--primary-color, #1976d2);
-        font-size: 32px;
-        width: 32px;
-        height: 32px;
-      }
-
-      mat-card-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-      }
-
-      mat-card-subtitle {
-        color: var(--text-secondary, #757575);
-      }
-    }
-
-    mat-card-content {
-      padding: 20px;
-    }
-
-    .period-tabs {
-      margin-bottom: 20px;
-    }
-
-    .expenses-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 500px;
-      overflow-y: auto;
-      padding-right: 8px;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 3px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: #c1c1c1;
-        border-radius: 3px;
-      }
-    }
-
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px 20px;
-      text-align: center;
-      color: var(--text-secondary, #757575);
-
-      mat-icon {
-        font-size: 64px;
-        width: 64px;
-        height: 64px;
-        margin-bottom: 16px;
-        opacity: 0.5;
-      }
-
-      p {
-        font-size: 1.125rem;
-        margin-bottom: 24px;
-      }
-    }
-
-    .edit-panel {
-      background: var(--surface-variant, #f5f5f5);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 20px;
-      border: 2px solid var(--primary-color, #1976d2);
-
-      h4 {
-        margin: 0 0 16px 0;
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--text-primary, #212121);
-      }
-
-      .edit-form {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
-        margin-bottom: 16px;
-      }
-
-      .edit-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-
-        button {
-          mat-icon {
-            margin-right: 4px;
-          }
-        }
-      }
-    }
-
-    mat-card-actions {
-      padding: 8px 20px 20px;
-    }
-
-    @media (max-width: 600px) {
-      .edit-form {
-        grid-template-columns: 1fr;
-      }
-
-      .expenses-list {
-        max-height: 400px;
-      }
-    }
-  `]
+  `
 })
 export class RecentExpensesComponent implements OnInit {
   private expenseStore = inject(ExpenseRecordStore);
