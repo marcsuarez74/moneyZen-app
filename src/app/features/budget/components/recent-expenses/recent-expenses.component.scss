@@ -1,0 +1,470 @@
+// ============================================
+// RECENT EXPENSES - Premium Fintech Design
+// ============================================
+
+:host {
+  display: block;
+}
+
+.recent-expenses-card {
+  background: var(--fintech-surface, #ffffff);
+  border-radius: 24px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--fintech-border, #e0e0e0);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow: 
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+mat-card-header {
+  padding: 24px 24px 16px 24px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.02) 100%);
+  border-bottom: 1px solid var(--fintech-border, #e0e0e0);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  ::ng-deep {
+    .mat-mdc-card-header-text {
+      flex: 1;
+    }
+
+    .mat-mdc-card-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      margin: 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border-radius: 12px;
+    }
+  }
+
+  mat-icon {
+    color: var(--fintech-primary, #667eea);
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  mat-card-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--fintech-text-primary, #212121);
+    margin: 0 0 4px 0;
+    letter-spacing: -0.02em;
+  }
+
+  mat-card-subtitle {
+    color: var(--fintech-text-secondary, #666666);
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+}
+
+mat-card-content {
+  padding: 0;
+}
+
+// Onglets de période
+.period-tabs {
+  background: var(--fintech-surface-variant, #f5f5f5);
+  border-bottom: 1px solid var(--fintech-border, #e0e0e0);
+
+  ::ng-deep {
+    .mat-mdc-tab-header {
+      background: transparent;
+    }
+
+    .mat-mdc-tab {
+      height: 56px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--fintech-text-secondary, #666666);
+      opacity: 1;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(102, 126, 234, 0.05);
+      }
+
+      &.mdc-tab--active {
+        color: var(--fintech-primary, #667eea);
+      }
+    }
+
+    .mat-mdc-tab-body-wrapper {
+      background: transparent;
+    }
+
+    .mdc-tab__ripple {
+      display: none;
+    }
+
+    .mat-mdc-tab-group {
+      --mdc-tab-indicator-active-indicator-color: var(--fintech-primary, #667eea);
+    }
+  }
+}
+
+// Liste des dépenses
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 20px;
+  background: var(--fintech-surface, #ffffff);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--fintech-surface-variant, #f5f5f5);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--fintech-border, #e0e0e0);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--fintech-text-tertiary, #9e9e9e);
+    }
+  }
+
+  app-expense-list-item {
+    display: block;
+  }
+}
+
+// État vide
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--fintech-text-secondary, #666666);
+
+  mat-icon {
+    font-size: 72px;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 20px;
+    opacity: 0.3;
+    color: var(--fintech-primary, #667eea);
+  }
+
+  p {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+    color: var(--fintech-text-secondary, #666666);
+  }
+
+  button {
+    background: transparent;
+    border: 2px solid var(--fintech-primary, #667eea);
+    color: var(--fintech-primary, #667eea);
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--fintech-primary, #667eea);
+      color: white;
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      margin-bottom: 0;
+      opacity: 1;
+    }
+  }
+}
+
+// Panneau d'édition
+.edit-panel {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-top: 3px solid var(--fintech-primary, #667eea);
+  padding: 24px;
+  margin: 0 20px 20px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+
+  h4 {
+    margin: 0 0 20px 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--fintech-text-primary, #212121);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 24px;
+      background: var(--gradient-fintech-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+      border-radius: 2px;
+    }
+  }
+
+  .edit-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+
+    mat-form-field {
+      width: 100%;
+
+      ::ng-deep {
+        .mat-mdc-form-field-flex {
+          background: var(--fintech-surface, #ffffff);
+          border-radius: 12px;
+        }
+
+        input, mat-select {
+          color: var(--fintech-text-primary, #212121);
+          font-weight: 500;
+        }
+
+        .mdc-text-field--outlined {
+          --mdc-outlined-text-field-container-shape: 12px;
+        }
+
+        .mat-mdc-notched-outline {
+          border-color: var(--fintech-border, #e0e0e0);
+        }
+      }
+    }
+  }
+
+  .edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+
+    button {
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-weight: 600;
+
+      &[mat-raised-button] {
+        background: var(--gradient-fintech-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+      }
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+// Actions du card
+mat-card-actions {
+  padding: 16px 24px 24px 24px;
+  border-top: 1px solid var(--fintech-border, #e0e0e0);
+  gap: 12px;
+
+  button {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 8px 16px;
+
+    &[color="warn"] {
+      color: #f5576c;
+      
+      &:hover {
+        background: rgba(245, 87, 108, 0.1);
+      }
+    }
+  }
+}
+
+// ============================================
+// DARK THEME
+// ============================================
+:host-context(.dark-theme) {
+  .recent-expenses-card {
+    background: linear-gradient(145deg, #1e1e2e 0%, #252538 100%);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.3),
+      0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  mat-card-header {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-color: rgba(255, 255, 255, 0.08);
+
+    ::ng-deep {
+      .mat-mdc-card-avatar {
+        background: rgba(102, 126, 234, 0.15);
+      }
+    }
+
+    mat-card-title {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    mat-card-subtitle {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  .period-tabs {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.08);
+
+    ::ng-deep {
+      .mat-mdc-tab {
+        color: rgba(255, 255, 255, 0.6);
+
+        &:hover {
+          background: rgba(102, 126, 234, 0.1);
+        }
+
+        &.mdc-tab--active {
+          color: #667eea;
+        }
+      }
+    }
+  }
+
+  .expenses-list {
+    background: transparent;
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+    }
+  }
+
+  .empty-state {
+    color: rgba(255, 255, 255, 0.6);
+
+    p {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    button {
+      border-color: #667eea;
+      color: #667eea;
+
+      &:hover {
+        background: #667eea;
+        color: white;
+      }
+    }
+  }
+
+  .edit-panel {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: rgba(102, 126, 234, 0.5);
+
+    h4 {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .edit-form {
+      mat-form-field {
+        ::ng-deep {
+          .mat-mdc-form-field-flex {
+            background: rgba(0, 0, 0, 0.3);
+          }
+
+          input, mat-select {
+            color: rgba(255, 255, 255, 0.9);
+          }
+
+          .mat-mdc-notched-outline {
+            border-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+    }
+  }
+
+  mat-card-actions {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+// ============================================
+// RESPONSIVE
+// ============================================
+@media (max-width: 600px) {
+  mat-card-header {
+    padding: 20px 20px 12px 20px;
+    gap: 12px;
+
+    ::ng-deep {
+      .mat-mdc-card-avatar {
+        width: 42px;
+        height: 42px;
+      }
+    }
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    mat-card-title {
+      font-size: 1.25rem;
+    }
+  }
+
+  .expenses-list {
+    max-height: 400px;
+    padding: 16px;
+  }
+
+  .edit-panel {
+    margin: 0 16px 16px 16px;
+    padding: 20px;
+
+    .edit-form {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  mat-card-actions {
+    padding: 12px 16px 20px 16px;
+    flex-direction: column;
+
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
