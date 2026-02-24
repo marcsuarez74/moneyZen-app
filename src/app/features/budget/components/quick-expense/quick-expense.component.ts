@@ -339,10 +339,19 @@ export class QuickExpenseComponent implements OnInit {
 
   private calculateRemainingDaily(): number {
     const monthlyRemaining = this.remainingMonthlyBudget();
-    const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
-    const currentDay = new Date().getDate();
-    const daysRemaining = Math.max(1, daysInMonth - currentDay + 1);
+    const today = new Date();
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    const currentDay = today.getDate();
     
-    return monthlyRemaining / daysRemaining;
+    // Jours restants dans le mois (incluant aujourd'hui)
+    const daysRemaining = Math.max(1, lastDayOfMonth - currentDay + 1);
+    
+    // Si on est déjà à découvert, retourner 0
+    if (monthlyRemaining <= 0) {
+      return 0;
+    }
+    
+    // Budget quotidien = budget restant / jours restants
+    return Math.max(0, monthlyRemaining / daysRemaining);
   }
 }
