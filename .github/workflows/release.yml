@@ -26,7 +26,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Lint
         run: npm run lint
@@ -55,7 +55,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build application
         run: npm run build:prod
@@ -133,38 +133,4 @@ jobs:
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  # Déploiement (optionnel - si vous voulez déployer automatiquement)
-  deploy:
-    name: 🚀 Deploy
-    needs: release
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/tags/v*' && !contains(github.ref, '-')
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build for production
-        run: npm run build:prod
-
-      - name: Copy index.html to 404.html
-        run: |
-          cp ./dist/budget-app/browser/index.html ./dist/budget-app/browser/404.html
-          echo "✅ 404.html created for SPA routing support"
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/budget-app/browser
-          cname: |-
-            # Si vous avez un domaine personnalisé, décommentez et modifiez:
-            # marcsuarez74.github.io
+  # Note: Le déploiement est géré par ci-cd.yml automatiquement sur chaque push main
