@@ -213,10 +213,11 @@ export class BudgetAdvisorService {
 
     // 1. Analyse du solde
     if (!userData.isPositiveBalance) {
+      const balance = Number(userData.accountBalance) || 0;
       insights.push({
         type: 'warning',
         title: 'Solde bancaire négatif',
-        description: `Votre solde est de ${userData.accountBalance.toLocaleString('fr-FR')}€. C'est un signal d'alerte qui nécessite une action immédiate.`,
+        description: `Votre solde est de ${balance.toLocaleString('fr-FR')}€. C'est un signal d'alerte qui nécessite une action immédiate.`,
         actionable: true,
         actionText: 'Voir les économies possibles',
         icon: 'warning',
@@ -229,7 +230,7 @@ export class BudgetAdvisorService {
       insights.push({
         type: 'warning',
         title: 'Déficit budgétaire critique',
-        description: `Vos dépenses (${summary.totalExpenses.toLocaleString('fr-FR')}€) dépassent votre salaire (${summary.totalIncome.toLocaleString('fr-FR')}€) de ${Math.abs(summary.remainingBudget).toLocaleString('fr-FR')}€. Vous êtes en train de vous endetter à chaque mois.`,
+        description: `Vos dépenses (${(summary.totalExpenses || 0).toLocaleString('fr-FR')}€) dépassent votre salaire (${(summary.totalIncome || 0).toLocaleString('fr-FR')}€) de ${Math.abs(summary.remainingBudget || 0).toLocaleString('fr-FR')}€. Vous êtes en train de vous endetter à chaque mois.`,
         actionable: true,
         actionText: 'Reduire les dépenses',
         icon: 'trending_down',
@@ -239,7 +240,7 @@ export class BudgetAdvisorService {
       insights.push({
         type: 'warning',
         title: 'Marge de manoeuvre faible',
-        description: `Il ne vous reste que ${summary.remainingBudget.toLocaleString('fr-FR')}€ par mois. En cas d'imprévu (dépannage voiture, appareil cassé), vous serez dans le rouge.`,
+        description: `Il ne vous reste que ${(summary.remainingBudget || 0).toLocaleString('fr-FR')}€ par mois. En cas d'imprévu (dépannage voiture, appareil cassé), vous serez dans le rouge.`,
         actionable: true,
         actionText: 'Créer un fonds d\'urgence',
         icon: 'warning_amber',
@@ -251,11 +252,11 @@ export class BudgetAdvisorService {
     const overloaded = this.getOverloadedCategories(summary);
     overloaded.forEach(categoryInfo => {
       const category = EXPENSE_CATEGORIES.find(c => c.value === categoryInfo.category);
-      const percentOfIncome = ((categoryInfo.amount / summary.totalIncome) * 100).toFixed(1);
+      const percentOfIncome = (((categoryInfo.amount || 0) / (summary.totalIncome || 1)) * 100).toFixed(1);
       insights.push({
         type: 'warning',
         title: `${category?.label || categoryInfo.category} trop élevé`,
-        description: `Vous dépensez ${categoryInfo.amount.toLocaleString('fr-FR')}€ (${percentOfIncome}% de vos revenus) en ${category?.label?.toLowerCase() || categoryInfo.category}. Le maximum recommandé est ${(this.categoryThresholds[categoryInfo.category].max * 100).toFixed(0)}%.`,
+        description: `Vous dépensez ${(categoryInfo.amount || 0).toLocaleString('fr-FR')}€ (${percentOfIncome}% de vos revenus) en ${category?.label?.toLowerCase() || categoryInfo.category}. Le maximum recommandé est ${(this.categoryThresholds[categoryInfo.category].max * 100).toFixed(0)}%.`,
         actionable: true,
         actionText: 'Optimiser cette catégorie',
         icon: category?.icon || 'info',
@@ -449,40 +450,40 @@ export class BudgetAdvisorService {
     summary: BudgetSummary,
     metrics: any
   ): { worstCase: BudgetScenario; realistic: BudgetScenario; optimized: BudgetScenario } {
-    const currentSavings = summary.savingsPotential;
+    const currentSavings = summary.savingsPotential || 0;
     
     // Scénario pessimiste (perte de 10% de revenus, augmentation 5% dépenses)
-    const worstCaseSavings = (summary.totalIncome * 0.9) - (summary.totalExpenses * 1.05);
+    const worstCaseSavings = ((summary.totalIncome || 0) * 0.9) - ((summary.totalExpenses || 0) * 1.05);
     
     // Scénario réaliste (maintien actuel avec inflation 2%)
-    const realisticSavings = currentSavings * 0.95; // -2% d'inflation
+    const realisticSavings = (currentSavings || 0) * 0.95; // -2% d'inflation
     
     // Scénario optimisé (application des recommandations)
     const recommendations = this.generateRecommendations(userData, expenses, summary, metrics);
     const potentialSavings = recommendations.reduce((sum, r) => sum + (r.potentialSavings || 0), 0);
-    const optimizedSavings = currentSavings + potentialSavings;
+    const optimizedSavings = (currentSavings || 0) + potentialSavings;
 
     return {
       worstCase: {
         name: 'Conservateur',
         description: 'Préparation aux imprévus (-10% revenus, +5% dépenses)',
-        monthlySavings: Math.max(0, worstCaseSavings),
-        yearlyProjection: Math.max(0, worstCaseSavings) * 12,
-        timelineToGoal: worstCaseSavings > 0 ? 'Objectif atteignable avec prudence' : 'Budget à risque'
+        monthlySavings: Math.max(0, worstCaseSavings || 0),
+        yearlyProjection: Math.max(0, worstCaseSavings || 0) * 12,
+        timelineToGoal: (worstCaseSavings || 0) > 0 ? 'Objectif atteignable avec prudence' : 'Budget à risque'
       },
       realistic: {
         name: 'Réaliste',
         description: 'Projection actuelle avec inflation (2%/an)',
         monthlySavings: realisticSavings,
-        yearlyProjection: realisticSavings * 12,
-        timelineToGoal: `Épargne annuelle: ${(realisticSavings * 12).toLocaleString('fr-FR')}€`
+        yearlyProjection: (realisticSavings || 0) * 12,
+        timelineToGoal: `Épargne annuelle: ${((realisticSavings || 0) * 12).toLocaleString('fr-FR')}€`
       },
       optimized: {
         name: 'Optimisé',
         description: 'Après application des recommandations d\'optimisation',
         monthlySavings: optimizedSavings,
-        yearlyProjection: optimizedSavings * 12,
-        timelineToGoal: `Potentiel d'économies: ${potentialSavings.toLocaleString('fr-FR')}€/mois`
+        yearlyProjection: (optimizedSavings || 0) * 12,
+        timelineToGoal: `Potentiel d'économies: ${(potentialSavings || 0).toLocaleString('fr-FR')}€/mois`
       }
     };
   }

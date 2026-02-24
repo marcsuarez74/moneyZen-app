@@ -20,7 +20,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Solde de vos comptes actuel</mat-label>
-        <input matInput type="text" inputmode="decimal" pattern="-?\d*[.,]?\d*" formControlName="accountBalance" placeholder="0">
+        <input matInput type="number" step="0.01" formControlName="accountBalance" placeholder="0">
         <span matSuffix>€</span>
         <mat-hint>Somme de tous vos comptes (positif ou négatif si découvert)</mat-hint>
       </mat-form-field>

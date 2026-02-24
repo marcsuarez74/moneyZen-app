@@ -71,11 +71,17 @@ export class BudgetDashboardPageComponent implements OnInit {
   });
   
   readonly isNegativeBalance = computed(() => {
-    if (!this.budgetStore.hasUserData()) return false;
-    const balance = this.budgetStore.userData()?.accountBalance || 0;
     const userData = this.budgetStore.userData();
-    if (userData?.isPositiveBalance === false) return true;
-    return balance < 0;
+    if (!userData) return false;
+    
+    // Prioriser isPositiveBalance s'il est défini explicitement
+    if (userData.isPositiveBalance !== undefined) {
+      return !userData.isPositiveBalance;
+    }
+    
+    // Sinon utiliser le solde numérique
+    const balance = Number(userData.accountBalance);
+    return !isNaN(balance) && balance < 0;
   });
   
   readonly recoveryData = computed((): RecoveryPlanData | null => {
@@ -107,9 +113,12 @@ export class BudgetDashboardPageComponent implements OnInit {
       ].includes(e.category))
       .reduce((sum, e) => sum + e.monthlyEquivalent, 0);
     
+    const accountBalance = Number(userData.accountBalance);
+    const salary = Number(userData.salary);
+    
     return {
-      overdraftAmount: Math.abs(userData.accountBalance),
-      monthlyIncome: userData.salary,
+      overdraftAmount: Math.abs(isNaN(accountBalance) ? 0 : accountBalance),
+      monthlyIncome: isNaN(salary) ? 0 : salary,
       fixedExpenses,
       remainingBudget: summary.remainingBudget
     };
@@ -189,7 +198,16 @@ export class BudgetDashboardPageComponent implements OnInit {
   private loadSavedData(): void {
     const savedState = this.storageService.loadBudgetState();
     if (savedState) {
-      if (savedState.userData) this.budgetStore.setUserData(savedState.userData);
+      // Normaliser les données utilisateur pour s'assurer que les types sont corrects
+      if (savedState.userData) {
+        const normalizedUserData: UserFinancialData = {
+          salary: Number(savedState.userData.salary) || 0,
+          accountBalance: Number(savedState.userData.accountBalance) || 0,
+          isPositiveBalance: Number(savedState.userData.accountBalance) >= 0,
+          paydayDay: Number(savedState.userData.paydayDay) || 1
+        };
+        this.budgetStore.setUserData(normalizedUserData);
+      }
       if (savedState.expenses?.length > 0) this.budgetStore.setExpenses(savedState.expenses);
       this.calculateAnalysis();
     }
@@ -253,12 +271,27 @@ export class BudgetDashboardPageComponent implements OnInit {
   }
 
   private saveAndRecalculate(): void {
+    const userData = this.budgetStore.userData();
+    
+    // Nettoyer les données avant sauvegarde
+    const cleanUserData = userData ? {
+      salary: Number(userData.salary) || 0,
+      accountBalance: Number(userData.accountBalance) || 0,
+      isPositiveBalance: Number(userData.accountBalance) >= 0,
+      paydayDay: Number(userData.paydayDay) || 1
+    } : null;
+    
     this.storageService.saveBudgetState({
-      userData: this.budgetStore.userData(),
+      userData: cleanUserData,
       expenses: this.budgetStore.expenses(),
       isLoading: false,
       error: null
     });
+    
+    // Mettre à jour le store avec les données nettoyées
+    if (cleanUserData) {
+      this.budgetStore.setUserData(cleanUserData);
+    }
     
     this.calculateAnalysis();
   }
