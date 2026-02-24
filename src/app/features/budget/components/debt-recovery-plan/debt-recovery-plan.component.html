@@ -25,8 +25,8 @@
           <li>
             <mat-icon>event</mat-icon>
             <span>
-              @if (planInfo().daysUntilStart === 0) {
-                Le plan commence <strong>aujourd'hui</strong> 🎉
+              @if (planInfo().hasStarted) {
+                Votre plan a <strong>commencé ce mois-ci</strong> 🎯 et prendra fin <strong>{{ planInfo().endDateFormatted }}</strong>
               } @else {
                 Le plan commence le <strong>{{ planInfo().startDateFormatted }}</strong> (votre prochaine paie)
               }
