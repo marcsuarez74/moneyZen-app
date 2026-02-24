@@ -70,18 +70,30 @@
           <mat-icon>account_balance_wallet</mat-icon>
           Solde bancaire
         </label>
-        <div class="input-wrapper" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
-          <input 
-            id="balance-input"
-            type="text"
-            inputmode="decimal"
-            formControlName="accountBalance" 
-            placeholder="0"
-            class="fintech-input"
-            [class.positive]="isPositiveBalance()"
+        <div class="balance-input-row">
+          <button 
+            type="button"
+            mat-icon-button 
+            class="sign-toggle-btn"
             [class.negative]="!isPositiveBalance()"
-          >
-          <span class="currency">€</span>
+            (click)="toggleBalanceSign()"
+            aria-label="Changer le signe du solde">
+            <mat-icon>{{ isPositiveBalance() ? 'add' : 'remove' }}</mat-icon>
+          </button>
+          <div class="input-wrapper balance-input" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
+            <input 
+              id="balance-input"
+              type="text"
+              inputmode="decimal"
+              pattern="-?\d*[.,]?\d*"
+              formControlName="accountBalance" 
+              placeholder="0"
+              class="fintech-input"
+              [class.positive]="isPositiveBalance()"
+              [class.negative]="!isPositiveBalance()"
+            >
+            <span class="currency">€</span>
+          </div>
         </div>
         <div class="balance-badge" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
           <mat-icon>{{ isPositiveBalance() ? 'trending_up' : 'trending_down' }}</mat-icon>

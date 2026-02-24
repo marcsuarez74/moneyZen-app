@@ -52,7 +52,7 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Solde bancaire actuel</mat-label>
-          <input matInput type="text" inputmode="decimal" formControlName="accountBalance" placeholder="0">
+          <input matInput type="text" inputmode="decimal" pattern="-?\d*[.,]?\d*" formControlName="accountBalance" placeholder="0">
           <span matSuffix>€</span>
           <mat-hint>Positif ou négatif si découvert</mat-hint>
         </mat-form-field>

@@ -62,6 +62,11 @@ export class EditIncomeDialogComponent {
     }
   }
 
+  toggleBalanceSign(): void {
+    const currentValue = this.incomeForm.get('accountBalance')?.value || 0;
+    this.incomeForm.get('accountBalance')?.setValue(-currentValue);
+  }
+
   onCancel(): void {
     this.dialogRef.close();
   }
