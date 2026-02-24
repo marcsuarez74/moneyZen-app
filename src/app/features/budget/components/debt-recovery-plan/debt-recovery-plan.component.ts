@@ -1,4 +1,4 @@
-import { Component, input, output, computed, signal, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, input, output, computed, signal, ViewChild, ElementRef, inject, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,10 +7,14 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule } from '@angular/forms';
 import { PlanStore } from '../../../../store/plan.store';
 import { LocalStorageService } from '../../../../services/local-storage.service';
 import { BudgetStore } from '../../../../store/budget.store';
+import { ExpenseRecordStore } from '../../../../store/expense-record.store';
+import { QuickExpenseComponent } from '../quick-expense/quick-expense.component';
+import { RecentExpensesComponent } from '../recent-expenses/recent-expenses.component';
 
 export interface RecoveryPlanData {
   overdraftAmount: number;
@@ -50,19 +54,23 @@ export interface MonthlyTarget {
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
+    MatExpansionModule,
     FormsModule,
-    CurrencyPipe
+    CurrencyPipe,
+    QuickExpenseComponent,
+    RecentExpensesComponent
   ],
   templateUrl: './debt-recovery-plan.component.html',
   styleUrls: ['./debt-recovery-plan.component.scss']
 })
-export class DebtRecoveryPlanComponent {
+export class DebtRecoveryPlanComponent implements OnInit {
   @ViewChild('durationSection') durationSection!: ElementRef;
   @ViewChild('recoveryCard') recoveryCard!: ElementRef;
 
   private planStore = inject(PlanStore);
   private budgetStore = inject(BudgetStore);
   private storageService = inject(LocalStorageService);
+  private expenseStore = inject(ExpenseRecordStore);
 
   readonly data = input.required<RecoveryPlanData>();
   readonly acceptPlan = output<{ duration: number; monthlyBudget: number; dailyBudget: number; adopted: boolean }>();
@@ -137,6 +145,21 @@ export class DebtRecoveryPlanComponent {
   });
 
   // Combien on doit minimum récupérer par mois pour remonter à temps
+  // Dépenses ponctuelles du mois en cours
+  readonly currentMonthExpenses = computed(() => this.expenseStore.currentMonthTotal());
+
+  // Budget mensuel ajusté avec les dépenses déjà effectuées
+  readonly adjustedMonthlyBudget = computed(() => {
+    const recommended = this.recommendedMonthlyBudget();
+    const spent = this.currentMonthExpenses();
+    return Math.max(0, recommended - spent);
+  });
+
+  // Budget quotidien ajusté
+  readonly adjustedDailyBudget = computed(() => {
+    return this.adjustedMonthlyBudget() / this.daysInMonth();
+  });
+
   readonly minimumRecoveryPerMonth = computed(() => {
     return Math.ceil(this.data().overdraftAmount / this.targetMonths());
   });
@@ -230,6 +253,11 @@ export class DebtRecoveryPlanComponent {
     const recommendedMonths = Math.ceil(this.data().overdraftAmount / availableForRecovery);
     return Math.max(3, Math.min(12, recommendedMonths));
   });
+
+  ngOnInit(): void {
+    // Charger les dépenses ponctuelles
+    this.expenseStore.loadExpenses();
+  }
 
   updateDuration(value: number): void {
     this.selectedDuration.set(value);
