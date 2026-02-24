@@ -33,7 +33,7 @@ module.exports = tseslint.config(
       ],
       // Critical: No unused vars
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-      // Warnings for code quality (not errors to avoid breaking existing code)
+      // Code quality (warnings only for existing codebase)
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-explicit-any": "off",
     },
@@ -45,13 +45,20 @@ module.exports = tseslint.config(
       ...angular.configs.templateAccessibility,
     ],
     rules: {
-      // Critical accessibility rules - these catch the errors you reported
-      "@angular-eslint/template/accessibility-label-has-associated-control": "error",
+      // Use only rules that exist in @angular-eslint/template v21.0.0
+      // The accessibility config already includes a11y rules automatically
+      "@angular-eslint/template/alt-text": "error",
+      "@angular-eslint/template/elements-content": "error",
       "@angular-eslint/template/click-events-have-key-events": "error",
-      "@angular-eslint/template/interactive-supports-focus": "error",
-      // Warnings for templates (existing code compatibility)
+      "@angular-eslint/template/mouse-events-have-key-events": "error",
+      "@angular-eslint/template/no-autofocus": "error",
+      "@angular-eslint/template/no-distracting-elements": "error",
+      "@angular-eslint/template/no-positive-tabindex": "error",
+      "@angular-eslint/template/role-has-required-aria": "error",
+      "@angular-eslint/template/table-scope": "error",
+      "@angular-eslint/template/valid-aria": "error",
+      // Style rules (warnings)
       "@angular-eslint/template/prefer-control-flow": "warn",
-      "@angular-eslint/template/prefer-self-closing-tags": "off",
     },
   },
   // Apply prettier last to override other configs
