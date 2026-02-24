@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PaydayInfo } from '../../../../services/payday-calculator.service';
+import { BackupExportButtonComponent } from '../../../../shared/components/backup-export-button/backup-export-button.component';
 
 interface ChargesInfo {
   count: number;
@@ -14,7 +15,7 @@ interface ChargesInfo {
 @Component({
   selector: 'app-dashboard-header',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, RouterLink, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, CurrencyPipe, RouterLink, MatButtonModule, MatIconModule, MatTooltipModule, BackupExportButtonComponent],
   templateUrl: './dashboard-header.component.html',
   styleUrls: ['./dashboard-header.component.scss']
 })
