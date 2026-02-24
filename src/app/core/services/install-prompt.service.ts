@@ -65,4 +65,8 @@ export class InstallPromptService {
     // Vérifier si l'installation est supportée
     return 'BeforeInstallPromptEvent' in window;
   }
+
+  isPromptReady(): boolean {
+    return this.deferredPrompt !== null;
+  }
 }
