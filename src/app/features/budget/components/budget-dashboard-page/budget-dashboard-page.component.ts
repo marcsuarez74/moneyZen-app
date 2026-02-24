@@ -120,7 +120,8 @@ export class BudgetDashboardPageComponent implements OnInit {
       overdraftAmount: Math.abs(isNaN(accountBalance) ? 0 : accountBalance),
       monthlyIncome: isNaN(salary) ? 0 : salary,
       fixedExpenses,
-      remainingBudget: summary.remainingBudget
+      remainingBudget: summary.remainingBudget,
+      paydayDay: userData.paydayDay
     };
   });
   

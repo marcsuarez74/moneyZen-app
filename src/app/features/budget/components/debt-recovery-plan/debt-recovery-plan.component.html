@@ -10,6 +10,73 @@
   </mat-card-header>
 
   <mat-card-content>
+    <!-- Section explicative du fonctionnement -->
+    <div class="info-box info-primary">
+      <h3>
+        <mat-icon>info</mat-icon>
+        Comment fonctionne ce plan ?
+      </h3>
+      <div class="info-content">
+        <p>
+          Ce plan de redressement est conçu pour vous aider à remonter à zéro de manière réaliste et progressive.
+          <strong>Il démarrera automatiquement le jour de votre prochaine paie.</strong>
+        </p>
+        <ul class="info-list">
+          <li>
+            <mat-icon>event</mat-icon>
+            <span>
+              @if (planInfo().daysUntilStart === 0) {
+                Le plan commence <strong>aujourd'hui</strong> 🎉
+              } @else {
+                Le plan commence le <strong>{{ planInfo().startDateFormatted }}</strong> (votre prochaine paie)
+              }
+            </span>
+          </li>
+          <li>
+            <mat-icon>update</mat-icon>
+            <span><strong>Important :</strong> Mettez à jour votre solde bancaire le jour de votre paie pour un suivi précis</span>
+          </li>
+          <li>
+            <mat-icon>track_changes</mat-icon>
+            <span>Suivez vos dépenses quotidiennes avec le budget indiqué chaque mois</span>
+          </li>
+          <li>
+            <mat-icon>trending_up</mat-icon>
+            <span>Le plan s'adapte automatiquement à votre situation si vous mettez à jour vos données</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Alerte si on doit attendre la prochaine paie ou si c'est aujourd'hui -->
+    @if (planInfo().daysUntilStart >= 0) {
+      <div class="alert-box alert-info">
+        <mat-icon>event_available</mat-icon>
+        <div>
+          @if (planInfo().daysUntilStart === 0) {
+            <strong>C'est le jour J ! 🎉</strong>
+            <p>
+              Vous êtes payé aujourd'hui. <strong>Mettez à jour votre solde bancaire maintenant</strong> 
+              pour démarrer le plan avec les données les plus précises.
+            </p>
+            <p class="hint">
+              N'oubliez pas de noter votre nouveau solde et de suivre votre budget quotidien de 
+              {{ recommendedDailyBudget() | currency:'EUR' }}.
+            </p>
+          } @else {
+            <strong>Prochaine étape</strong>
+            <p>
+              Votre plan démarrera dans <strong>{{ planInfo().daysUntilStart }} jour{{ planInfo().daysUntilStart > 1 ? 's' : '' }}</strong> 
+              (le {{ planInfo().startDateFormatted }}).
+            </p>
+            <p class="hint">
+              D'ici là, essayez de limiter vos dépenses au maximum. Le jour de votre paie, 
+              <strong>mettez à jour votre solde bancaire</strong> pour que le plan soit le plus précis possible.
+            </p>
+          }
+        </div>
+      </div>
+    }
     <div class="situation-box">
       <h3>
         <mat-icon>account_balance</mat-icon>

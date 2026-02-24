@@ -23,6 +23,7 @@ export interface ActivePlan {
   targets: MonthlyTarget[];
   history: MonthlyHistory[];
   isActive: boolean;
+  startDate?: string; // Date de début du plan au format ISO (optionnel)
 }
 
 export interface PlanState {
