@@ -5,26 +5,24 @@
   </div>
 
   <div class="banks-grid">
-    <mat-card 
-      *ngFor="let bank of banks" 
-      class="bank-card"
-      [class.selected]="false"
-      (click)="onSelectBank(bank)"
-      [style.--bank-color]="bank.color">
-      
-      <div class="bank-icon-wrapper" [style.background-color]="bank.color + '20'">
-        <mat-icon [style.color]="bank.color">{{ bank.icon }}</mat-icon>
-      </div>
-      
-      <div class="bank-info">
-        <h3 class="bank-name">{{ bank.name }}</h3>
-        <span class="bank-badge">Guide disponible</span>
-      </div>
-      
-      <div class="bank-arrow">
-        <mat-icon>chevron_right</mat-icon>
-      </div>
-    </mat-card>
+    @for (bank of banks; track bank) {
+      <mat-card
+        class="bank-card"
+        [class.selected]="false"
+        (click)="onSelectBank(bank)"
+        [style.--bank-color]="bank.color">
+        <div class="bank-icon-wrapper" [style.background-color]="bank.color + '20'">
+          <mat-icon [style.color]="bank.color">{{ bank.icon }}</mat-icon>
+        </div>
+        <div class="bank-info">
+          <h3 class="bank-name">{{ bank.name }}</h3>
+          <span class="bank-badge">Guide disponible</span>
+        </div>
+        <div class="bank-arrow">
+          <mat-icon>chevron_right</mat-icon>
+        </div>
+      </mat-card>
+    }
   </div>
 
   <div class="other-banks-section">

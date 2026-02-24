@@ -4,62 +4,62 @@
     <p class="step-description">Déposez votre fichier de relevé bancaire ou sélectionnez-le depuis votre ordinateur</p>
   </div>
 
-  <div 
+  <div
     class="upload-zone"
     [class.drag-over]="isDragOver"
     [class.loading]="isLoading"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onDrop($event)">
-    
-    <div class="upload-content" *ngIf="!isLoading">
-      <div class="upload-icon-wrapper">
-        <mat-icon class="upload-icon">cloud_upload</mat-icon>
-      </div>
-      
-      <div class="upload-text">
-        <h3 class="upload-title">Glissez-déposez votre fichier ici</h3>
-        <p class="upload-subtitle">ou cliquez pour parcourir vos fichiers</p>
-      </div>
 
-      <input 
-        type="file" 
-        #fileInput
-        class="file-input"
-        accept=".csv,.ofx"
-        (change)="onFileInputChange($event)"
-        hidden>
-      
-      <button 
-        mat-raised-button 
-        class="browse-btn"
-        color="primary"
-        (click)="fileInput.click()"
-        [disabled]="isLoading">
-        <mat-icon>folder_open</mat-icon>
-        Parcourir
-      </button>
-
-      <div class="supported-formats">
-        <div class="format-badge">
-          <mat-icon>description</mat-icon>
-          <span>CSV</span>
+    @if (!isLoading) {
+      <div class="upload-content">
+        <div class="upload-icon-wrapper">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
         </div>
-        <div class="format-badge">
-          <mat-icon>account_balance</mat-icon>
-          <span>OFX</span>
+        <div class="upload-text">
+          <h3 class="upload-title">Glissez-déposez votre fichier ici</h3>
+          <p class="upload-subtitle">ou cliquez pour parcourir vos fichiers</p>
+        </div>
+        <input
+          type="file"
+          #fileInput
+          class="file-input"
+          accept=".csv,.ofx"
+          (change)="onFileInputChange($event)"
+          hidden>
+        <button
+          mat-raised-button
+          class="browse-btn"
+          color="primary"
+          (click)="fileInput.click()"
+          [disabled]="isLoading">
+          <mat-icon>folder_open</mat-icon>
+          Parcourir
+        </button>
+        <div class="supported-formats">
+          <div class="format-badge">
+            <mat-icon>description</mat-icon>
+            <span>CSV</span>
+          </div>
+          <div class="format-badge">
+            <mat-icon>account_balance</mat-icon>
+            <span>OFX</span>
+          </div>
         </div>
       </div>
-    </div>
+    }
 
-    <div class="upload-loading" *ngIf="isLoading">
-      <div class="loading-spinner">
-        <mat-icon class="spinner-icon">sync</mat-icon>
+    @if (isLoading) {
+      <div class="upload-loading">
+        <div class="loading-spinner">
+          <mat-icon class="spinner-icon">sync</mat-icon>
+        </div>
+        <h3 class="loading-title">Analyse du fichier en cours...</h3>
+        <p class="loading-subtitle">Veuillez patienter pendant que nous traitons vos transactions</p>
+        <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
       </div>
-      <h3 class="loading-title">Analyse du fichier en cours...</h3>
-      <p class="loading-subtitle">Veuillez patienter pendant que nous traitons vos transactions</p>
-      <mat-progress-bar mode="indeterminate" color="primary"></mat-progress-bar>
-    </div>
+    }
   </div>
 
   <div class="security-notice">

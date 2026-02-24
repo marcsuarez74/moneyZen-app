@@ -1,83 +1,84 @@
-<div class="export-guide-container" *ngIf="selectedBank">
-  <div class="guide-header">
-    <div class="bank-header-card">
-      <div class="bank-icon" [style.background-color]="selectedBank.color + '20'">
-        <mat-icon [style.color]="selectedBank.color">{{ selectedBank.icon }}</mat-icon>
-      </div>
-      <div class="bank-title">
-        <h2 class="bank-name">{{ selectedBank.name }}</h2>
-        <span class="guide-label">Guide d'export</span>
+@if (selectedBank) {
+  <div class="export-guide-container">
+    <div class="guide-header">
+      <div class="bank-header-card">
+        <div class="bank-icon" [style.background-color]="selectedBank.color + '20'">
+          <mat-icon [style.color]="selectedBank.color">{{ selectedBank.icon }}</mat-icon>
+        </div>
+        <div class="bank-title">
+          <h2 class="bank-name">{{ selectedBank.name }}</h2>
+          <span class="guide-label">Guide d'export</span>
+        </div>
       </div>
     </div>
+    <div class="guide-content">
+      <mat-card class="steps-card">
+        <div class="card-header">
+          <mat-icon class="header-icon" color="primary">format_list_numbered</mat-icon>
+          <h3>Étapes pour exporter vos relevés</h3>
+        </div>
+        <div class="steps-list">
+          @for (step of selectedBank.steps; track step; let i = $index) {
+            <div
+              class="step-item"
+              [style.animation-delay]="i * 100 + 'ms'">
+              <div class="step-number" [style.background-color]="selectedBank.color">
+                {{ i + 1 }}
+              </div>
+              <div class="step-content">
+                <p>{{ step }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </mat-card>
+      <mat-card class="tips-card">
+        <div class="card-header">
+          <mat-icon class="header-icon" color="accent">lightbulb</mat-icon>
+          <h3>Conseils importants</h3>
+        </div>
+        <div class="tips-list">
+          @for (tip of selectedBank.tips; track tip; let i = $index) {
+            <div
+              class="tip-item"
+              [style.animation-delay]="(selectedBank.steps.length + i) * 100 + 'ms'">
+              <mat-icon class="tip-icon">check_circle</mat-icon>
+              <p>{{ tip }}</p>
+            </div>
+          }
+        </div>
+      </mat-card>
+    </div>
+    <div class="formats-info">
+      <mat-card class="formats-card">
+        <div class="formats-grid">
+          <div class="format-item">
+            <div class="format-icon ofx">
+              <mat-icon>description</mat-icon>
+            </div>
+            <div class="format-info">
+              <span class="format-name">Format OFX</span>
+              <span class="format-desc">Recommandé - Plus précis</span>
+            </div>
+          </div>
+          <div class="format-item">
+            <div class="format-icon csv">
+              <mat-icon>table_chart</mat-icon>
+            </div>
+            <div class="format-info">
+              <span class="format-name">Format CSV</span>
+              <span class="format-desc">Universel - Bien supporté</span>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
   </div>
+}
 
-  <div class="guide-content">
-    <mat-card class="steps-card">
-      <div class="card-header">
-        <mat-icon class="header-icon" color="primary">format_list_numbered</mat-icon>
-        <h3>Étapes pour exporter vos relevés</h3>
-      </div>
-      
-      <div class="steps-list">
-        <div 
-          *ngFor="let step of selectedBank.steps; let i = index" 
-          class="step-item"
-          [style.animation-delay]="i * 100 + 'ms'">
-          <div class="step-number" [style.background-color]="selectedBank.color">
-            {{ i + 1 }}
-          </div>
-          <div class="step-content">
-            <p>{{ step }}</p>
-          </div>
-        </div>
-      </div>
-    </mat-card>
-
-    <mat-card class="tips-card">
-      <div class="card-header">
-        <mat-icon class="header-icon" color="accent">lightbulb</mat-icon>
-        <h3>Conseils importants</h3>
-      </div>
-      
-      <div class="tips-list">
-        <div 
-          *ngFor="let tip of selectedBank.tips; let i = index" 
-          class="tip-item"
-          [style.animation-delay]="(selectedBank.steps.length + i) * 100 + 'ms'">
-          <mat-icon class="tip-icon">check_circle</mat-icon>
-          <p>{{ tip }}</p>
-        </div>
-      </div>
-    </mat-card>
+@if (!selectedBank) {
+  <div class="no-bank-selected">
+    <mat-icon class="no-bank-icon">account_balance</mat-icon>
+    <p>Veuillez d'abord sélectionner une banque</p>
   </div>
-
-  <div class="formats-info">
-    <mat-card class="formats-card">
-      <div class="formats-grid">
-        <div class="format-item">
-          <div class="format-icon ofx">
-            <mat-icon>description</mat-icon>
-          </div>
-          <div class="format-info">
-            <span class="format-name">Format OFX</span>
-            <span class="format-desc">Recommandé - Plus précis</span>
-          </div>
-        </div>
-        <div class="format-item">
-          <div class="format-icon csv">
-            <mat-icon>table_chart</mat-icon>
-          </div>
-          <div class="format-info">
-            <span class="format-name">Format CSV</span>
-            <span class="format-desc">Universel - Bien supporté</span>
-          </div>
-        </div>
-      </div>
-    </mat-card>
-  </div>
-</div>
-
-<div class="no-bank-selected" *ngIf="!selectedBank">
-  <mat-icon class="no-bank-icon">account_balance</mat-icon>
-  <p>Veuillez d'abord sélectionner une banque</p>
-</div>
+}
