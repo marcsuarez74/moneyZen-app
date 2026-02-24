@@ -6,3 +6,6 @@ export { VersionDisplayComponent } from './version-display/version-display.compo
 export { CategorySelectComponent } from './category-select/category-select.component';
 export { UpdateNotificationComponent } from './update-notification/update-notification.component';
 export { InstallPromptComponent } from './install-prompt/install-prompt.component';
+export { ExpenseCategoryChipComponent } from './expense-category-chip/expense-category-chip.component';
+export { QuickExpenseFormComponent } from './quick-expense-form/quick-expense-form.component';
+export { ExpenseListItemComponent } from './expense-list-item/expense-list-item.component';

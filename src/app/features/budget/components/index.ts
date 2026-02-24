@@ -7,6 +7,10 @@ export { ExpenseBreakdownComponent } from './expense-breakdown/expense-breakdown
 export { BudgetRecommendationsComponent } from './budget-recommendations/budget-recommendations.component';
 export { DebtRecoveryPlanComponent } from './debt-recovery-plan/debt-recovery-plan.component';
 
+// Expense tracking components (NEW)
+export { QuickExpenseComponent } from './quick-expense/quick-expense.component';
+export { RecentExpensesComponent } from './recent-expenses/recent-expenses.component';
+
 // Dialog components
 export { EditIncomeDialogComponent } from './edit-income-dialog/edit-income-dialog.component';
 export { EditExpensesDialogComponent } from './edit-expenses-dialog/edit-expenses-dialog.component';
