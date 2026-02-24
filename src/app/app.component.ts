@@ -9,6 +9,9 @@ import { MatListModule } from '@angular/material/list';
 import { LocalStorageService } from './services/local-storage.service';
 import { PlanAutoUpdateService } from './services/plan-auto-update.service';
 import { VersionDisplayComponent } from './shared/components/version-display/version-display.component';
+import { UpdateNotificationComponent } from './shared/components/update-notification/update-notification.component';
+import { InstallPromptComponent } from './shared/components/install-prompt/install-prompt.component';
+import { UpdateService } from './core/services/update.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +24,9 @@ import { VersionDisplayComponent } from './shared/components/version-display/ver
     MatIconModule,
     MatSidenavModule,
     MatListModule,
-    VersionDisplayComponent
+    VersionDisplayComponent,
+    UpdateNotificationComponent,
+    InstallPromptComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -29,6 +34,7 @@ import { VersionDisplayComponent } from './shared/components/version-display/ver
 export class AppComponent implements OnInit, OnDestroy {
   private storageService = inject(LocalStorageService);
   private planAutoUpdate = inject(PlanAutoUpdateService);
+  private updateService = inject(UpdateService);
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
@@ -38,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isDarkMode = this.storageService.loadThemePreference();
     this.applyTheme();
     this.planAutoUpdate.initialize();
+    this.updateService.init();
   }
 
   ngOnDestroy(): void {
