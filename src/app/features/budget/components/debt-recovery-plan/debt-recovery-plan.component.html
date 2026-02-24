@@ -188,10 +188,11 @@
         <app-quick-expense
           [monthlyBudget]="recommendedMonthlyBudget()"
           [dailyBudget]="recommendedDailyBudget()"
-          [paydayDay]="data().paydayDay || 1">
+          [paydayDay]="data().paydayDay || 1"
+          (viewAllExpensesClicked)="scrollToRecentExpenses()">
         </app-quick-expense>
         
-        <app-recent-expenses></app-recent-expenses>
+        <app-recent-expenses #recentExpenses></app-recent-expenses>
       </div>
     </mat-expansion-panel>
 
