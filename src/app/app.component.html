@@ -21,6 +21,8 @@
     </nav>
     
     <app-version-display></app-version-display>
+    
+    <app-install-prompt></app-install-prompt>
 
     <button mat-icon-button (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Mode clair' : 'Mode sombre'">
       <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
@@ -55,4 +57,6 @@
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  
+  <app-update-notification></app-update-notification>
 </div>

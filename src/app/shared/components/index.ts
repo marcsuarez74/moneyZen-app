@@ -4,3 +4,5 @@ export { ExpenseItemComponent } from './expense-item/expense-item.component';
 export { ExpenseFormComponent } from './expense-form/expense-form.component';
 export { VersionDisplayComponent } from './version-display/version-display.component';
 export { CategorySelectComponent } from './category-select/category-select.component';
+export { UpdateNotificationComponent } from './update-notification/update-notification.component';
+export { InstallPromptComponent } from './install-prompt/install-prompt.component';
