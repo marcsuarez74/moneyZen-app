@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { QuickExpenseFormComponent } from '../../../../shared/components/quick-expense-form/quick-expense-form.component';
 import { ExpenseCategoryChipComponent } from '../../../../shared/components/expense-category-chip/expense-category-chip.component';
 import { ExpenseRecordStore } from '../../../../store/expense-record.store';
@@ -24,6 +25,7 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
     MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
+    MatTooltipModule,
     QuickExpenseFormComponent,
     ExpenseCategoryChipComponent
   ],
@@ -46,11 +48,17 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
               {{ remainingMonthlyBudget() | currency:'EUR':'symbol':'1.2-2' }}
             </span>
           </div>
-          <div class="budget-item">
-            <span class="budget-label">Budget quotidien actuel</span>
-            <span class="budget-value" [class.negative]="remainingDailyBudget() < 0">
-              {{ remainingDailyBudget() | currency:'EUR':'symbol':'1.2-2' }}
+          <div class="budget-item daily-budget">
+            <span class="budget-label">
+              Budget quotidien réel
+              <span class="help-icon" matTooltip="Calculé à partir de votre budget mensuel restant divisé par les jours restants dans le mois">ⓘ</span>
             </span>
+            <div class="budget-value-container">
+              <span class="budget-value" [class.negative]="adjustedDailyBudget() < 0">
+                {{ adjustedDailyBudget() | currency:'EUR':'symbol':'1.2-2' }}
+              </span>
+              <span class="budget-sublabel">/jour</span>
+            </div>
           </div>
           
           <!-- Barre de progression -->
@@ -169,6 +177,39 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
 
       &.negative {
         color: #d32f2f;
+      }
+    }
+
+    .daily-budget {
+      .budget-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+      }
+
+      .help-icon {
+        font-size: 14px;
+        color: var(--primary-color, #1976d2);
+        cursor: help;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .budget-value-container {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+      }
+
+      .budget-sublabel {
+        font-size: 0.875rem;
+        color: var(--text-secondary, #757575);
+        font-weight: 400;
       }
     }
 
@@ -300,6 +341,16 @@ export class QuickExpenseComponent implements OnInit {
   // Computed values
   remainingMonthlyBudget = () => this.monthlyBudget() - this.currentMonthTotal();
   remainingDailyBudget = () => this.calculateRemainingDaily();
+  adjustedDailyBudget = () => {
+    const monthlyRemaining = this.remainingMonthlyBudget();
+    const today = new Date();
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    const currentDay = today.getDate();
+    const daysRemaining = Math.max(1, lastDayOfMonth - currentDay + 1);
+    
+    if (monthlyRemaining <= 0) return 0;
+    return monthlyRemaining / daysRemaining;
+  };
   expensePercentage = () => {
     const budget = this.monthlyBudget();
     if (budget <= 0) return 0;
