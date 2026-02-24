@@ -33,18 +33,18 @@ import { ExpenseCategory, ExpenseRecordFormData, EXPENSE_CATEGORY_LABELS } from 
   template: `
     <div class="quick-expense-form">
       <!-- Montant -->
-      <mat-form-field appearance="outline" class="amount-field">
+      <mat-form-field appearance="outline" class="amount-field" floatLabel="always">
         <mat-label>Montant</mat-label>
         <input 
           matInput 
           type="number" 
           [(ngModel)]="amount"
-          placeholder="0.00"
           step="0.01"
           min="0.01"
           required
           #amountInput>
         <span matSuffix>€</span>
+        <mat-hint>Saisissez le montant de la dépense</mat-hint>
       </mat-form-field>
 
       <!-- Catégories -->
