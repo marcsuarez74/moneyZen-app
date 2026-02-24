@@ -51,13 +51,13 @@ import { ExpenseRecordFormData, calculateExpensesByCategory } from '../../../../
           <div class="budget-item daily-budget">
             <span class="budget-label">
               Budget quotidien réel
-              <span class="help-icon" matTooltip="Calculé à partir de votre budget mensuel restant divisé par les jours restants dans le mois">ⓘ</span>
+              <span class="help-icon" matTooltip="Votre budget mensuel restant ({{ remainingMonthlyBudget() | currency:'EUR':'symbol':'1.2-2' }}) divisé par les jours restants jusqu'à votre prochaine paie ({{ daysUntilPayday() }} jours)">ⓘ</span>
             </span>
             <div class="budget-value-container">
               <span class="budget-value" [class.negative]="adjustedDailyBudget() < 0">
                 {{ adjustedDailyBudget() | currency:'EUR':'symbol':'1.2-2' }}
               </span>
-              <span class="budget-sublabel">/jour</span>
+              <span class="budget-sublabel">/jour pendant {{ daysUntilPayday() }} jours</span>
             </div>
           </div>
           
@@ -342,8 +342,7 @@ export class QuickExpenseComponent implements OnInit {
   // Computed values
   remainingMonthlyBudget = () => this.monthlyBudget() - this.currentMonthTotal();
   remainingDailyBudget = () => this.calculateRemainingDaily();
-  adjustedDailyBudget = () => {
-    const monthlyRemaining = this.remainingMonthlyBudget();
+  daysUntilPayday = () => {
     const today = new Date();
     const paydayDay = this.paydayDay();
     
@@ -361,7 +360,12 @@ export class QuickExpenseComponent implements OnInit {
     // Nombre de jours jusqu'à la prochaine paie (incluant aujourd'hui)
     const nextPaydayWithoutTime = new Date(nextPayday.getFullYear(), nextPayday.getMonth(), nextPayday.getDate());
     const diffTime = nextPaydayWithoutTime.getTime() - todayWithoutTime.getTime();
-    const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  };
+
+  adjustedDailyBudget = () => {
+    const monthlyRemaining = this.remainingMonthlyBudget();
+    const daysRemaining = this.daysUntilPayday();
     
     if (monthlyRemaining <= 0) return 0;
     return monthlyRemaining / Math.max(1, daysRemaining);
