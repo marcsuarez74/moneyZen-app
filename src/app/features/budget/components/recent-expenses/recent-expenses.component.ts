@@ -141,14 +141,15 @@ import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button 
-          mat-button 
-          color="warn"
-          *ngIf="filteredExpenses().length > 0"
-          (click)="confirmClearAll()">
-          <mat-icon>delete_sweep</mat-icon>
-          Tout effacer
-        </button>
+        @if (filteredExpenses().length > 0) {
+          <button 
+            mat-button 
+            color="warn"
+            (click)="confirmClearAll()">
+            <mat-icon>delete_sweep</mat-icon>
+            Tout effacer
+          </button>
+        }
       </mat-card-actions>
     </mat-card>
   `,

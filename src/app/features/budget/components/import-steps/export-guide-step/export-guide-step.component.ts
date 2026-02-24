@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,13 +19,12 @@ export interface BankGuide {
   selector: 'app-export-guide-step',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
     MatListModule,
     MatChipsModule
-  ],
+],
   templateUrl: './export-guide-step.component.html',
   styleUrls: ['./export-guide-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

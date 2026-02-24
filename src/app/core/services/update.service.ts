@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { BehaviorSubject, filter, map } from 'rxjs';
 
@@ -6,10 +6,9 @@ import { BehaviorSubject, filter, map } from 'rxjs';
   providedIn: 'root'
 })
 export class UpdateService {
+  private swUpdate = inject(SwUpdate);
   private updateAvailable$ = new BehaviorSubject<boolean>(false);
   updateAvailable = this.updateAvailable$.asObservable();
-
-  constructor(private swUpdate: SwUpdate) {}
 
   init(): void {
     if (this.swUpdate.isEnabled) {

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,12 +9,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   selector: 'app-file-upload-step',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
     MatProgressBarModule
-  ],
+],
   templateUrl: './file-upload-step.component.html',
   styleUrls: ['./file-upload-step.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
