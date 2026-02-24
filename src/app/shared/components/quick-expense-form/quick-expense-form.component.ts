@@ -29,6 +29,7 @@ import { ExpenseCategory, ExpenseRecordFormData, EXPENSE_CATEGORY_LABELS } from 
     ExpenseCategoryChipComponent
   ],
   providers: [provideNativeDateAdapter()],
+  styleUrls: ['./quick-expense-form.component.scss'],
   template: `
     <div class="quick-expense-form">
       <!-- Montant -->
