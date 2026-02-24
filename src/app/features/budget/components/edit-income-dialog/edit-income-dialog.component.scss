@@ -146,6 +146,63 @@ mat-dialog-content {
 }
 
 // Wrapper input avec style Fintech
+// Balance input with sign toggle
+.balance-input-row {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+}
+
+.sign-toggle-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  color: var(--text-secondary);
+  transition: all $transition-base;
+  flex-shrink: 0;
+  
+  @include media-down($sm) {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+  
+  &:hover {
+    background: var(--surface-variant);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+  
+  &.negative {
+    background: var(--error-light);
+    border-color: var(--error-color);
+    color: var(--error-color);
+    
+    &:hover {
+      background: var(--error-color);
+      color: var(--text-on-error);
+    }
+  }
+  
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    
+    @include media-down($sm) {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.balance-input {
+  flex: 1;
+}
+
 .input-wrapper {
   position: relative;
   display: flex;
