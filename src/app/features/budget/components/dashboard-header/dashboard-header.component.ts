@@ -1,10 +1,11 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PaydayInfo } from '../../../../services/payday-calculator.service';
+import { BackupService } from '../../../../services/backup.service';
 
 interface ChargesInfo {
   count: number;
@@ -31,6 +32,12 @@ export class DashboardHeaderComponent {
   readonly editExpenses = output<void>();
   readonly createNewBudget = output<void>();
   readonly importBank = output<void>();
+
+  private backupService = inject(BackupService);
+
+  async exportBackup(): Promise<void> {
+    await this.backupService.exportToZip();
+  }
 
   getHealthClass(): string {
     const health = this.budgetHealth() || 0;
