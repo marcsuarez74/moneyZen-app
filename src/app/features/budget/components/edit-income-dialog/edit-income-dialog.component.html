@@ -73,7 +73,8 @@
         <div class="input-wrapper" [class.positive]="isPositiveBalance()" [class.negative]="!isPositiveBalance() && incomeForm.get('accountBalance')?.value !== 0">
           <input 
             id="balance-input"
-            type="number" 
+            type="text"
+            inputmode="decimal"
             formControlName="accountBalance" 
             placeholder="0"
             class="fintech-input"
