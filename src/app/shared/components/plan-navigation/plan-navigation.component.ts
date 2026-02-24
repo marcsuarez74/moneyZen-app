@@ -6,7 +6,6 @@ import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 export interface PlanSection {
   id: string;
@@ -18,7 +17,7 @@ export interface PlanSection {
 @Component({
   selector: 'app-plan-navigation',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule],
   template: `
     <nav class="plan-navigation" [class.sticky]="sticky()">
       <div class="nav-header">
@@ -34,8 +33,7 @@ export interface PlanSection {
               class="nav-item"
               [attr.data-section]="section.id"
               (click)="scrollToSection(section.id)"
-              [matTooltip]="section.label"
-              matTooltipPosition="right">
+              [attr.aria-label]="section.label">
               <mat-icon>{{ section.icon }}</mat-icon>
               <span class="nav-label">{{ section.label }}</span>
             </button>
