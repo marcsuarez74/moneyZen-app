@@ -1,0 +1,248 @@
+<div class="backup-import-dialog">
+  <!-- Header -->
+  <div class="dialog-header">
+    <mat-icon class="header-icon">restore</mat-icon>
+    <h2 mat-dialog-title>Restaurer une sauvegarde</h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <!-- Étape 1: Sélection du fichier -->
+    @if (currentStep() === 'select') {
+      <div class="step-select">
+        @if (!isMobile) {
+          <!-- Desktop: Drag & Drop -->
+          <div 
+            class="drop-zone"
+            [class.drag-over]="isDragging()"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave()"
+            (drop)="onDrop($event)">
+            <mat-icon class="drop-icon">cloud_upload</mat-icon>
+            <p class="drop-text">
+              <strong>Glissez votre fichier ZIP ici</strong><br>
+              ou cliquez pour parcourir
+            </p>
+            <input 
+              type="file" 
+              #fileInput
+              accept=".zip"
+              (change)="onFileSelected($event)"
+              class="file-input">
+          </div>
+        } @else {
+          <!-- Mobile: Bouton de sélection -->
+          <div class="mobile-select">
+            <mat-icon class="mobile-icon">upload_file</mat-icon>
+            <p>Sélectionnez votre fichier de sauvegarde MoneyZen (.zip)</p>
+            <button 
+              mat-stroked-button 
+              color="primary"
+              (click)="fileInput.click()">
+              <mat-icon>folder_open</mat-icon>
+              Choisir un fichier
+            </button>
+            <input 
+              type="file" 
+              #fileInput
+              accept=".zip"
+              (change)="onFileSelected($event)"
+              class="file-input">
+          </div>
+        }
+        
+        <p class="info-text">
+          <mat-icon>info</mat-icon>
+          Le fichier doit être au format .zip généré par MoneyZen
+        </p>
+      </div>
+    }
+
+    <!-- Étape 2: Analyse en cours -->
+    @if (currentStep() === 'analyzing') {
+      <div class="step-analyzing">
+        <mat-icon class="analyzing-icon">hourglass_empty</mat-icon>
+        <h3>Analyse de la sauvegarde...</h3>
+        <mat-progress-bar 
+          mode="indeterminate" 
+          color="primary">
+        </mat-progress-bar>
+      </div>
+    }
+
+    <!-- Étape 3: Prévisualisation -->
+    @if (currentStep() === 'preview' && importSummary()) {
+      <div class="step-preview">
+        <h3>
+          <mat-icon>preview</mat-icon>
+          Contenu de la sauvegarde
+        </h3>
+        
+        <div class="summary-card">
+          <div class="summary-header">
+            <span class="backup-date">{{ importSummary()!.backupDate }}</span>
+            <span class="app-version">v{{ importSummary()!.appVersion }}</span>
+          </div>
+          
+          <div class="summary-items">
+            <div class="summary-item" [class.active]="importSummary()!.hasBudget">
+              <mat-icon>{{ importSummary()!.hasBudget ? 'check_circle' : 'cancel' }}</mat-icon>
+              <div class="item-info">
+                <span class="item-label">Budget configuré</span>
+                <span class="item-value">{{ importSummary()!.hasBudget ? 'Oui' : 'Non' }}</span>
+              </div>
+            </div>
+            
+            <div class="summary-item" [class.active]="importSummary()!.expenseCount > 0">
+              <mat-icon>{{ importSummary()!.expenseCount > 0 ? 'receipt_long' : 'receipt' }}</mat-icon>
+              <div class="item-info">
+                <span class="item-label">Dépenses enregistrées</span>
+                <span class="item-value">{{ importSummary()!.expenseCount }}</span>
+              </div>
+            </div>
+            
+            <div class="summary-item" [class.active]="importSummary()!.hasActivePlan">
+              <mat-icon>{{ importSummary()!.hasActivePlan ? 'trending_up' : 'show_chart' }}</mat-icon>
+              <div class="item-info">
+                <span class="item-label">Plan de redressement</span>
+                <span class="item-value">{{ importSummary()!.hasActivePlan ? 'Actif' : 'Aucun' }}</span>
+              </div>
+            </div>
+            
+            <div class="summary-item" [class.active]="importSummary()!.projectCount > 0">
+              <mat-icon>{{ importSummary()!.projectCount > 0 ? 'savings' : 'account_balance' }}</mat-icon>
+              <div class="item-info">
+                <span class="item-label">Projets d'épargne</span>
+                <span class="item-value">{{ importSummary()!.projectCount }}</span>
+              </div>
+            </div>
+            
+            <div class="summary-item">
+              <mat-icon>palette</mat-icon>
+              <div class="item-info">
+                <span class="item-label">Thème</span>
+                <span class="item-value">{{ importSummary()!.theme === 'dark' ? 'Sombre' : 'Clair' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        @if (importResult()?.warnings?.length) {
+          <div class="warnings-box">
+            <mat-icon>warning</mat-icon>
+            <ul>
+              @for (warning of importResult()?.warnings; track warning) {
+                <li>{{ warning }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        <button 
+          mat-raised-button 
+          color="primary"
+          class="continue-btn"
+          (click)="goToConfirm()">
+          Continuer
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    }
+
+    <!-- Étape 4: Confirmation -->
+    @if (currentStep() === 'confirm') {
+      <div class="step-confirm">
+        <div class="warning-box">
+          <mat-icon color="warn">warning</mat-icon>
+          <p>
+            <strong>Attention !</strong><br>
+            Cette action remplacera <strong>toutes vos données actuelles</strong> par celles de la sauvegarde.
+            Cette opération ne peut pas être annulée.
+          </p>
+        </div>
+
+        <mat-checkbox 
+          [(ngModel)]="confirmImport"
+          color="primary"
+          class="confirm-checkbox">
+          Je comprends que cela remplacera mes données actuelles
+        </mat-checkbox>
+
+        <div class="confirm-actions">
+          <button mat-button (click)="goBackToPreview()">
+            <mat-icon>arrow_back</mat-icon>
+            Retour
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary"
+            [disabled]="!confirmImport"
+            (click)="startImport()">
+            Confirmer l'import
+            <mat-icon>download_done</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Étape 5: Import en cours -->
+    @if (currentStep() === 'importing') {
+      <div class="step-importing">
+        <h3>Restauration en cours...</h3>
+        <div class="progress-info">
+          <mat-icon>sync</mat-icon>
+          <span>{{ importStage() }}</span>
+        </div>
+        <mat-progress-bar 
+          mode="determinate" 
+          [value]="importProgress()"
+          color="primary">
+        </mat-progress-bar>
+        <span class="progress-percent">{{ importProgress() }}%</span>
+      </div>
+    }
+
+    <!-- Étape 6: Succès -->
+    @if (currentStep() === 'success') {
+      <div class="step-success">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+        <h3>Import réussi !</h3>
+        <p>Vos données ont été restaurées avec succès.</p>
+        <p class="hint">L'application va se recharger pour appliquer les changements.</p>
+      </div>
+    }
+
+    <!-- Étape 7: Erreur -->
+    @if (currentStep() === 'error') {
+      <div class="step-error">
+        <mat-icon class="error-icon">error</mat-icon>
+        <h3>Import échoué</h3>
+        @if (importResult()?.errors?.length) {
+          <ul class="error-list">
+            @for (error of importResult()?.errors; track error) {
+              <li>{{ error }}</li>
+            }
+          </ul>
+        }
+        <p class="rollback-info">
+          <mat-icon>info</mat-icon>
+          Vos données précédentes ont été automatiquement restaurées.
+        </p>
+        <button 
+          mat-stroked-button 
+          color="primary"
+          (click)="resetToSelect()">
+          <mat-icon>refresh</mat-icon>
+          Réessayer
+        </button>
+      </div>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    @if (currentStep() === 'select' || currentStep() === 'error') {
+      <button mat-button (click)="closeDialog()">
+        Annuler
+      </button>
+    }
+  </mat-dialog-actions>
+</div>
