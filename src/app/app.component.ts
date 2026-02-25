@@ -11,7 +11,6 @@ import { PlanAutoUpdateService } from './services/plan-auto-update.service';
 import { VersionDisplayComponent } from './shared/components/version-display/version-display.component';
 import { UpdateNotificationComponent } from './shared/components/update-notification/update-notification.component';
 import { InstallPromptComponent } from './shared/components/install-prompt/install-prompt.component';
-import { BottomNavigationComponent } from './shared/components/bottom-navigation/bottom-navigation.component';
 import { UpdateService } from './core/services/update.service';
 import { ResponsiveService } from './services/responsive.service';
 
@@ -29,10 +28,9 @@ import { ResponsiveService } from './services/responsive.service';
     VersionDisplayComponent,
     UpdateNotificationComponent,
     InstallPromptComponent,
-    BottomNavigationComponent
   ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
   private storageService = inject(LocalStorageService);
@@ -55,28 +53,28 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.planAutoUpdate.destroy();
   }
-  
+
   toggleTheme(): void {
     this.isDarkMode = !this.isDarkMode;
     this.storageService.saveThemePreference(this.isDarkMode);
     this.applyTheme();
   }
-  
+
   toggleSidenav(): void {
     this.sidenav.toggle();
   }
-  
+
   closeSidenav(): void {
     this.sidenav.close();
   }
-  
+
   resetAllData(): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ?')) {
       this.storageService.clearAll();
       window.location.reload();
     }
   }
-  
+
   private applyTheme(): void {
     if (this.isDarkMode) {
       document.body.classList.add('dark-theme');

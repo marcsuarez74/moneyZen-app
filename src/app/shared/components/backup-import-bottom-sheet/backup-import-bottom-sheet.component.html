@@ -1,0 +1,238 @@
+<div class="bottom-sheet-container">
+  <!-- Handle pour swipe -->
+  <div
+    class="bottom-sheet-handle"
+    (click)="onSwipeDown()"
+    (keydown.enter)="onSwipeDown()"
+    (keydown.escape)="closeBottomSheet()"
+    tabindex="0"
+    role="button"
+    aria-label="Fermer le panneau"
+  >
+    <div class="handle-bar"></div>
+  </div>
+
+  <!-- Header fixe -->
+  <div class="bottom-sheet-header">
+    <mat-icon class="header-icon">restore</mat-icon>
+    <h2>Restaurer une sauvegarde</h2>
+    <button mat-icon-button class="close-btn" (click)="closeBottomSheet()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Contenu scrollable -->
+  <div class="bottom-sheet-content">
+    <!-- Étape 1: Sélection -->
+    @if (currentStep() === 'select') {
+      <div class="step-select">
+        <div class="mobile-select">
+          <mat-icon class="mobile-icon">upload_file</mat-icon>
+          <p>Sélectionnez votre fichier de sauvegarde MoneyZen (.zip)</p>
+          <button mat-stroked-button color="primary" class="select-file-btn" (click)="fileInput.click()">
+            <mat-icon>folder_open</mat-icon>
+            Choisir un fichier
+          </button>
+          <input type="file" #fileInput accept=".zip" (change)="onFileSelected($event)" class="file-input" />
+        </div>
+
+        <div class="info-box">
+          <mat-icon>info</mat-icon>
+          <p>Le fichier doit être au format .zip généré par MoneyZen</p>
+        </div>
+      </div>
+    }
+
+    <!-- Étape 2: Analyse -->
+    @if (currentStep() === 'analyzing') {
+      <div class="step-analyzing">
+        <div class="spinner-container">
+          <mat-spinner diameter="48" color="primary"></mat-spinner>
+        </div>
+        <h3>Analyse de la sauvegarde...</h3>
+        <p class="subtitle">Vérification des données</p>
+      </div>
+    }
+
+    <!-- Étape 3: Prévisualisation -->
+    @if (currentStep() === 'preview' && importSummary()) {
+      <div class="step-preview">
+        <div class="preview-header">
+          <mat-icon>preview</mat-icon>
+          <h3>Contenu de la sauvegarde</h3>
+        </div>
+
+        <div class="summary-header">
+          <span class="date">{{ importSummary()!.backupDate }}</span>
+          <span class="version">v{{ importSummary()!.appVersion }}</span>
+        </div>
+
+        <div class="summary-list">
+          <div class="summary-item" [class.has-data]="importSummary()!.hasBudget">
+            <div class="item-icon">
+              <mat-icon>{{ importSummary()!.hasBudget ? 'check_circle' : 'cancel' }}</mat-icon>
+            </div>
+            <div class="item-content">
+              <span class="label">Budget configuré</span>
+              <span class="value">{{ importSummary()!.hasBudget ? 'Oui' : 'Non' }}</span>
+            </div>
+          </div>
+
+          <div class="summary-item" [class.has-data]="importSummary()!.expenseCount > 0">
+            <div class="item-icon">
+              <mat-icon>{{ importSummary()!.expenseCount > 0 ? 'receipt_long' : 'receipt' }}</mat-icon>
+            </div>
+            <div class="item-content">
+              <span class="label">Dépenses</span>
+              <span class="value">{{ importSummary()!.expenseCount }}</span>
+            </div>
+          </div>
+
+          <div class="summary-item" [class.has-data]="importSummary()!.hasActivePlan">
+            <div class="item-icon">
+              <mat-icon>{{ importSummary()!.hasActivePlan ? 'trending_up' : 'show_chart' }}</mat-icon>
+            </div>
+            <div class="item-content">
+              <span class="label">Plan de redressement</span>
+              <span class="value">{{ importSummary()!.hasActivePlan ? 'Actif' : 'Aucun' }}</span>
+            </div>
+          </div>
+
+          <div class="summary-item" [class.has-data]="importSummary()!.projectCount > 0">
+            <div class="item-icon">
+              <mat-icon>{{ importSummary()!.projectCount > 0 ? 'savings' : 'account_balance' }}</mat-icon>
+            </div>
+            <div class="item-content">
+              <span class="label">Projets</span>
+              <span class="value">{{ importSummary()!.projectCount }}</span>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <div class="item-icon theme-icon">
+              <mat-icon>palette</mat-icon>
+            </div>
+            <div class="item-content">
+              <span class="label">Thème</span>
+              <span class="value">{{ importSummary()!.theme === 'dark' ? 'Sombre' : 'Clair' }}</span>
+            </div>
+          </div>
+        </div>
+
+        @if (importResult()?.warnings?.length) {
+          <div class="warnings-box">
+            <mat-icon>warning</mat-icon>
+            <ul>
+              @for (warning of importResult()?.warnings; track warning) {
+                <li>{{ warning }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Étape 4: Confirmation -->
+    @if (currentStep() === 'confirm') {
+      <div class="step-confirm">
+        <div class="warning-box">
+          <mat-icon>warning</mat-icon>
+          <div class="warning-content">
+            <strong>Attention !</strong>
+            <p>Cette action remplacera <strong>toutes vos données actuelles</strong> par celles de la sauvegarde.</p>
+          </div>
+        </div>
+
+        <mat-checkbox [(ngModel)]="confirmImport" color="primary" class="confirm-checkbox">
+          Je comprends que cela remplacera mes données
+        </mat-checkbox>
+      </div>
+    }
+
+    <!-- Étape 5: Import en cours -->
+    @if (currentStep() === 'importing') {
+      <div class="step-importing">
+        <h3>Restauration en cours...</h3>
+        <div class="stage-info">{{ importStage() }}</div>
+        <div class="progress-container">
+          <mat-progress-bar mode="determinate" [value]="importProgress()" color="primary"> </mat-progress-bar>
+          <span class="percent">{{ importProgress() }}%</span>
+        </div>
+      </div>
+    }
+
+    <!-- Étape 6: Succès -->
+    @if (currentStep() === 'success') {
+      <div class="step-success">
+        <div class="success-icon-wrapper">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <h3>Import réussi !</h3>
+        <p>Vos données ont été restaurées.</p>
+        <div class="reload-hint">
+          <mat-icon>refresh</mat-icon>
+          <span>Rechargement...</span>
+        </div>
+      </div>
+    }
+
+    <!-- Étape 7: Erreur -->
+    @if (currentStep() === 'error') {
+      <div class="step-error">
+        <div class="error-icon-wrapper">
+          <mat-icon>error</mat-icon>
+        </div>
+        <h3>Import échoué</h3>
+        @if (importResult()?.errors?.length) {
+          <div class="error-list">
+            @for (error of importResult()?.errors; track error) {
+              <div class="error-item">{{ error }}</div>
+            }
+          </div>
+        }
+        <div class="rollback-info">
+          <mat-icon>info</mat-icon>
+          <span>Données précédentes restaurées</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Footer fixe avec actions -->
+  <div class="bottom-sheet-footer">
+    @if (currentStep() === 'select' || currentStep() === 'error') {
+      <button mat-stroked-button class="action-btn secondary" (click)="closeBottomSheet()">Annuler</button>
+    }
+
+    @if (currentStep() === 'preview') {
+      <button mat-raised-button color="primary" class="action-btn primary" (click)="goToConfirm()">
+        Continuer
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    }
+
+    @if (currentStep() === 'confirm') {
+      <button mat-button class="action-btn secondary" (click)="goBackToPreview()">
+        <mat-icon>arrow_back</mat-icon>
+        Retour
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="action-btn primary"
+        [disabled]="!confirmImport"
+        (click)="startImport()"
+      >
+        Confirmer
+        <mat-icon>download_done</mat-icon>
+      </button>
+    }
+
+    @if (currentStep() === 'error') {
+      <button mat-raised-button color="primary" class="action-btn primary" (click)="resetToSelect()">
+        <mat-icon>refresh</mat-icon>
+        Réessayer
+      </button>
+    }
+  </div>
+</div>

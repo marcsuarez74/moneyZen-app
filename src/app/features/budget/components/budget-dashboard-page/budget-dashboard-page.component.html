@@ -1,17 +1,19 @@
 <div class="budget-page">
-  <app-dashboard-header
-    [hasUserData]="budgetStore.hasUserData()"
-    [isNegativeBalance]="isNegativeBalance()"
-    [paydayInfo]="paydayInfo()"
-    [paydayMessage]="paydayMessage()"
-    [upcomingCharges]="upcomingCharges()"
-    [expenseCount]="budgetStore.expenses().length"
-    [budgetHealth]="budgetAnalysis()?.metrics?.budgetHealth"
-    (editIncome)="openEditIncome()"
-    (editExpenses)="openEditExpenses()"
-    (createNewBudget)="createNewBudget()"
-    (importBank)="openBankImport()">
-  </app-dashboard-header>
+  @if (budgetStore.hasUserData()) {
+    <app-dashboard-header
+      [hasUserData]="budgetStore.hasUserData()"
+      [isNegativeBalance]="isNegativeBalance()"
+      [paydayInfo]="paydayInfo()"
+      [paydayMessage]="paydayMessage()"
+      [upcomingCharges]="upcomingCharges()"
+      [expenseCount]="budgetStore.expenses().length"
+      [budgetHealth]="budgetAnalysis()?.metrics?.budgetHealth"
+      (editIncome)="openEditIncome()"
+      (editExpenses)="openEditExpenses()"
+      (createNewBudget)="createNewBudget()"
+      (importBank)="openBankImport()">
+    </app-dashboard-header>
+  }
 
   @if (!budgetStore.hasUserData()) {
     <app-welcome-card></app-welcome-card>

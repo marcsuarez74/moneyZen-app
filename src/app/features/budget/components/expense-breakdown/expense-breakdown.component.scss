@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // EXPENSE BREAKDOWN - Responsive & Dark Theme
@@ -9,7 +9,7 @@
   border-radius: $radius-xl;
   padding: $space-lg;
   border: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-lg;
@@ -24,13 +24,13 @@
   margin-bottom: $space-xl;
   padding-bottom: $space-lg;
   border-bottom: 1px solid var(--border);
-  
+
   @include media-down($md) {
     flex-direction: column;
     gap: $space-md;
     margin-bottom: $space-lg;
   }
-  
+
   @include media-down($sm) {
     margin-bottom: $space-md;
     padding-bottom: $space-md;
@@ -45,7 +45,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-primary);
-  
+
   @include media-down($sm) {
     font-size: 1.125rem;
   }
@@ -63,7 +63,7 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
-  
+
   @include media-down($md) {
     align-items: flex-start;
   }
@@ -74,7 +74,7 @@
   font-weight: 700;
   color: var(--error-color);
   letter-spacing: -1px;
-  
+
   @include media-down($sm) {
     font-size: 1.5rem;
   }
@@ -100,12 +100,12 @@ categories-list {
   animation: slideUp 0.6s ease forwards;
   animation-delay: var(--delay, 0s);
   opacity: 0;
-  
+
   @include media-down($sm) {
     gap: $space-sm;
     margin-bottom: $space-sm;
   }
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -121,22 +121,22 @@ categories-list {
   flex-shrink: 0;
   box-shadow: $shadow-sm;
   transition: transform 0.2s ease;
-  
+
   @include media-down($sm) {
     width: 44px;
     height: 44px;
     border-radius: $radius-sm;
   }
-  
+
   &:hover {
     transform: scale(1.05);
   }
-  
+
   mat-icon {
     font-size: 26px;
     width: 26px;
     height: 26px;
-    
+
     @include media-down($sm) {
       font-size: 22px;
       width: 22px;
@@ -158,7 +158,7 @@ categories-list {
   justify-content: space-between;
   align-items: center;
   gap: $space-md;
-  
+
   @include media-down($sm) {
     flex-wrap: wrap;
   }
@@ -170,7 +170,7 @@ categories-list {
   gap: $space-sm;
   min-width: 0;
   flex: 1;
-  
+
   @include media-down($sm) {
     flex-direction: column;
     align-items: flex-start;
@@ -187,7 +187,7 @@ categories-list {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
-  
+
   @include media-down($sm) {
     max-width: none;
     font-size: 0.875rem;
@@ -199,7 +199,7 @@ categories-list {
   font-weight: 700;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
-  
+
   @include media-down($sm) {
     font-size: 0.8125rem;
   }
@@ -210,7 +210,7 @@ categories-list {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-  
+
   @include media-down($sm) {
     margin-left: auto;
   }
@@ -257,14 +257,14 @@ categories-list {
   background: var(--warning-light);
   border: 1px solid var(--warning-color);
   border-radius: $radius-md;
-  
+
   @include media-down($sm) {
     flex-direction: column;
     align-items: flex-start;
     padding: $space-md;
     margin-top: $space-lg;
   }
-  
+
   mat-icon {
     font-size: 22px;
     width: 22px;
@@ -272,13 +272,13 @@ categories-list {
     color: var(--warning-color);
     flex-shrink: 0;
   }
-  
+
   span {
     flex: 1;
     font-size: 0.875rem;
     color: var(--text-primary);
   }
-  
+
   .action-link {
     font-size: 0.8125rem;
     font-weight: 600;
@@ -290,11 +290,11 @@ categories-list {
     border-radius: 8px;
     transition: background $transition-fast;
     flex-shrink: 0;
-    
+
     &:hover {
       background: rgba(255, 183, 77, 0.1);
     }
-    
+
     @include media-down($sm) {
       align-self: stretch;
       text-align: center;

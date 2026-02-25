@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // DASHBOARD HEADER - Responsive & Dark Theme
@@ -15,7 +15,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  
+
   &.negative {
     border-bottom-color: var(--error-color);
     background: linear-gradient(180deg, var(--error-light) 0%, var(--surface) 100%);
@@ -30,13 +30,13 @@
   align-items: center;
   justify-content: space-between;
   gap: $space-xl;
-  
+
   @include media-down($lg) {
     flex-wrap: wrap;
     gap: $space-md;
     padding: 16px;
   }
-  
+
   @include media-down($sm) {
     padding: 12px;
     gap: $space-sm;
@@ -50,7 +50,7 @@
   gap: $space-lg;
   flex: 1;
   min-width: 0;
-  
+
   @include media-down($lg) {
     flex: 1 1 100%;
     justify-content: space-between;
@@ -72,12 +72,12 @@
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.5px;
-  
+
   @include media-down($sm) {
     font-size: 1.375rem;
     gap: 8px;
   }
-  
+
   mat-icon {
     font-size: 28px;
     width: 28px;
@@ -86,7 +86,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    
+
     @include media-down($sm) {
       font-size: 24px;
       width: 24px;
@@ -100,13 +100,13 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  
+
   &.urgent {
     .subtitle-badge {
       background: var(--warning-light);
       color: var(--warning-dark);
       border-color: var(--warning-color);
-      
+
       mat-icon {
         color: var(--warning-color);
       }
@@ -125,13 +125,13 @@
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--info-dark);
-  
+
   mat-icon {
     font-size: 16px;
     width: 16px;
     height: 16px;
   }
-  
+
   @include media-down($sm) {
     font-size: 0.75rem;
     padding: 4px 10px;
@@ -149,18 +149,18 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--success-dark);
-  
+
   @include media-down($sm) {
     font-size: 0.75rem;
     padding: 4px 10px;
   }
-  
+
   mat-icon {
     font-size: 16px;
     width: 16px;
     height: 16px;
   }
-  
+
   &.tight {
     background: var(--warning-light);
     border-color: var(--warning-color);
@@ -179,59 +179,59 @@
   border-radius: $radius-lg;
   transition: all $transition-base;
   min-width: 140px;
-  
+
   @include media-down($md) {
     min-width: auto;
     padding: 10px 12px;
   }
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-md;
   }
-  
+
   &.healthy {
     border-color: var(--success-color);
     background: var(--success-light);
-    
+
     .health-icon {
       background: var(--gradient-success);
       color: var(--text-on-success);
     }
-    
+
     .health-fill {
       background: var(--gradient-success);
     }
   }
-  
+
   &.warning {
     border-color: var(--warning-color);
     background: var(--warning-light);
-    
+
     .health-icon {
       background: var(--gradient-warning);
       color: var(--text-on-warning);
     }
-    
+
     .health-fill {
       background: var(--gradient-warning);
     }
   }
-  
+
   &.critical {
     border-color: var(--error-color);
     background: var(--error-light);
-    
+
     .health-icon {
       background: var(--gradient-error);
       color: var(--text-on-error);
     }
-    
+
     .health-fill {
       background: var(--gradient-error);
     }
   }
-  
+
   .health-icon {
     width: 40px;
     height: 40px;
@@ -240,17 +240,17 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    
+
     @include media-down($sm) {
       width: 36px;
       height: 36px;
     }
-    
+
     mat-icon {
       font-size: 22px;
       width: 22px;
       height: 22px;
-      
+
       @include media-down($sm) {
         font-size: 18px;
         width: 18px;
@@ -258,30 +258,30 @@
       }
     }
   }
-  
+
   .health-info {
     display: flex;
     flex-direction: column;
     gap: 2px;
     flex: 1;
-    
+
     .health-label {
       font-size: 0.75rem;
       color: var(--text-secondary);
       font-weight: 500;
     }
-    
+
     .health-value {
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--text-primary);
-      
+
       @include media-down($sm) {
         font-size: 1.125rem;
       }
     }
   }
-  
+
   .health-bar {
     width: 100%;
     height: 4px;
@@ -289,7 +289,7 @@
     border-radius: 2px;
     overflow: hidden;
     margin-top: 4px;
-    
+
     .health-fill {
       height: 100%;
       border-radius: 2px;
@@ -303,17 +303,17 @@
   display: flex;
   align-items: center;
   gap: $space-md;
-  
+
   @include media-down($lg) {
     order: 3;
     flex: 1 1 100%;
     justify-content: flex-start;
   }
-  
+
   @include media-down($md) {
     flex-wrap: wrap;
   }
-  
+
   .stat-card {
     display: flex;
     align-items: center;
@@ -323,16 +323,16 @@
     border: 1px solid var(--border);
     border-radius: $radius-lg;
     transition: all $transition-base;
-    
+
     @include media-down($sm) {
       padding: 10px 12px;
     }
-    
+
     &:hover {
       transform: translateY(-2px);
       box-shadow: $shadow-md;
     }
-    
+
     .stat-icon {
       width: 44px;
       height: 44px;
@@ -341,17 +341,17 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      
+
       @include media-down($sm) {
         width: 38px;
         height: 38px;
       }
-      
+
       mat-icon {
         font-size: 22px;
         width: 22px;
         height: 22px;
-        
+
         @include media-down($sm) {
           font-size: 18px;
           width: 18px;
@@ -359,18 +359,18 @@
         }
       }
     }
-    
+
     .stat-content {
       display: flex;
       flex-direction: column;
       gap: 2px;
-      
+
       .stat-value {
         font-size: 1rem;
         font-weight: 700;
         color: var(--text-primary);
       }
-      
+
       .stat-label {
         font-size: 0.75rem;
         color: var(--text-secondary);
@@ -379,38 +379,38 @@
       }
     }
   }
-  
+
   .charges-card {
     .stat-icon {
       background: var(--warning-light);
       color: var(--warning-color);
     }
-    
+
     &.urgent {
       border-color: var(--error-color);
       background: var(--error-light);
-      
+
       .stat-icon {
         background: var(--error-light);
         color: var(--error-color);
       }
-      
+
       .stat-value {
         color: var(--error-color);
       }
     }
   }
-  
+
   .alert-card {
     border-color: var(--error-color);
     background: var(--error-light);
     animation: pulse 2s infinite;
-    
+
     .stat-icon {
       background: var(--error-light);
       color: var(--error-color);
     }
-    
+
     .stat-value {
       color: var(--error-color);
     }
@@ -418,10 +418,11 @@
 }
 
 @keyframes pulse {
-  0%, 100% { 
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(var(--error-color-rgb), 0.4);
   }
-  50% { 
+  50% {
     box-shadow: 0 0 0 8px rgba(var(--error-color-rgb), 0);
   }
 }
@@ -431,11 +432,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  
+
   @include media-down($lg) {
     order: 2;
   }
-  
+
   .action-btn {
     width: 44px;
     height: 44px;
@@ -448,12 +449,12 @@
     border: 1px solid var(--border);
     transition: all $transition-fast;
     position: relative;
-    
+
     @include media-down($sm) {
       width: 40px;
       height: 40px;
     }
-    
+
     &:hover {
       background: var(--surface);
       color: var(--text-primary);
@@ -461,19 +462,19 @@
       transform: translateY(-2px);
       box-shadow: $shadow-sm;
     }
-    
+
     mat-icon {
       font-size: 22px;
       width: 22px;
       height: 22px;
-      
+
       @include media-down($sm) {
         font-size: 20px;
         width: 20px;
         height: 20px;
       }
     }
-    
+
     &.has-badge {
       .btn-badge {
         position: absolute;
@@ -495,14 +496,14 @@
       }
     }
   }
-  
+
   .divider {
     width: 1px;
     height: 32px;
     background: var(--border);
     margin: 0 4px;
   }
-  
+
   .new-budget-btn {
     height: 44px;
     padding: 0 20px;
@@ -512,27 +513,27 @@
     background: var(--gradient-primary);
     box-shadow: 0 4px 16px rgba(var(--primary-color-rgb), 0.4);
     border: none;
-    
+
     @include media-down($sm) {
       width: 44px;
       height: 44px;
       padding: 0;
       min-width: 44px;
-      
+
       span {
         display: none;
       }
-      
+
       mat-icon {
         margin: 0;
       }
     }
-    
+
     &:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.5);
     }
-    
+
     mat-icon {
       font-size: 20px;
       width: 20px;

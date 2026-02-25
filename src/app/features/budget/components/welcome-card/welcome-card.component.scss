@@ -1,21 +1,26 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // WELCOME CARD - Responsive & Dark Theme
 // ============================================
 
+:host {
+  display: block;
+}
+
 .empty-state {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 64px);
   padding: $space-2xl $space-xl;
-  
+  box-sizing: border-box;
+
   @include media-down($md) {
     min-height: calc(100vh - 160px);
     padding: $space-xl $space-lg;
   }
-  
+
   @include media-down($sm) {
     padding: $space-lg $space-md;
   }
@@ -29,18 +34,18 @@
   box-shadow: $shadow-xl;
   border: 1px solid var(--border);
   background: var(--surface);
-  
+
   .welcome-illustration {
     position: relative;
     height: 240px;
     overflow: hidden;
-    
+
     @include media-down($sm) {
       height: 180px;
     }
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 0;
       left: 0;
@@ -48,22 +53,22 @@
       height: 100px;
       background: linear-gradient(180deg, transparent 0%, var(--surface) 100%);
     }
-    
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
-  
+
   mat-card-content {
     padding: $space-xl;
-    
+
     @include media-down($sm) {
       padding: $space-lg;
     }
   }
-  
+
   h2 {
     margin: 0 0 8px 0;
     font-size: 2rem;
@@ -73,35 +78,35 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -1px;
-    
+
     @include media-down($sm) {
       font-size: 1.625rem;
     }
   }
-  
+
   .subtitle {
     color: var(--text-secondary);
     font-size: 1.125rem;
     margin-bottom: $space-xl;
     font-weight: 500;
-    
+
     @include media-down($sm) {
       font-size: 1rem;
       margin-bottom: $space-lg;
     }
   }
-  
+
   .features-preview {
     display: flex;
     flex-direction: column;
     gap: $space-md;
     margin-bottom: $space-xl;
-    
+
     @include media-down($sm) {
       margin-bottom: $space-lg;
       gap: 12px;
     }
-    
+
     .feature-item {
       display: flex;
       align-items: center;
@@ -111,21 +116,21 @@
       border-radius: $radius-lg;
       border: 1px solid var(--border);
       transition: all $transition-base;
-      
+
       &:hover {
         transform: translateX(8px);
         box-shadow: $shadow-sm;
       }
-      
+
       @include media-down($sm) {
         padding: $space-sm;
         border-radius: $radius-md;
-        
+
         &:hover {
           transform: translateX(4px);
         }
       }
-      
+
       mat-icon {
         width: 44px;
         height: 44px;
@@ -137,94 +142,100 @@
         font-size: 22px;
         background: var(--gradient-primary);
         color: var(--text-on-primary);
-        
+
         @include media-down($sm) {
           width: 38px;
           height: 38px;
           font-size: 20px;
         }
       }
-      
+
       span {
         font-size: 1rem;
         font-weight: 600;
         color: var(--text-primary);
-        
+
         @include media-down($sm) {
           font-size: 0.875rem;
         }
       }
     }
   }
-  
-    .cta-section {
-      .cta-button {
-        width: 100%;
-        height: 56px;
-        font-size: 1.0625rem;
-        font-weight: 600;
-        border-radius: $radius-lg;
-        background: var(--gradient-primary);
-        box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.4);
-        margin-bottom: $space-md;
-        transition: all $transition-base;
-        
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 32px rgba(var(--primary-color-rgb), 0.5);
-        }
-        
-        @include media-down($sm) {
-          height: 50px;
-          font-size: 1rem;
-          border-radius: 14px;
-        }
-        
-        mat-icon {
-          margin-right: 10px;
-          font-size: 22px;
-        }
+
+  .cta-section {
+    .cta-button {
+      width: 100%;
+      height: 56px;
+      font-size: 1.0625rem;
+      font-weight: 600;
+      border-radius: $radius-lg;
+      background: var(--gradient-primary);
+      box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.4);
+      margin-bottom: $space-md;
+      transition: all $transition-base;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(var(--primary-color-rgb), 0.5);
       }
-      
-      .restore-button {
-        width: 100%;
-        height: 48px;
+
+      @include media-down($sm) {
+        height: 50px;
         font-size: 1rem;
-        font-weight: 600;
-        border-radius: $radius-lg;
-        border: 2px solid var(--primary-color);
-        color: var(--primary-color);
-        background: transparent;
-        margin-bottom: $space-md;
-        transition: all $transition-base;
-        display: flex;
+        border-radius: 14px;
+      }
+
+      mat-icon {
+        margin-right: 10px;
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        
-        &:hover {
-          background: rgba(var(--primary-color-rgb), 0.1);
-          transform: translateY(-1px);
-        }
-        
-        @include media-down($sm) {
-          height: 44px;
-          font-size: 0.9375rem;
-          border-radius: 14px;
-        }
-        
-        mat-icon {
-          margin-right: 8px;
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-          flex-shrink: 0;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
+        flex-shrink: 0;
       }
-      
-      .privacy-note {
+    }
+
+    .restore-button {
+      width: 100%;
+      height: 48px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: $radius-lg;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      background: transparent;
+      margin-bottom: $space-md;
+      transition: all $transition-base;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background: rgba(var(--primary-color-rgb), 0.1);
+        transform: translateY(-1px);
+      }
+
+      @include media-down($sm) {
+        height: 44px;
+        font-size: 0.9375rem;
+        border-radius: 14px;
+      }
+
+      mat-icon {
+        margin-right: 8px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .privacy-note {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -235,14 +246,14 @@
       padding: $space-sm;
       background: var(--success-light);
       border-radius: $radius-md;
-      
+
       @include media-down($sm) {
         flex-direction: column;
         text-align: center;
         gap: 4px;
         font-size: 0.8125rem;
       }
-      
+
       mat-icon {
         font-size: 18px;
         width: 18px;

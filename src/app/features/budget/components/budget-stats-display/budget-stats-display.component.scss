@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // BUDGET STATS DISPLAY - Responsive & Dark Theme
@@ -8,15 +8,15 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: $space-md;
-  
+
   @include media-down($lg) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   @include media-down($md) {
     gap: $space-sm;
   }
-  
+
   @include media-down($sm) {
     grid-template-columns: 1fr;
   }
@@ -32,29 +32,29 @@
   min-height: 200px;
   display: flex;
   flex-direction: column;
-  
+
   @include media-down($lg) {
     grid-column: span 2;
   }
-  
+
   @include media-down($sm) {
     grid-column: span 1;
     min-height: 160px;
   }
-  
+
   &.negative {
     background: var(--gradient-error);
   }
-  
+
   .hero-bg {
     position: absolute;
     inset: 0;
-    background: 
-      radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    background:
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
     pointer-events: none;
   }
-  
+
   .hero-content {
     position: relative;
     padding: $space-lg;
@@ -63,102 +63,108 @@
     height: 100%;
     color: var(--text-on-primary);
     z-index: 1;
-    
+
     @include media-down($sm) {
       padding: $space-md;
     }
   }
-  
+
   .hero-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: $space-md;
   }
-  
+
   .hero-label {
     font-size: 0.875rem;
     opacity: 0.9;
     font-weight: 500;
   }
-  
+
   .hero-badge {
     display: flex;
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     font-size: 0.8125rem;
     font-weight: 600;
-    
+
     mat-icon {
       font-size: 16px;
       width: 16px;
       height: 16px;
     }
-    
-    &.healthy { background: rgba(76, 175, 80, 0.3); }
-    &.warning { background: rgba(255, 152, 0, 0.3); }
-    &.critical { background: rgba(244, 67, 54, 0.3); }
+
+    &.healthy {
+      background: rgba(76, 175, 80, 0.3);
+    }
+    &.warning {
+      background: rgba(255, 152, 0, 0.3);
+    }
+    &.critical {
+      background: rgba(244, 67, 54, 0.3);
+    }
   }
-  
+
   .hero-balance {
     display: flex;
     align-items: baseline;
     gap: 4px;
     margin-bottom: $space-lg;
-    
+
     @include media-down($sm) {
       margin-bottom: $space-md;
     }
-    
+
     .balance-currency {
       font-size: 2rem;
       font-weight: 600;
       opacity: 0.8;
-      
+
       @include media-down($sm) {
         font-size: 1.5rem;
       }
     }
-    
+
     .balance-amount {
       font-size: 3rem;
       font-weight: 700;
       letter-spacing: -1px;
-      
+
       @include media-down($sm) {
         font-size: 2rem;
       }
     }
   }
-  
+
   .hero-footer {
     margin-top: auto;
     display: flex;
     gap: $space-lg;
     padding-top: $space-md;
-    border-top: 1px solid rgba(255,255,255,0.2);
-    
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+
     @include media-down($sm) {
       gap: $space-md;
       flex-wrap: wrap;
     }
-    
+
     .footer-item {
       display: flex;
       align-items: center;
       gap: 8px;
       font-size: 0.875rem;
       opacity: 0.9;
-      
+
       &.warning {
         opacity: 1;
         font-weight: 600;
       }
-      
+
       mat-icon {
         font-size: 18px;
         width: 18px;
@@ -177,16 +183,16 @@
   gap: $space-md;
   border: 1px solid var(--border);
   transition: all $transition-base;
-  
+
   @include media-down($sm) {
     padding: $space-md;
   }
-  
+
   &:hover {
     transform: translateY(-4px);
     box-shadow: $shadow-md;
   }
-  
+
   .card-icon {
     width: 48px;
     height: 48px;
@@ -195,18 +201,18 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    
+
     @include media-down($sm) {
       width: 40px;
       height: 40px;
       border-radius: 12px;
     }
-    
+
     mat-icon {
       font-size: 24px;
       width: 24px;
       height: 24px;
-      
+
       @include media-down($sm) {
         font-size: 20px;
         width: 20px;
@@ -214,7 +220,7 @@
       }
     }
   }
-  
+
   .card-content {
     display: flex;
     flex-direction: column;
@@ -222,67 +228,67 @@
     flex: 1;
     min-width: 0;
   }
-  
+
   .card-label {
     font-size: 0.8125rem;
     color: var(--text-secondary);
     font-weight: 500;
   }
-  
+
   .card-value {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: -0.5px;
-    
+
     @include media-down($sm) {
       font-size: 1.25rem;
     }
   }
-  
+
   .card-subtitle {
     font-size: 0.75rem;
     color: var(--text-secondary);
   }
-  
+
   // Card colors adaptatives
   &.income .card-icon {
     background: rgba(var(--success-color-rgb), 0.15);
     color: var(--success-color);
   }
-  
+
   &.expenses .card-icon {
     background: rgba(var(--error-color-rgb), 0.15);
     color: var(--error-color);
   }
-  
+
   &.remaining {
     .card-icon {
       background: rgba(var(--success-color-rgb), 0.15);
       color: var(--success-color);
     }
-    
+
     &.negative .card-icon {
       background: rgba(var(--error-color-rgb), 0.15);
       color: var(--error-color);
     }
   }
-  
+
   &.health {
     .card-content {
       justify-content: center;
     }
-    
+
     &.healthy .card-icon {
       background: rgba(var(--success-color-rgb), 0.15);
       color: var(--success-color);
     }
-    
+
     &.warning .card-icon {
       background: rgba(var(--warning-color-rgb), 0.15);
       color: var(--warning-color);
     }
-    
+
     &.critical .card-icon {
       background: rgba(var(--error-color-rgb), 0.15);
       color: var(--error-color);
@@ -301,7 +307,7 @@
     font-size: 1.75rem;
     font-weight: 700;
     color: var(--text-primary);
-    
+
     @include media-down($sm) {
       font-size: 1.5rem;
     }
