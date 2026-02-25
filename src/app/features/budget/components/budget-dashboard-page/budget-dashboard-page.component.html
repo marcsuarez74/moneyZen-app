@@ -4,14 +4,12 @@
       [hasUserData]="budgetStore.hasUserData()"
       [isNegativeBalance]="isNegativeBalance()"
       [paydayInfo]="paydayInfo()"
-      [paydayMessage]="paydayMessage()"
-      [upcomingCharges]="upcomingCharges()"
       [expenseCount]="budgetStore.expenses().length"
-      [budgetHealth]="budgetAnalysis()?.metrics?.budgetHealth"
       (editIncome)="openEditIncome()"
       (editExpenses)="openEditExpenses()"
       (createNewBudget)="createNewBudget()"
-      (importBank)="openBankImport()">
+      (importBank)="openBankImport()"
+    >
     </app-dashboard-header>
   }
 
@@ -22,22 +20,20 @@
   @if (budgetStore.hasUserData()) {
     <main class="dashboard-layout responsive-container">
       <div class="dashboard-content">
-        
         @if (isNegativeBalance() && recoveryData(); as recovery) {
           <section class="dashboard-section section-alert">
             <app-debt-recovery-plan
               [data]="recovery"
               (acceptPlan)="onAcceptRecoveryPlan($event)"
-              (adjustPlan)="onAdjustRecoveryPlan($event)">
+              (adjustPlan)="onAdjustRecoveryPlan($event)"
+            >
             </app-debt-recovery-plan>
           </section>
         }
-        
+
         @if (priorityInsights().length > 0) {
           <section class="dashboard-section section-insights">
-            <app-budget-insights
-              [insights]="priorityInsights()"
-              (actionClicked)="handleInsightAction($event)">
+            <app-budget-insights [insights]="priorityInsights()" (actionClicked)="handleInsightAction($event)">
             </app-budget-insights>
           </section>
         }
@@ -48,7 +44,8 @@
               [summary]="summary"
               [userData]="budgetStore.userData()"
               [analysis]="budgetAnalysis()"
-              [paydayInfo]="paydayInfo()">
+              [paydayInfo]="paydayInfo()"
+            >
             </app-budget-stats-display>
           </section>
         }
@@ -70,7 +67,8 @@
                     <app-expense-breakdown
                       [summary]="summary"
                       [expenses]="budgetStore.expenses()"
-                      [thresholds]="categoryThresholds">
+                      [thresholds]="categoryThresholds"
+                    >
                     </app-expense-breakdown>
                   }
                 </div>
@@ -90,9 +88,7 @@
                 </ng-template>
                 <div class="tab-panel">
                   @if (budgetStore.budgetSummary(); as summary) {
-                    <app-budget-recommendations
-                      [analysis]="budgetAnalysis()"
-                      [summary]="summary">
+                    <app-budget-recommendations [analysis]="budgetAnalysis()" [summary]="summary">
                     </app-budget-recommendations>
                   }
                 </div>
@@ -114,8 +110,13 @@
                         <div class="scenario-header">
                           <div class="scenario-icon">
                             <mat-icon>
-                              {{ scenario.name === 'Conservateur' ? 'trending_down' : 
-                                 scenario.name === 'Optimisé' ? 'trending_up' : 'trending_flat' }}
+                              {{
+                                scenario.name === 'Conservateur'
+                                  ? 'trending_down'
+                                  : scenario.name === 'Optimisé'
+                                    ? 'trending_up'
+                                    : 'trending_flat'
+                              }}
                             </mat-icon>
                           </div>
                           <h3>{{ scenario.name }}</h3>
@@ -123,11 +124,11 @@
                         <div class="scenario-body">
                           <div class="scenario-metric">
                             <span class="metric-label">Épargne mensuelle</span>
-                            <span class="metric-value">{{ scenario.monthlySavings | currency:'EUR' }}</span>
+                            <span class="metric-value">{{ scenario.monthlySavings | currency: 'EUR' }}</span>
                           </div>
                           <div class="scenario-metric">
                             <span class="metric-label">Projection annuelle</span>
-                            <span class="metric-value main">{{ scenario.yearlyProjection | currency:'EUR' }}</span>
+                            <span class="metric-value main">{{ scenario.yearlyProjection | currency: 'EUR' }}</span>
                           </div>
                         </div>
                       </article>
@@ -138,7 +139,6 @@
             </mat-tab-group>
           </div>
         </section>
-        
       </div>
     </main>
   }

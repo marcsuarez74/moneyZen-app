@@ -24,6 +24,10 @@ export interface ActivePlan {
   history: MonthlyHistory[];
   isActive: boolean;
   startDate?: string; // Date de début du plan au format ISO (optionnel)
+  // Données pour recalculer le budget ajusté
+  overdraftAmount: number;
+  remainingBudget: number;
+  monthlyIncome: number;
 }
 
 export interface PlanState {
@@ -33,13 +37,13 @@ export interface PlanState {
 
 const initialState: PlanState = {
   activePlan: null,
-  pastPlans: []
+  pastPlans: [],
 };
 
 export const PlanStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed((state) => ({
+  withComputed(state => ({
     isPlanActive: computed(() => state.activePlan()?.isActive ?? false),
     currentMonthProgress: computed(() => {
       const plan = state.activePlan();
@@ -52,17 +56,19 @@ export const PlanStore = signalStore(
     isLastMonth: computed(() => {
       const plan = state.activePlan();
       return plan ? plan.currentMonth >= plan.durationMonths : false;
-    })
+    }),
   })),
-  withMethods((store) => ({
-    createPlan(plan: Omit<ActivePlan, 'id' | 'createdAt' | 'currentMonth' | 'history' | 'isActive'>) {
+  withMethods(store => ({
+    createPlan(
+      plan: Omit<ActivePlan, 'id' | 'createdAt' | 'currentMonth' | 'history' | 'isActive'>
+    ) {
       const newPlan: ActivePlan = {
         ...plan,
         id: crypto.randomUUID(),
         createdAt: new Date(),
         currentMonth: 1,
         history: [],
-        isActive: true
+        isActive: true,
       };
       patchState(store, { activePlan: newPlan });
     },
@@ -79,32 +85,35 @@ export const PlanStore = signalStore(
         plannedBudget: plan.monthlyBudget,
         actualSpending,
         completedAt: new Date(),
-        notes
+        notes,
       };
 
       if (plan.currentMonth >= plan.durationMonths) {
-        patchState(store, (state) => ({
+        patchState(store, state => ({
           activePlan: null,
-          pastPlans: [...state.pastPlans, { ...plan, isActive: false, history: [...plan.history, newHistory] }]
+          pastPlans: [
+            ...state.pastPlans,
+            { ...plan, isActive: false, history: [...plan.history, newHistory] },
+          ],
         }));
       } else {
         patchState(store, {
           activePlan: {
             ...plan,
             currentMonth: plan.currentMonth + 1,
-            history: [...plan.history, newHistory]
-          }
+            history: [...plan.history, newHistory],
+          },
         });
       }
     },
 
     cancelPlan() {
-      patchState(store, (state) => {
+      patchState(store, state => {
         if (!state.activePlan) return state;
         const cancelledPlan = { ...state.activePlan, isActive: false };
         return {
           activePlan: null,
-          pastPlans: [...state.pastPlans, cancelledPlan]
+          pastPlans: [...state.pastPlans, cancelledPlan],
         };
       });
     },
@@ -125,9 +134,9 @@ export const PlanStore = signalStore(
         activePlan: {
           ...plan,
           monthlyBudget,
-          dailyBudget
-        }
+          dailyBudget,
+        },
       });
-    }
+    },
   }))
 );

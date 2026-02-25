@@ -1,0 +1,17 @@
+@if (paydayInfo(); as info) {
+  <div class="daily-budget-info" [class]="getUrgencyClass()" [matTooltip]="getTooltipText()">
+    <div class="budget-main">
+      <span class="budget-amount" [class]="getBudgetStatusClass()">
+        {{ info.realisticDailyBudget | currency: 'EUR' : 'symbol' : '1.0-0' }}
+      </span>
+      <span class="budget-label">/jour</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="payday-countdown">
+      <mat-icon>event</mat-icon>
+      <span class="countdown-value">{{ getPaydayLabel() }}</span>
+    </div>
+  </div>
+}

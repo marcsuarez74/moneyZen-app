@@ -1,0 +1,112 @@
+@use "../../../../styles/variables" as *;
+
+.health-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  background: var(--surface-variant);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  cursor: default;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .value {
+    position: relative;
+    z-index: 1;
+    font-family: "SF Mono", "Monaco", "Consolas", monospace;
+  }
+
+  .indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    border-radius: 0 0 0 20px;
+    transition: width 0.3s ease;
+    opacity: 0.7;
+  }
+
+  // Status variants
+  &.healthy {
+    background: var(--success-light);
+    border-color: var(--success-color);
+    color: var(--success-dark);
+
+    mat-icon {
+      color: var(--success-color);
+    }
+
+    .indicator {
+      background: var(--success-color);
+    }
+  }
+
+  &.warning {
+    background: var(--warning-light);
+    border-color: var(--warning-color);
+    color: var(--warning-dark);
+
+    mat-icon {
+      color: var(--warning-color);
+    }
+
+    .indicator {
+      background: var(--warning-color);
+    }
+  }
+
+  &.critical {
+    background: var(--error-light);
+    border-color: var(--error-color);
+    color: var(--error-dark);
+    animation: pulse-subtle 2s infinite;
+
+    mat-icon {
+      color: var(--error-color);
+    }
+
+    .indicator {
+      background: var(--error-color);
+    }
+  }
+}
+
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--error-color-rgb), 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(var(--error-color-rgb), 0);
+  }
+}
+
+// Mobile
+@media (max-width: 640px) {
+  .health-badge {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}

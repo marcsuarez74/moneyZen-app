@@ -1,131 +1,81 @@
 <header class="dashboard-header" [class.negative]="isNegativeBalance()">
   <div class="header-container">
-    <!-- Left: Brand & Info -->
+    <!-- Left: Brand & Budget Info -->
     <div class="header-brand">
       <div class="brand-content">
         <h1 class="brand-title">
           <mat-icon>account_balance_wallet</mat-icon>
           Mon Budget
         </h1>
-        
+
         @if (paydayInfo(); as payday) {
-          <div class="brand-subtitle" [class.urgent]="payday.daysUntilPayday <= 5">
-            <div class="subtitle-badge">
-              <mat-icon>event</mat-icon>
-              <span>{{ paydayMessage() }}</span>
-            </div>
-            
-            @if (payday.actualDailyBudget > 0) {
-              <div class="daily-budget" [class.tight]="payday.actualDailyBudget < 20">
-                <mat-icon>speed</mat-icon>
-                <span>{{ payday.actualDailyBudget | currency:'EUR' }}/jour</span>
-              </div>
-            }
+          <div class="brand-subtitle">
+            <app-daily-budget-info [paydayInfo]="payday" />
           </div>
         }
       </div>
-
-      @if (hasUserData() && budgetHealth() !== undefined) {
-        <div class="health-widget" [class]="getHealthClass()">
-          <div class="health-icon">
-            <mat-icon>{{ getHealthIcon() }}</mat-icon>
-          </div>
-          <div class="health-info">
-            <span class="health-label">Santé</span>
-            <span class="health-value">{{ budgetHealth() }}%</span>
-          </div>
-          <div class="health-bar">
-            <div class="health-fill" [style.width.%]="budgetHealth()"></div>
-          </div>
-        </div>
-      }
     </div>
 
-    <!-- Center: Quick Stats -->
-    @if (hasUserData()) {
-      <div class="header-stats">
-        @if (upcomingCharges(); as charges) {
-          @if (charges.count > 0) {
-            <div class="stat-card charges-card" [class.urgent]="charges.total > 500">
-              <div class="stat-icon">
-                <mat-icon>receipt_long</mat-icon>
-              </div>
-              <div class="stat-content">
-                <span class="stat-value">{{ charges.total | currency:'EUR':'symbol':'1.0-0' }}</span>
-                <span class="stat-label">{{ charges.count }} charge{{ charges.count > 1 ? 's' : '' }} à venir</span>
-              </div>
-            </div>
-          }
-        }
-
-        @if (isNegativeBalance()) {
-          <div class="stat-card alert-card">
-            <div class="stat-icon">
-              <mat-icon>warning</mat-icon>
-            </div>
-            <div class="stat-content">
-              <span class="stat-value">Déficit</span>
-              <span class="stat-label">Solde négatif</span>
-            </div>
-          </div>
-        }
-      </div>
-    }
-
-    <!-- Right: Actions -->
-    <div class="header-actions">
+    <!-- Right: Desktop Actions -->
+    <div class="header-actions-desktop">
       @if (hasUserData()) {
-        <button 
-          mat-icon-button 
+        <button
+          mat-icon-button
           class="action-btn"
           [class.has-badge]="expenseCount() > 0"
           (click)="editExpenses.emit()"
-          matTooltip="Modifier les charges">
+          matTooltip="Modifier les charges"
+        >
           <mat-icon>receipt_long</mat-icon>
           @if (expenseCount() > 0) {
             <span class="btn-badge">{{ expenseCount() }}</span>
           }
         </button>
 
-        <button 
-          mat-icon-button 
-          class="action-btn"
-          (click)="editIncome.emit()"
-          matTooltip="Modifier les revenus">
+        <button mat-icon-button class="action-btn" (click)="editIncome.emit()" matTooltip="Modifier les revenus">
           <mat-icon>payments</mat-icon>
         </button>
 
-        <button 
-          mat-icon-button 
-          class="action-btn"
-          (click)="importBank.emit()"
-          matTooltip="Importer relevé bancaire">
+        <button mat-icon-button class="action-btn" (click)="importBank.emit()" matTooltip="Importer relevé bancaire">
           <mat-icon>upload_file</mat-icon>
         </button>
 
-        <button
-          mat-icon-button
-          class="action-btn"
-          (click)="exportBackup()"
-          matTooltip="Exporter une sauvegarde">
+        <button mat-icon-button class="action-btn" (click)="exportBackup()" matTooltip="Exporter une sauvegarde">
           <mat-icon>download</mat-icon>
         </button>
 
         <div class="divider"></div>
 
-        <button 
-          mat-raised-button 
-          class="new-budget-btn"
-          color="primary"
-          (click)="createNewBudget.emit()">
+        <button mat-raised-button class="new-budget-btn" color="primary" (click)="createNewBudget.emit()">
           <mat-icon>add</mat-icon>
           <span>Nouveau</span>
         </button>
       } @else {
-        <button 
-          mat-raised-button 
-          color="primary"
-          routerLink="/budget/setup">
+        <button mat-raised-button color="primary" routerLink="/budget/setup">
+          <mat-icon>add</mat-icon>
+          Commencer
+        </button>
+      }
+    </div>
+
+    <!-- Right: Mobile Actions -->
+    <div class="header-actions-mobile">
+      @if (hasUserData()) {
+        <!-- Quick New Budget Button -->
+        <button mat-raised-button class="quick-new-btn" color="primary" (click)="createNewBudget.emit()">
+          <mat-icon>add</mat-icon>
+          <span>Nouveau</span>
+        </button>
+
+        <!-- Menu Button -->
+        <button mat-icon-button class="menu-btn" (click)="isMenuOpen.set(true)" [class.has-badge]="expenseCount() > 0">
+          <mat-icon>menu</mat-icon>
+          @if (expenseCount() > 0) {
+            <span class="menu-badge">{{ expenseCount() }}</span>
+          }
+        </button>
+      } @else {
+        <button mat-raised-button color="primary" routerLink="/budget/setup">
           <mat-icon>add</mat-icon>
           Commencer
         </button>
@@ -133,3 +83,64 @@
     </div>
   </div>
 </header>
+
+<!-- Mobile Menu Overlay -->
+@if (isMenuOpen()) {
+  <div class="mobile-menu-overlay" [class.open]="isMenuOpen()" (click)="isMenuOpen.set(false)"></div>
+}
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" [class.open]="isMenuOpen()">
+  <div class="mobile-menu-header">
+    <h2 class="menu-title">Actions</h2>
+    <button mat-icon-button class="close-btn" (click)="isMenuOpen.set(false)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="mobile-menu-content">
+    @if (hasUserData()) {
+      <button class="mobile-menu-item primary" (click)="createNewBudget.emit(); isMenuOpen.set(false)">
+        <mat-icon>add</mat-icon>
+        <span>Nouveau budget</span>
+      </button>
+
+      <button class="mobile-menu-item" (click)="editExpenses.emit(); isMenuOpen.set(false)">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Modifier les charges</span>
+        @if (expenseCount() > 0) {
+          <span class="badge">{{ expenseCount() }}</span>
+        }
+      </button>
+
+      <button class="mobile-menu-item" (click)="editIncome.emit(); isMenuOpen.set(false)">
+        <mat-icon>payments</mat-icon>
+        <span>Modifier les revenus</span>
+      </button>
+
+      <button class="mobile-menu-item" (click)="importBank.emit(); isMenuOpen.set(false)">
+        <mat-icon>upload_file</mat-icon>
+        <span>Importer relevé</span>
+      </button>
+
+      <button class="mobile-menu-item" (click)="exportBackup(); isMenuOpen.set(false)">
+        <mat-icon>download</mat-icon>
+        <span>Exporter sauvegarde</span>
+      </button>
+    }
+  </div>
+
+  @if (hasUserData()) {
+    <div class="mobile-menu-footer">
+      <button
+        mat-raised-button
+        class="new-budget-mobile"
+        color="primary"
+        (click)="createNewBudget.emit(); isMenuOpen.set(false)"
+      >
+        <mat-icon>add</mat-icon>
+        <span>Créer un nouveau budget</span>
+      </button>
+    </div>
+  }
+</div>

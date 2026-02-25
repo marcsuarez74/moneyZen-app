@@ -1,4 +1,14 @@
-import { Component, input, output, computed, signal, ViewChild, ElementRef, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  computed,
+  signal,
+  ViewChild,
+  ElementRef,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +25,10 @@ import { BudgetStore } from '../../../../store/budget.store';
 import { ExpenseRecordStore } from '../../../../store/expense-record.store';
 import { QuickExpenseComponent } from '../quick-expense/quick-expense.component';
 import { RecentExpensesComponent } from '../recent-expenses/recent-expenses.component';
-import { PlanNavigationComponent, PlanSection } from '../../../../shared/components/plan-navigation/plan-navigation.component';
+import {
+  PlanNavigationComponent,
+  PlanSection,
+} from '../../../../shared/components/plan-navigation/plan-navigation.component';
 
 export interface RecoveryPlanData {
   overdraftAmount: number;
@@ -62,10 +75,10 @@ export interface MonthlyTarget {
     CurrencyPipe,
     QuickExpenseComponent,
     RecentExpensesComponent,
-    PlanNavigationComponent
+    PlanNavigationComponent,
   ],
   templateUrl: './debt-recovery-plan.component.html',
-  styleUrls: ['./debt-recovery-plan.component.scss']
+  styleUrls: ['./debt-recovery-plan.component.scss'],
 })
 export class DebtRecoveryPlanComponent implements OnInit {
   @ViewChild('durationSection') durationSection!: ElementRef;
@@ -78,7 +91,12 @@ export class DebtRecoveryPlanComponent implements OnInit {
   private expenseStore = inject(ExpenseRecordStore);
 
   readonly data = input.required<RecoveryPlanData>();
-  readonly acceptPlan = output<{ duration: number; monthlyBudget: number; dailyBudget: number; adopted: boolean }>();
+  readonly acceptPlan = output<{
+    duration: number;
+    monthlyBudget: number;
+    dailyBudget: number;
+    adopted: boolean;
+  }>();
   readonly adjustPlan = output<number>();
 
   readonly Math = Math;
@@ -96,10 +114,10 @@ export class DebtRecoveryPlanComponent implements OnInit {
 
     // Calculer la date de paie de ce mois
     const currentMonthPayday = new Date(today.getFullYear(), today.getMonth(), paydayDay);
-    
+
     // Déterminer si le plan a déjà commencé (la paie de ce mois est déjà passée)
     const hasStarted = todayWithoutTime > currentMonthPayday;
-    
+
     // Calculer la prochaine date de paie
     let nextPayday: Date;
     if (hasStarted) {
@@ -117,43 +135,43 @@ export class DebtRecoveryPlanComponent implements OnInit {
     // Calculer le nombre de jours jusqu'à la prochaine paie
     const diffTime = nextPayday.getTime() - todayWithoutTime.getTime();
     const daysUntilStart = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     // Formater la date de début
-    const startDateFormatted = hasStarted 
+    const startDateFormatted = hasStarted
       ? currentMonthPayday.toLocaleDateString('fr-FR', {
           weekday: 'long',
           day: 'numeric',
           month: 'long',
-          year: 'numeric'
+          year: 'numeric',
         })
       : nextPayday.toLocaleDateString('fr-FR', {
           weekday: 'long',
           day: 'numeric',
           month: 'long',
-          year: 'numeric'
+          year: 'numeric',
         });
-    
+
     // Calculer la date de fin (date de début + durée en mois)
     const endDate = new Date(hasStarted ? currentMonthPayday : nextPayday);
     endDate.setMonth(endDate.getMonth() + durationMonths);
-    
+
     const endDateFormatted = endDate.toLocaleDateString('fr-FR', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
-    
+
     // Info sur le mois actuel
     const currentMonthInfo = today.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
-    
+
     return {
       startDate: hasStarted ? currentMonthPayday : nextPayday,
       startDateFormatted,
       daysUntilStart,
       currentMonthInfo,
       hasStarted,
-      endDateFormatted
+      endDateFormatted,
     };
   });
 
@@ -232,15 +250,15 @@ export class DebtRecoveryPlanComponent implements OnInit {
       const endDate = new Date(startDate);
       endDate.setMonth(endDate.getMonth() + 1);
 
-      const startDateStr = startDate.toLocaleDateString('fr-FR', { 
-        day: 'numeric', 
+      const startDateStr = startDate.toLocaleDateString('fr-FR', {
+        day: 'numeric',
         month: 'long',
-        year: startDate.getFullYear() !== endDate.getFullYear() ? 'numeric' : undefined
+        year: startDate.getFullYear() !== endDate.getFullYear() ? 'numeric' : undefined,
       });
-      const endDateStr = endDate.toLocaleDateString('fr-FR', { 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric' 
+      const endDateStr = endDate.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
       });
       const monthName = `${startDateStr} - ${endDateStr}`;
 
@@ -261,7 +279,7 @@ export class DebtRecoveryPlanComponent implements OnInit {
         availableBudget,
         dailyBudget: availableBudget / this.daysInMonth(),
         overdraftReduction: actualRecovery,
-        isAchievable: availableBudget >= minLiving
+        isAchievable: availableBudget >= minLiving,
       });
 
       currentOverdraft = newOverdraft;
@@ -290,13 +308,18 @@ export class DebtRecoveryPlanComponent implements OnInit {
   // Configuration des sections pour la navigation
   readonly planSections = computed((): PlanSection[] => [
     { id: 'plan-info', label: 'Fonctionnement', icon: 'info', visible: true },
-    { id: 'plan-next-step', label: 'Prochaine étape', icon: 'event_available', visible: this.planInfo().daysUntilStart >= 0 },
+    {
+      id: 'plan-next-step',
+      label: 'Prochaine étape',
+      icon: 'event_available',
+      visible: this.planInfo().daysUntilStart >= 0,
+    },
     { id: 'plan-situation', label: 'Votre situation', icon: 'account_balance', visible: true },
     { id: 'plan-strategy', label: 'Stratégie', icon: 'lightbulb', visible: true },
     { id: 'plan-expenses', label: 'Suivi des dépenses', icon: 'add_circle', visible: true },
     { id: 'plan-duration', label: 'Durée', icon: 'schedule', visible: true },
     { id: 'plan-evolution', label: 'Évolution', icon: 'flag', visible: true },
-    { id: 'plan-tips', label: 'Conseils', icon: 'tips_and_updates', visible: true }
+    { id: 'plan-tips', label: 'Conseils', icon: 'tips_and_updates', visible: true },
   ]);
 
   ngOnInit(): void {
@@ -325,7 +348,7 @@ export class DebtRecoveryPlanComponent implements OnInit {
       duration: this.targetMonths(),
       monthlyBudget: this.recommendedMonthlyBudget(),
       dailyBudget: this.recommendedDailyBudget(),
-      adopted: true
+      adopted: true,
     });
 
     // Créer et sauvegarder le plan dans le store
@@ -336,21 +359,25 @@ export class DebtRecoveryPlanComponent implements OnInit {
       dailyBudget: this.recommendedDailyBudget(),
       paydayDay: userData?.paydayDay || 1,
       startDate: planInfo.startDate.toISOString(),
-      targets: this.monthlyTargets()
+      targets: this.monthlyTargets(),
+      overdraftAmount: this.data().overdraftAmount,
+      remainingBudget: this.data().remainingBudget,
+      monthlyIncome: this.data().monthlyIncome,
     });
 
     // Persister dans le localStorage
     this.storageService.savePlanState({
       activePlan: this.planStore.activePlan(),
-      pastPlans: this.planStore.pastPlans()
+      pastPlans: this.planStore.pastPlans(),
     });
 
     console.log('✅ Plan sauvegardé avec succès !');
-    
-    const alertMessage = planInfo.daysUntilStart > 0 
-      ? `Plan adopté et sauvegardé ! 🎯\n\nVotre plan démarrera le ${planInfo.startDateFormatted}.\n\n📊 Objectif : remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois.\n💰 Budget mensuel : ${this.recommendedMonthlyBudget().toFixed(0)}€\n📅 Budget quotidien : ${this.recommendedDailyBudget().toFixed(0)}€/jour\n\n⚠️ N'oubliez pas : Mettez à jour votre solde bancaire le jour de votre paie pour un suivi précis !`
-      : `Plan adopté et sauvegardé ! 🎯\n\nVotre plan démarre aujourd'hui !\n\n📊 Objectif : remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois.\n💰 Budget mensuel : ${this.recommendedMonthlyBudget().toFixed(0)}€\n📅 Budget quotidien : ${this.recommendedDailyBudget().toFixed(0)}€/jour\n\n⚠️ N'oubliez pas : Mettez à jour votre solde bancaire le jour de votre paie pour un suivi précis !`;
-    
+
+    const alertMessage =
+      planInfo.daysUntilStart > 0
+        ? `Plan adopté et sauvegardé ! 🎯\n\nVotre plan démarrera le ${planInfo.startDateFormatted}.\n\n📊 Objectif : remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois.\n💰 Budget mensuel : ${this.recommendedMonthlyBudget().toFixed(0)}€\n📅 Budget quotidien : ${this.recommendedDailyBudget().toFixed(0)}€/jour\n\n⚠️ N'oubliez pas : Mettez à jour votre solde bancaire le jour de votre paie pour un suivi précis !`
+        : `Plan adopté et sauvegardé ! 🎯\n\nVotre plan démarre aujourd'hui !\n\n📊 Objectif : remonter votre découvert de ${this.data().overdraftAmount}€ sur ${this.targetMonths()} mois.\n💰 Budget mensuel : ${this.recommendedMonthlyBudget().toFixed(0)}€\n📅 Budget quotidien : ${this.recommendedDailyBudget().toFixed(0)}€/jour\n\n⚠️ N'oubliez pas : Mettez à jour votre solde bancaire le jour de votre paie pour un suivi précis !`;
+
     alert(alertMessage);
   }
 }
