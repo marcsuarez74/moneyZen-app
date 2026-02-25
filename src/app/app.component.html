@@ -3,11 +3,11 @@
     <button mat-icon-button (click)="toggleSidenav()" aria-label="Menu" class="menu-button hide-desktop">
       <mat-icon>menu</mat-icon>
     </button>
-    
+
     <span class="app-title" routerLink="/">MoneyZen</span>
-    
+
     <span class="spacer"></span>
-    
+
     <nav class="desktop-nav">
       <a mat-button routerLink="/budget" routerLinkActive="active-link">
         <mat-icon>account_balance_wallet</mat-icon>
@@ -17,14 +17,21 @@
         <mat-icon>flag</mat-icon>
         <span class="hide-mobile">Projets</span>
       </a>
-
+      <a mat-button routerLink="/settings" routerLinkActive="active-link">
+        <mat-icon>settings</mat-icon>
+        <span class="hide-mobile">Paramètres</span>
+      </a>
     </nav>
-    
+
     <app-version-display></app-version-display>
-    
+
     <app-install-prompt></app-install-prompt>
 
-    <button class="theme-toggle-btn" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Mode clair' : 'Mode sombre'">
+    <button
+      class="theme-toggle-btn"
+      (click)="toggleTheme()"
+      [attr.aria-label]="isDarkMode ? 'Mode clair' : 'Mode sombre'"
+    >
       <div class="theme-toggle-slider" [class.dark]="isDarkMode">
         <div class="theme-toggle-thumb">
           <mat-icon class="sun-icon">light_mode</mat-icon>
@@ -45,11 +52,19 @@
           <mat-icon matListItemIcon>flag</mat-icon>
           <span matListItemTitle>Mes Projets</span>
         </a>
+        <a mat-list-item routerLink="/settings" routerLinkActive="active" (click)="closeSidenav()">
+          <mat-icon matListItemIcon>settings</mat-icon>
+          <span matListItemTitle>Paramètres</span>
+        </a>
 
-        
         <mat-divider></mat-divider>
-        
-        <a mat-list-item (click)="resetAllData(); closeSidenav()" (keydown.enter)="resetAllData(); closeSidenav()" tabindex="0">
+
+        <a
+          mat-list-item
+          (click)="resetAllData(); closeSidenav()"
+          (keydown.enter)="resetAllData(); closeSidenav()"
+          tabindex="0"
+        >
           <mat-icon matListItemIcon color="warn">delete_forever</mat-icon>
           <span matListItemTitle>Réinitialiser tout</span>
         </a>
@@ -62,6 +77,6 @@
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
-  
+
   <app-update-notification></app-update-notification>
 </div>

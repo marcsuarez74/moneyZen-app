@@ -1,0 +1,181 @@
+<div class="notification-preferences">
+  <!-- Status Card -->
+  <div
+    class="status-card"
+    [class.status-enabled]="isEnabled()"
+    [class.status-denied]="isPermissionDenied()"
+    [class.status-disabled]="!isEnabled() && !isPermissionDenied()"
+  >
+    <div class="status-icon">
+      <mat-icon>{{ getNotificationStatusIcon() }}</mat-icon>
+    </div>
+    <div class="status-info">
+      <h3 class="status-title">{{ getNotificationStatusText() }}</h3>
+      <p class="status-description" *ngIf="isEnabled()">Vous recevrez des alertes directement sur votre appareil</p>
+      <p class="status-description" *ngIf="!isEnabled() && !isPermissionDenied()">
+        Activez les notifications pour recevoir des alertes de budget
+      </p>
+      <p class="status-description" *ngIf="isPermissionDenied()">
+        Modifiez les paramètres de votre navigateur pour autoriser les notifications
+      </p>
+    </div>
+    <div class="status-action" *ngIf="!notificationSupported">
+      <span>Non supporté</span>
+    </div>
+    <div class="status-action" *ngIf="notificationSupported && !isPermissionDenied()">
+      <button
+        mat-raised-button
+        class="toggle-btn"
+        [class.btn-enable]="!isEnabled()"
+        [class.btn-disable]="isEnabled()"
+        [disabled]="loading()"
+        (click)="toggleNotifications()"
+      >
+        <ng-container *ngIf="!loading(); else loadingTemplate">
+          <mat-icon>{{ isEnabled() ? 'notifications_off' : 'notifications_active' }}</mat-icon>
+          <span>{{ isEnabled() ? 'Désactiver' : 'Activer' }}</span>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <span class="btn-loading-text">{{ isEnabled() ? 'Désactivation...' : 'Activation...' }}</span>
+        </ng-template>
+      </button>
+    </div>
+  </div>
+
+  <!-- Warning for unsupported browser -->
+  <div class="warning-box" *ngIf="!notificationSupported">
+    <mat-icon>warning</mat-icon>
+    <p>Votre navigateur ne supporte pas les notifications push. Essays avec Chrome, Edge ou Firefox.</p>
+  </div>
+
+  <!-- Warning for denied permission -->
+  <div class="warning-box" *ngIf="isPermissionDenied() && notificationSupported">
+    <mat-icon>block</mat-icon>
+    <div>
+      <p>
+        Les notifications sont bloquées. Pour les activer :
+        <strong>Chrome/Edge:</strong> Cliquez sur l'icône 🔒 dans la barre d'adresse → Autorisations de site →
+        Notifications → Autoriser
+      </p>
+    </div>
+  </div>
+
+  <!-- Preferences Grid (only when enabled) -->
+  <div class="preferences-grid" *ngIf="isEnabled()" [@fadeIn]>
+    <!-- Budget Alerts -->
+    <div class="preference-card" [class.active]="preferences().budgetAlerts">
+      <div class="preference-header">
+        <div class="preference-icon">
+          <mat-icon>account_balance_wallet</mat-icon>
+        </div>
+        <div class="preference-info">
+          <h4 class="preference-title">
+            Alertes de budget
+            <mat-slide-toggle
+              class="custom-toggle"
+              [checked]="preferences().budgetAlerts"
+              (change)="onBudgetAlertsChange($event.checked)"
+              color="primary"
+            >
+            </mat-slide-toggle>
+          </h4>
+          <p class="preference-description">Soyez alerté quand vous approchez de vos limites</p>
+        </div>
+      </div>
+
+      <div class="threshold-section" *ngIf="preferences().budgetAlerts">
+        <div class="threshold-label">
+          <span>Seuil d'alerte</span>
+          <span class="threshold-value">{{ preferences().budgetAlertThreshold }}%</span>
+        </div>
+        <mat-slider class="threshold-slider" min="50" max="100" step="5" discrete>
+          <input
+            matSliderThumb
+            [value]="preferences().budgetAlertThreshold"
+            (valueChange)="onBudgetThresholdChange($event)"
+          />
+        </mat-slider>
+      </div>
+    </div>
+
+    <!-- Weekly Summaries -->
+    <div class="preference-card" [class.active]="preferences().weeklySummaries">
+      <div class="preference-header">
+        <div class="preference-icon">
+          <mat-icon>summarize</mat-icon>
+        </div>
+        <div class="preference-info">
+          <h4 class="preference-title">
+            Résumés hebdo
+            <mat-slide-toggle
+              class="custom-toggle"
+              [checked]="preferences().weeklySummaries"
+              (change)="onWeeklySummariesChange($event.checked)"
+              color="primary"
+            >
+            </mat-slide-toggle>
+          </h4>
+          <p class="preference-description">Recevez un récapitulatif de vos dépenses chaque semaine</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Reminders -->
+    <div class="preference-card" [class.active]="preferences().dailyReminders">
+      <div class="preference-header">
+        <div class="preference-icon">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="preference-info">
+          <h4 class="preference-title">
+            Rappels quotidiens
+            <mat-slide-toggle
+              class="custom-toggle"
+              [checked]="preferences().dailyReminders"
+              (change)="onDailyRemindersChange($event.checked)"
+              color="primary"
+            >
+            </mat-slide-toggle>
+          </h4>
+          <p class="preference-description">Soyez rappelé de saisir vos dépenses</p>
+        </div>
+      </div>
+
+      <div class="time-selector" *ngIf="preferences().dailyReminders">
+        <mat-form-field appearance="outline">
+          <mat-label>Heure du rappel</mat-label>
+          <input
+            matInput
+            type="time"
+            [value]="preferences().reminderTime"
+            (change)="onReminderTimeChange($any($event).target.value)"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state when disabled -->
+  <div class="empty-state" *ngIf="!isEnabled() && notificationSupported && !isPermissionDenied()">
+    <mat-icon>notifications_none</mat-icon>
+    <p>Activez les notifications pour configurer vos préférences</p>
+  </div>
+
+  <!-- Test Section -->
+  <div class="test-section" *ngIf="isEnabled()">
+    <button mat-stroked-button class="test-btn" [disabled]="testing()" (click)="testNotification()">
+      <mat-icon *ngIf="!testing()">send</mat-icon>
+      <mat-spinner *ngIf="testing()" diameter="16"></mat-spinner>
+      <span>Envoyer une notification de test</span>
+    </button>
+  </div>
+
+  <!-- Info Section -->
+  <div class="info-section">
+    <mat-icon>info</mat-icon>
+    <p>
+      Les notifications sont envoyées via Firebase Cloud Messaging. Vos données restent privées et ne sont pas stockées
+      sur nos serveurs.
+    </p>
+  </div>
+</div>
