@@ -1,0 +1,21 @@
+<mat-expansion-panel id="plan-expenses" class="expense-tracker-panel" [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon>add_circle</mat-icon>
+      <span>Suivi des dépenses</span>
+    </mat-panel-title>
+    <mat-panel-description> Ajoutez vos dépenses pour un suivi en temps réel </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="expense-tracker-content">
+    <app-quick-expense
+      [monthlyBudget]="recommendedMonthlyBudget()"
+      [dailyBudget]="recommendedDailyBudget()"
+      [paydayDay]="paydayDay() || 1"
+      (viewAllExpensesClicked)="scrollToRecentExpenses()"
+    >
+    </app-quick-expense>
+
+    <app-recent-expenses #recentExpenses></app-recent-expenses>
+  </div>
+</mat-expansion-panel>

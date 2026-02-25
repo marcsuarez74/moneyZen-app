@@ -18,20 +18,20 @@
   border-radius: 24px;
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 
+  box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06),
     0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &:hover {
-    box-shadow: 
+    box-shadow:
       0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -2px rgba(0, 0, 0, 0.05),
       0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
-  
+
   ::ng-deep .mat-expansion-panel-header {
     background: var(--gradient-fintech-primary);
     padding: 20px 24px;
@@ -39,9 +39,9 @@
     min-height: 64px;
     position: relative;
     overflow: hidden;
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -50,16 +50,16 @@
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       opacity: 0.1;
     }
-    
+
     &:hover {
       background: var(--gradient-fintech-primary);
       filter: brightness(1.1);
     }
-    
+
     .mat-content {
       align-items: center;
     }
-    
+
     mat-panel-title {
       display: flex;
       align-items: center;
@@ -69,7 +69,7 @@
       color: white;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       z-index: 1;
-      
+
       mat-icon {
         font-size: 28px;
         width: 28px;
@@ -77,26 +77,25 @@
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
       }
     }
-    
+
     mat-panel-description {
       color: rgba(255, 255, 255, 0.9);
       font-size: 0.9375rem;
       font-weight: 500;
       z-index: 1;
     }
-    
+
     .mat-expansion-indicator {
       color: white;
       z-index: 1;
     }
   }
-  
+
   .expense-tracker-content {
-    padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 28px;
-    
+
     app-quick-expense,
     app-recent-expenses {
       display: block;
@@ -113,9 +112,9 @@
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -123,20 +122,20 @@
     height: 3px;
     background: var(--gradient-fintech-primary);
   }
-  
+
   &:hover {
     border-color: rgba(102, 126, 234, 0.3);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
   }
-  
+
   mat-icon {
     color: #667eea;
     font-size: 28px;
     width: 28px;
     height: 28px;
   }
-  
+
   .strategy-value {
     background: var(--gradient-fintech-success);
     -webkit-background-clip: text;
@@ -145,7 +144,7 @@
     font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.025em;
-    
+
     &.negative {
       background: var(--gradient-fintech-warning);
       -webkit-background-clip: text;
@@ -153,13 +152,13 @@
       background-clip: text;
     }
   }
-  
+
   .strategy-label {
     color: var(--text-primary);
     font-weight: 600;
     font-size: 0.9375rem;
   }
-  
+
   .strategy-detail {
     color: var(--text-secondary);
     font-size: 0.875rem;
@@ -171,16 +170,16 @@
 .fintech-card {
   background: var(--surface);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.1),
     0 1px 2px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--border);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   position: relative;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -188,10 +187,10 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   }
-  
+
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
       0 20px 25px -5px rgba(0, 0, 0, 0.1),
       0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
@@ -210,9 +209,9 @@
   border: none;
   position: relative;
   overflow: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
@@ -221,20 +220,20 @@
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.5s;
   }
-  
+
   &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-    
+
     &::before {
       left: 100%;
     }
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -250,13 +249,13 @@
   font-weight: 500;
   transition: all 0.2s ease;
   color: var(--text-primary);
-  
+
   &:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
   }
-  
+
   &::placeholder {
     color: var(--text-tertiary);
   }
@@ -271,19 +270,19 @@
   border-radius: 100px;
   font-size: 0.875rem;
   font-weight: 600;
-  
+
   &.success {
     background: rgba(17, 153, 142, 0.12);
     color: #11998e;
     border: 1px solid rgba(17, 153, 142, 0.2);
   }
-  
+
   &.warning {
     background: rgba(245, 87, 108, 0.12);
     color: #f5576c;
     border: 1px solid rgba(245, 87, 108, 0.2);
   }
-  
+
   &.info {
     background: rgba(79, 172, 254, 0.12);
     color: #4facfe;
@@ -298,9 +297,9 @@
   background: var(--surface-variant);
   overflow: hidden;
   position: relative;
-  
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -309,18 +308,18 @@
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     animation: shimmer 2s infinite;
   }
-  
+
   .progress-bar {
     height: 100%;
     border-radius: 4px;
     background: var(--gradient-fintech-primary);
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    
+
     &.warning {
       background: var(--gradient-fintech-warning);
     }
-    
+
     &.success {
       background: var(--gradient-fintech-success);
     }
@@ -328,8 +327,12 @@
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 // Animations
@@ -356,7 +359,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -391,91 +395,91 @@
   .expense-tracker-panel {
     background: linear-gradient(145deg, #1e1e2e 0%, #2d2d44 100%);
     border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 
+    box-shadow:
       0 4px 6px -1px rgba(0, 0, 0, 0.3),
       0 2px 4px -1px rgba(0, 0, 0, 0.2),
       0 20px 25px -5px rgba(0, 0, 0, 0.4);
-    
+
     &:hover {
-      box-shadow: 
+      box-shadow:
         0 10px 15px -3px rgba(0, 0, 0, 0.4),
         0 4px 6px -2px rgba(0, 0, 0, 0.3),
         0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
-    
+
     ::ng-deep .mat-expansion-panel-header {
       background: var(--gradient-fintech-dark);
-      
+
       mat-panel-title {
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
       }
     }
   }
-  
+
   .strategy-item.adjusted-budget {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%);
     border-color: rgba(102, 126, 234, 0.3);
-    
+
     &:hover {
       box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
     }
-    
+
     .strategy-value {
       text-shadow: 0 0 20px rgba(56, 239, 125, 0.5);
-      
+
       &.negative {
         text-shadow: 0 0 20px rgba(245, 87, 108, 0.5);
       }
     }
   }
-  
+
   .fintech-card {
     background: linear-gradient(145deg, #1e1e2e 0%, #252538 100%);
     border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 
+    box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.3),
       0 1px 2px rgba(0, 0, 0, 0.2);
-    
+
     &:hover {
-      box-shadow: 
+      box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.4),
         0 10px 10px -5px rgba(0, 0, 0, 0.3);
     }
   }
-  
+
   .fintech-input {
     background: rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.1);
     color: white;
-    
+
     &:focus {
       border-color: #667eea;
       box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
     }
   }
-  
+
   .fintech-progress {
     background: rgba(255, 255, 255, 0.1);
   }
-  
+
   .glass-effect {
     background: rgba(30, 30, 46, 0.8);
     border-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .fintech-badge {
     &.success {
       background: rgba(17, 153, 142, 0.2);
       color: #38ef7d;
       border-color: rgba(56, 239, 125, 0.3);
     }
-    
+
     &.warning {
       background: rgba(245, 87, 108, 0.2);
       color: #f093fb;
       border-color: rgba(240, 147, 251, 0.3);
     }
-    
+
     &.info {
       background: rgba(79, 172, 254, 0.2);
       color: #00f2fe;
@@ -491,45 +495,44 @@
   .expense-tracker-panel {
     margin: 16px 0;
     border-radius: 20px;
-    
+
     ::ng-deep .mat-expansion-panel-header {
       padding: 16px 20px;
       min-height: 56px;
-      
+
       mat-panel-title {
         font-size: 1.125rem;
-        
+
         mat-icon {
           font-size: 24px;
           width: 24px;
           height: 24px;
         }
       }
-      
+
       mat-panel-description {
         display: none;
       }
     }
-    
+
     .expense-tracker-content {
-      padding: 20px;
       gap: 20px;
     }
   }
-  
+
   .strategy-item.adjusted-budget {
     padding: 16px;
-    
+
     .strategy-value {
       font-size: 1.25rem;
     }
   }
-  
+
   .fintech-button-primary {
     padding: 14px 24px;
     width: 100%;
   }
-  
+
   .fintech-input {
     padding: 14px 16px;
   }

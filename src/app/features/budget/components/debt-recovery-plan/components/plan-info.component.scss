@@ -1,0 +1,89 @@
+@use "../../../../../../styles/variables" as *;
+
+.info-box {
+  background: var(--surface-variant);
+  border-radius: $radius-lg;
+  padding: $space-lg;
+  margin-bottom: $space-lg;
+  border: 1px solid var(--border);
+
+  @include media-down($sm) {
+    padding: $space-md;
+    border-radius: $radius-md;
+    margin-bottom: $space-md;
+  }
+
+  &.info-primary {
+    border: 2px solid var(--primary-color);
+    background: var(--primary-light);
+
+    h3 mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 $space-md;
+  color: var(--text-primary);
+
+  @include media-down($sm) {
+    font-size: 0.9375rem;
+    margin-bottom: $space-sm;
+  }
+
+  mat-icon {
+    font-size: 22px;
+    color: var(--primary-color);
+
+    @include media-down($sm) {
+      font-size: 20px;
+    }
+  }
+}
+
+.info-content {
+  p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: $space-md;
+  }
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-sm;
+    padding: $space-sm;
+    background: var(--surface);
+    border-radius: $radius-md;
+
+    mat-icon {
+      color: var(--primary-color);
+      flex-shrink: 0;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    span {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+  }
+}
