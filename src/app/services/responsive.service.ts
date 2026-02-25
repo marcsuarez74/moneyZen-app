@@ -7,6 +7,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatBottomSheet, MatBottomSheetConfig } from '@angular/material/bottom-sheet';
 import { ComponentType } from '@angular/cdk/portal';
+import { BackupImportDialogComponent } from '../shared/components/backup-import-dialog/backup-import-dialog.component';
+import { BackupImportBottomSheetComponent } from '../shared/components/backup-import-bottom-sheet/backup-import-bottom-sheet.component';
 
 export type DeviceType = 'mobile' | 'tablet' | 'desktop';
 
@@ -132,5 +134,24 @@ export class ResponsiveService {
    */
   shouldUseCompactView(): boolean {
     return this.isMobile() || this.viewportWidth() < 400;
+  }
+
+  /**
+   * Ouvre l'import de sauvegarde (Dialog sur desktop, Bottom Sheet sur mobile)
+   */
+  openBackupImport(): void {
+    if (this.isMobile()) {
+      this.bottomSheet.open(BackupImportBottomSheetComponent, {
+        data: { isMobile: true },
+        panelClass: 'fullscreen-bottom-sheet',
+        hasBackdrop: true
+      });
+    } else {
+      this.dialog.open(BackupImportDialogComponent, {
+        width: this.isTablet() ? '90vw' : '500px',
+        maxWidth: '500px',
+        data: { isMobile: false }
+      });
+    }
   }
 }

@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // BUDGET INSIGHTS - Responsive & Dark Theme
@@ -20,27 +20,27 @@
   animation-delay: var(--delay, 0s);
   opacity: 0;
   transition: all $transition-base;
-  
+
   &:hover {
     transform: translateX(4px);
     box-shadow: $shadow-md;
   }
-  
+
   &.warning {
     border-color: var(--error-color);
     background: var(--error-light);
   }
-  
+
   &.positive {
     border-color: var(--success-color);
     background: var(--success-light);
   }
-  
+
   &.info {
     border-color: var(--info-color);
     background: var(--info-light);
   }
-  
+
   &.opportunity {
     border-color: var(--warning-color);
     background: var(--warning-light);
@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   gap: $space-md;
-  
+
   @include media-down($sm) {
     flex-direction: column;
     align-items: flex-start;
@@ -66,39 +66,39 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  
+
   @include media-down($sm) {
     width: 48px;
     height: 48px;
   }
-  
+
   mat-icon {
     font-size: 28px;
     width: 28px;
     height: 28px;
-    
+
     @include media-down($sm) {
       font-size: 24px;
       width: 24px;
       height: 24px;
     }
   }
-  
+
   &.warning {
     background: var(--error-light);
     color: var(--error-dark);
   }
-  
+
   &.positive {
     background: var(--success-light);
     color: var(--success-dark);
   }
-  
+
   &.info {
     background: var(--info-light);
     color: var(--info-dark);
   }
-  
+
   &.opportunity {
     background: var(--warning-light);
     color: var(--warning-dark);
@@ -108,21 +108,21 @@
 .insight-body {
   flex: 1;
   min-width: 0;
-  
+
   .insight-header {
     display: flex;
     align-items: center;
     gap: $space-sm;
     margin-bottom: 8px;
     flex-wrap: wrap;
-    
+
     h3 {
       margin: 0;
       font-size: 1.0625rem;
       font-weight: 700;
       color: var(--text-primary);
     }
-    
+
     .priority-badge {
       font-size: 0.6875rem;
       font-weight: 700;
@@ -130,29 +130,29 @@
       border-radius: 20px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      
+
       &.warning {
         background: var(--error-color);
         color: var(--text-on-error);
       }
-      
+
       &.positive {
         background: var(--success-color);
         color: var(--text-on-success);
       }
-      
+
       &.info {
         background: var(--info-color);
         color: var(--text-on-info);
       }
-      
+
       &.opportunity {
         background: var(--warning-color);
         color: var(--text-on-warning);
       }
     }
   }
-  
+
   .insight-description {
     margin: 0;
     font-size: 0.875rem;
@@ -165,12 +165,12 @@
   flex-shrink: 0;
   border-radius: $radius-md;
   font-weight: 600;
-  
+
   @include media-down($sm) {
     align-self: stretch;
     margin-top: 8px;
   }
-  
+
   mat-icon {
     margin-left: 6px;
     font-size: 18px;

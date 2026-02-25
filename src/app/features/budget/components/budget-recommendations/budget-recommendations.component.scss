@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // BUDGET RECOMMENDATIONS - Responsive & Dark Theme
@@ -9,7 +9,7 @@
   border-radius: $radius-xl;
   padding: $space-lg;
   border: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-lg;
@@ -23,14 +23,14 @@
   margin-bottom: $space-xl;
   padding-bottom: $space-lg;
   border-bottom: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     flex-direction: column;
     text-align: center;
     margin-bottom: $space-lg;
     padding-bottom: $space-md;
   }
-  
+
   .header-icon {
     width: 52px;
     height: 52px;
@@ -40,12 +40,12 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    
+
     @include media-down($sm) {
       width: 48px;
       height: 48px;
     }
-    
+
     mat-icon {
       font-size: 28px;
       width: 28px;
@@ -53,19 +53,19 @@
       color: var(--warning-color);
     }
   }
-  
+
   .header-content {
     h2 {
       margin: 0;
       font-size: 1.375rem;
       font-weight: 700;
       color: var(--text-primary);
-      
+
       @include media-down($sm) {
         font-size: 1.25rem;
       }
     }
-    
+
     .subtitle {
       font-size: 0.875rem;
       color: var(--text-secondary);
@@ -75,7 +75,7 @@
 
 .priority-section {
   margin-bottom: $space-lg;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -91,11 +91,11 @@
   margin: 0 0 $space-md 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  
+
   @include media-down($sm) {
     font-size: 0.8125rem;
   }
-  
+
   mat-icon {
     font-size: 20px;
     width: 20px;
@@ -106,7 +106,7 @@
 .high-priority {
   .section-title {
     color: var(--error-color);
-    
+
     mat-icon {
       color: var(--error-color);
     }
@@ -116,7 +116,7 @@
 .medium-priority {
   .section-title {
     color: var(--warning-color);
-    
+
     mat-icon {
       color: var(--warning-color);
     }
@@ -135,28 +135,28 @@
   padding: $space-md;
   border: 2px solid transparent;
   transition: all $transition-base;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-md;
   }
-  
+
   &.reduce {
     border-color: var(--error-color);
   }
-  
+
   &.eliminate {
     border-color: #9c27b0;
   }
-  
+
   &.optimize {
     border-color: var(--info-color);
   }
-  
+
   &.suggestion {
     border-color: var(--success-color);
   }
-  
+
   @include media-down($sm) {
     padding: $space-sm;
     border-radius: $radius-md;
@@ -167,7 +167,7 @@
   display: flex;
   gap: $space-md;
   margin-bottom: $space-md;
-  
+
   @include media-down($sm) {
     flex-direction: column;
     gap: $space-sm;
@@ -182,40 +182,40 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  
+
   @include media-down($sm) {
     width: 40px;
     height: 40px;
     border-radius: 12px;
   }
-  
+
   mat-icon {
     font-size: 24px;
     width: 24px;
     height: 24px;
-    
+
     @include media-down($sm) {
       font-size: 20px;
       width: 20px;
       height: 20px;
     }
   }
-  
+
   &.reduce {
     background: var(--error-light);
     color: var(--error-dark);
   }
-  
+
   &.eliminate {
     background: rgba(156, 39, 176, 0.15);
     color: #9c27b0;
   }
-  
+
   &.optimize {
     background: var(--info-light);
     color: var(--info-dark);
   }
-  
+
   &.suggestion {
     background: var(--success-light);
     color: var(--success-dark);
@@ -225,21 +225,21 @@
 .rec-info {
   flex: 1;
   min-width: 0;
-  
+
   .rec-header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
-    
+
     h4 {
       margin: 0;
       font-size: 1rem;
       font-weight: 700;
       color: var(--text-primary);
     }
-    
+
     .rec-category {
       font-size: 0.75rem;
       padding: 4px 10px;
@@ -250,7 +250,7 @@
       border: 1px solid var(--border);
     }
   }
-  
+
   .rec-description {
     margin: 0;
     font-size: 0.875rem;
@@ -267,18 +267,18 @@
   background: var(--success-light);
   border-radius: $radius-md;
   flex-shrink: 0;
-  
+
   @include media-down($sm) {
     align-self: flex-start;
   }
-  
+
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
     color: var(--success-dark);
   }
-  
+
   span {
     font-size: 0.875rem;
     font-weight: 700;
@@ -290,20 +290,20 @@
   display: flex;
   gap: $space-sm;
   justify-content: flex-end;
-  
+
   @include media-down($sm) {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   button {
     border-radius: $radius-sm;
-    
+
     mat-icon {
       margin-right: 6px;
       font-size: 18px;
     }
-    
+
     @include media-down($sm) {
       width: 100%;
     }
@@ -317,12 +317,12 @@
   background: var(--success-light);
   border-radius: $radius-xl;
   border: 2px solid var(--success-color);
-  
+
   @include media-down($sm) {
     padding: $space-xl $space-md;
     border-radius: $radius-lg;
   }
-  
+
   .success-illustration {
     width: 80px;
     height: 80px;
@@ -332,18 +332,18 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto $space-lg auto;
-    
+
     @include media-down($sm) {
       width: 64px;
       height: 64px;
     }
-    
+
     mat-icon {
       font-size: 44px;
       width: 44px;
       height: 44px;
       color: var(--text-on-success);
-      
+
       @include media-down($sm) {
         font-size: 32px;
         width: 32px;
@@ -351,30 +351,30 @@
       }
     }
   }
-  
+
   h2 {
     margin: 0 0 8px 0;
     font-size: 1.75rem;
     font-weight: 700;
     color: var(--success-dark);
-    
+
     @include media-down($sm) {
       font-size: 1.5rem;
     }
   }
-  
+
   p {
     margin: 0 0 $space-lg 0;
     font-size: 1rem;
     color: var(--text-secondary);
   }
-  
+
   .metrics-preview {
     display: flex;
     justify-content: center;
     gap: $space-md;
     flex-wrap: wrap;
-    
+
     .metric-badge {
       display: flex;
       align-items: center;
@@ -383,19 +383,19 @@
       background: var(--surface);
       border-radius: 14px;
       border: 1px solid var(--success-color);
-      
+
       @include media-down($sm) {
         width: 100%;
         justify-content: center;
       }
-      
+
       mat-icon {
         font-size: 20px;
         width: 20px;
         height: 20px;
         color: var(--success-color);
       }
-      
+
       span {
         font-size: 0.875rem;
         font-weight: 700;

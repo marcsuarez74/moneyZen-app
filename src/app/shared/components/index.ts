@@ -11,5 +11,6 @@ export { QuickExpenseFormComponent } from './quick-expense-form/quick-expense-fo
 export { ExpenseListItemComponent } from './expense-list-item/expense-list-item.component';
 export { PlanNavigationComponent, PlanSection } from './plan-navigation/plan-navigation.component';
 export { BackupImportDialogComponent } from './backup-import-dialog/backup-import-dialog.component';
+export { BackupImportBottomSheetComponent } from './backup-import-bottom-sheet/backup-import-bottom-sheet.component';
 export { BackupExportButtonComponent } from './backup-export-button/backup-export-button.component';
 export { BottomNavigationComponent } from './bottom-navigation/bottom-navigation.component';

@@ -1,25 +1,44 @@
-<div class="expense-item">
-  <div class="expense-icon">
-    <mat-icon>{{ icon() }}</mat-icon>
+<div class="expense-item" [class.has-category]="expense().category">
+  <div class="expense-icon" [style.--category-color]="getCategoryColor(expense().category)">
+    <mat-icon>{{ getCategoryIcon(expense().category) }}</mat-icon>
   </div>
-  
+
   <div class="expense-info">
     <span class="expense-name">{{ expense().name }}</span>
-    <mat-chip-set>
-      <mat-chip>{{ expense().frequency === 'monthly' ? 'Mensuel' : 'Annuel' }}</mat-chip>
-    </mat-chip-set>
+    <div class="expense-badges">
+      <span class="badge frequency" [class]="'freq-' + expense().frequency">
+        {{
+          expense().frequency === 'monthly'
+            ? 'Mensuel'
+            : expense().frequency === 'quarterly'
+              ? 'Trimestriel'
+              : expense().frequency === 'yearly'
+                ? 'Annuel'
+                : 'Ponctuel'
+        }}
+      </span>
+    </div>
   </div>
-  
-  <span class="expense-amount">{{ expense().monthlyEquivalent | currency:'EUR' }}/mois</span>
-  
+
+  <div class="expense-amount-wrapper">
+    <span class="expense-amount">{{ expense().monthlyEquivalent | currency: 'EUR' }}</span>
+    <span class="expense-period">/mois</span>
+  </div>
+
   <div class="expense-actions">
     @if (editable()) {
-      <button mat-icon-button (click)="edit.emit(expense())" matTooltip="Modifier">
+      <button mat-icon-button (click)="edit.emit(expense())" matTooltip="Modifier" aria-label="Modifier la charge">
         <mat-icon>edit</mat-icon>
       </button>
     }
     @if (removable()) {
-      <button mat-icon-button color="warn" (click)="remove.emit(expense())" matTooltip="Supprimer">
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="remove.emit(expense())"
+        matTooltip="Supprimer"
+        aria-label="Supprimer la charge"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     }

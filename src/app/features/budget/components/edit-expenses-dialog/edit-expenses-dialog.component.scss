@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // EDIT EXPENSES DIALOG - Responsive & Dark Theme
@@ -10,11 +10,11 @@
   max-height: 90vh;
   border-radius: $radius-xl;
   overflow: hidden;
-  
+
   @include media-down($md) {
     border-radius: $radius-lg;
   }
-  
+
   @include media-down($sm) {
     max-height: 95vh;
     border-radius: $radius-md;
@@ -30,29 +30,29 @@
   gap: $space-md;
   background: var(--gradient-primary);
   color: var(--text-on-primary);
-  
+
   @include media-down($sm) {
     padding: $space-sm $space-md;
     gap: $space-sm;
   }
-  
+
   mat-icon {
     font-size: 28px;
     width: 28px;
     height: 28px;
-    
+
     @include media-down($sm) {
       font-size: 24px;
       width: 24px;
       height: 24px;
     }
   }
-  
+
   span {
     font-size: 1.25rem;
     font-weight: 700;
     letter-spacing: -0.3px;
-    
+
     @include media-down($sm) {
       font-size: 1.125rem;
     }
@@ -76,7 +76,7 @@
   overflow: auto;
   max-height: 50vh;
   flex: 1;
-  
+
   @include media-down($sm) {
     max-height: 45vh;
   }
@@ -85,7 +85,7 @@
 .expenses-table {
   width: 100%;
   min-width: 600px;
-  
+
   th {
     font-weight: 700;
     color: var(--text-primary);
@@ -95,31 +95,31 @@
     letter-spacing: 0.5px;
     padding: $space-md;
     white-space: nowrap;
-    
+
     @include media-down($sm) {
       padding: 12px;
     }
   }
-  
+
   td {
     padding: 12px $space-md;
     vertical-align: middle;
     color: var(--text-primary);
     border-bottom: 1px solid var(--border);
-    
+
     @include media-down($sm) {
       padding: 10px 12px;
     }
   }
-  
+
   tr {
     transition: all $transition-fast;
-    
+
     &:hover {
       background-color: rgba(var(--primary-color-rgb), 0.05);
     }
   }
-  
+
   tr.editing-row {
     background: var(--surface-variant);
     border-left: 4px solid var(--primary-color);
@@ -156,7 +156,7 @@
   font-size: 0.8125rem;
   font-weight: 600;
   border: 1px solid var(--border);
-  
+
   mat-icon {
     font-size: 16px;
     width: 16px;
@@ -168,26 +168,26 @@
 .inline-field {
   width: 100%;
   margin-bottom: -1.25em;
-  
+
   &.amount-field {
     width: 110px;
   }
-  
+
   &.frequency-field {
     width: 130px;
   }
-  
+
   ::ng-deep {
     .mat-mdc-form-field-subscript-wrapper {
       display: none;
     }
-    
+
     .mat-mdc-text-field-wrapper {
       padding: 0 12px;
       border-radius: 10px;
       background: var(--surface);
     }
-    
+
     .mat-mdc-form-field-infix {
       min-height: 44px;
       padding: 10px 0;
@@ -209,22 +209,22 @@
   border-radius: 16px;
   font-size: 0.75rem;
   font-weight: 700;
-  
+
   &.freq-monthly {
     background: var(--success-light);
     color: var(--success-dark);
   }
-  
+
   &.freq-quarterly {
     background: var(--warning-light);
     color: var(--warning-dark);
   }
-  
+
   &.freq-yearly {
     background: var(--info-light);
     color: var(--info-dark);
   }
-  
+
   &.freq-one-time {
     background: var(--surface-variant);
     color: var(--text-secondary);
@@ -235,7 +235,7 @@
   font-weight: 700;
   color: var(--primary-color);
   font-variant-numeric: tabular-nums;
-  
+
   &.zero {
     color: var(--text-secondary);
   }
@@ -244,24 +244,24 @@
 .action-buttons {
   display: flex;
   gap: 6px;
-  
+
   button {
     width: 36px;
     height: 36px;
     padding: 0;
     border-radius: 10px;
-    
+
     @include media-down($sm) {
       width: 32px;
       height: 32px;
       border-radius: 8px;
     }
-    
+
     mat-icon {
       font-size: 20px;
       width: 20px;
       height: 20px;
-      
+
       @include media-down($sm) {
         font-size: 18px;
         width: 18px;
@@ -278,13 +278,13 @@
   display: flex;
   gap: $space-xl;
   justify-content: flex-end;
-  
+
   @include media-down($md) {
     flex-direction: column;
     gap: $space-sm;
     padding: $space-md;
   }
-  
+
   @include media-down($sm) {
     gap: 8px;
   }
@@ -294,7 +294,7 @@
   display: flex;
   align-items: center;
   gap: $space-sm;
-  
+
   &.annual .total-value {
     color: var(--error-color);
   }
@@ -312,7 +312,7 @@
   color: var(--primary-color);
   font-variant-numeric: tabular-nums;
   letter-spacing: -1px;
-  
+
   @include media-down($sm) {
     font-size: 1.25rem;
   }
@@ -323,17 +323,17 @@
   border-top: 2px solid var(--border);
   gap: $space-sm;
   background: var(--surface);
-  
+
   @include media-down($sm) {
     flex-direction: column-reverse;
     padding: $space-md;
     gap: 8px;
-    
+
     button {
       width: 100%;
     }
   }
-  
+
   button {
     border-radius: $radius-md;
   }

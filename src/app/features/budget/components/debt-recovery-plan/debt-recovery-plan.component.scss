@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // DEBT RECOVERY PLAN - Responsive & Dark Theme
@@ -12,7 +12,7 @@
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  
+
   @media (min-width: 1024px) {
     flex-direction: row;
     gap: 24px;
@@ -23,7 +23,7 @@
 .plan-navigation-sidebar {
   width: 100%;
   order: -1;
-  
+
   @media (min-width: 1024px) {
     width: 240px;
     flex-shrink: 0;
@@ -32,15 +32,15 @@
     top: 24px;
     max-height: calc(100vh - 48px);
     overflow-y: auto;
-    
+
     &::-webkit-scrollbar {
       width: 4px;
     }
-    
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
-    
+
     &::-webkit-scrollbar-thumb {
       background: var(--fintech-border, #e0e0e0);
       border-radius: 2px;
@@ -72,7 +72,7 @@
   border-radius: $radius-xl;
   border: 1px solid var(--border);
   border-left-width: 4px;
-  
+
   @include media-down($sm) {
     border-radius: $radius-lg;
   }
@@ -87,17 +87,17 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  
+
   @include media-down($sm) {
     width: 40px;
     height: 40px;
     border-radius: 12px;
   }
-  
+
   mat-icon {
     color: var(--text-on-error);
     font-size: 24px;
-    
+
     @include media-down($sm) {
       font-size: 20px;
     }
@@ -112,16 +112,16 @@ h3 {
   font-weight: 700;
   margin: $space-lg 0 $space-md;
   color: var(--text-primary);
-  
+
   @include media-down($sm) {
     font-size: 0.9375rem;
     margin: $space-md 0 $space-sm;
   }
-  
+
   mat-icon {
     font-size: 22px;
     color: var(--primary-color);
-    
+
     @include media-down($sm) {
       font-size: 20px;
     }
@@ -135,17 +135,17 @@ h3 {
   padding: $space-lg;
   margin-bottom: $space-lg;
   border: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-md;
     margin-bottom: $space-md;
   }
-  
+
   &.info-primary {
     border: 2px solid var(--primary-color);
     background: var(--primary-light);
-    
+
     h3 mat-icon {
       color: var(--primary-color);
     }
@@ -167,7 +167,7 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: $space-sm;
-  
+
   li {
     display: flex;
     align-items: flex-start;
@@ -175,7 +175,7 @@ h3 {
     padding: $space-sm;
     background: var(--surface);
     border-radius: $radius-md;
-    
+
     mat-icon {
       color: var(--primary-color);
       flex-shrink: 0;
@@ -183,7 +183,7 @@ h3 {
       width: 20px;
       height: 20px;
     }
-    
+
     span {
       font-size: 0.875rem;
       line-height: 1.5;
@@ -197,15 +197,15 @@ h3 {
   &.alert-info {
     background: var(--info-light);
     border: 2px solid var(--info-color);
-    
+
     mat-icon {
       color: var(--info-color);
     }
-    
+
     strong {
       color: var(--info-color);
     }
-    
+
     .hint {
       margin-top: $space-sm;
       font-size: 0.8125rem;
@@ -220,7 +220,7 @@ h3 {
   border-radius: $radius-lg;
   padding: $space-lg;
   margin-bottom: $space-lg;
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-md;
@@ -232,7 +232,7 @@ h3 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: $space-md;
-  
+
   @include media-down($sm) {
     grid-template-columns: 1fr;
     gap: $space-sm;
@@ -247,49 +247,49 @@ h3 {
   background: var(--surface);
   border-radius: $radius-md;
   border: 1px solid var(--border);
-  
+
   .label {
     font-size: 0.75rem;
     color: var(--text-secondary);
     text-transform: uppercase;
     font-weight: 600;
   }
-  
+
   .value {
     font-size: 1.625rem;
     font-weight: 700;
     letter-spacing: -1px;
   }
-  
+
   &.negative .value {
     color: var(--error-color);
   }
-  
+
   &.income .value {
     color: var(--success-color);
   }
-  
+
   &.expenses .value {
     color: var(--warning-color);
   }
-  
+
   .sublabel {
     font-size: 0.75rem;
     color: var(--text-secondary);
     font-style: italic;
     margin-top: 4px;
   }
-  
+
   &.expenses .sublabel {
     color: var(--warning-color);
     font-weight: 500;
   }
-  
+
   &.remaining .sublabel {
     color: var(--success-color);
     font-weight: 500;
   }
-  
+
   &.remaining .sublabel.warning {
     color: var(--error-color);
     font-weight: 600;
@@ -302,7 +302,7 @@ h3 {
   padding: $space-lg;
   margin-bottom: $space-lg;
   border: 2px solid var(--primary-color);
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-md;
@@ -324,17 +324,17 @@ h3 {
   background: var(--surface);
   border-radius: $radius-md;
   transition: all $transition-base;
-  
+
   &:hover {
     transform: translateX(4px);
     box-shadow: $shadow-sm;
   }
-  
+
   &.primary {
     background: var(--surface-variant);
     border: 2px solid var(--primary-color);
   }
-  
+
   mat-icon {
     color: var(--primary-color);
     flex-shrink: 0;
@@ -374,11 +374,11 @@ h3 {
   background: var(--surface-variant);
   padding: $space-lg;
   border-radius: $radius-lg;
-  
+
   @include media-down($sm) {
     padding: $space-md;
   }
-  
+
   mat-slider {
     width: 100%;
   }
@@ -393,7 +393,7 @@ h3 {
   border-top: 1px solid var(--border);
   flex-wrap: wrap;
   gap: $space-md;
-  
+
   @include media-down($sm) {
     flex-direction: column;
     align-items: flex-start;
@@ -405,7 +405,7 @@ h3 {
   font-weight: 700;
   color: var(--primary-color);
   display: block;
-  
+
   @include media-down($sm) {
     font-size: 1.5rem;
   }
@@ -418,7 +418,7 @@ h3 {
 
 .monthly-impact {
   text-align: right;
-  
+
   @include media-down($sm) {
     text-align: left;
     align-self: stretch;
@@ -442,7 +442,7 @@ h3 {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: $space-md;
   margin-top: $space-md;
-  
+
   @include media-down($sm) {
     grid-template-columns: 1fr;
     gap: $space-sm;
@@ -455,17 +455,17 @@ h3 {
   padding: $space-md;
   background: var(--surface);
   transition: all $transition-base;
-  
+
   &:hover {
     transform: translateY(-4px);
     box-shadow: $shadow-md;
   }
-  
+
   &.achievable {
     border-color: var(--success-color);
     background: var(--success-light);
   }
-  
+
   &.difficult {
     border-color: var(--error-color);
     background: var(--error-light);
@@ -512,7 +512,7 @@ h3 {
   background: var(--surface-variant);
   border-radius: $radius-md;
   margin-bottom: $space-md;
-  
+
   @include media-down($sm) {
     flex-direction: column;
     gap: $space-sm;
@@ -524,7 +524,7 @@ h3 {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  
+
   @include media-down($sm) {
     width: 100%;
   }
@@ -540,11 +540,11 @@ h3 {
 .point-value {
   font-size: 1rem;
   font-weight: 700;
-  
+
   &.negative {
     color: var(--error-color);
   }
-  
+
   &.zero {
     color: var(--success-color);
   }
@@ -563,7 +563,7 @@ h3 {
   align-items: center;
   gap: $space-sm;
   margin-bottom: 8px;
-  
+
   mat-icon {
     color: var(--primary-color);
   }
@@ -601,7 +601,7 @@ h3 {
   background: var(--success-light);
   border-radius: $radius-md;
   border: 1px solid var(--success-color);
-  
+
   @include media-down($sm) {
     flex-direction: column;
     align-items: flex-start;
@@ -629,7 +629,7 @@ h3 {
   border-radius: $radius-md;
   margin-bottom: $space-md;
   border: 2px solid var(--error-color);
-  
+
   mat-icon {
     color: var(--error-color);
     flex-shrink: 0;
@@ -652,16 +652,16 @@ h3 {
   border-radius: $radius-md;
   align-items: flex-start;
   transition: all $transition-base;
-  
+
   &:hover {
     transform: translateX(4px);
   }
-  
+
   &.urgent {
     background: var(--error-light);
     border: 2px solid var(--error-color);
   }
-  
+
   mat-icon {
     color: var(--success-color);
     flex-shrink: 0;
@@ -669,7 +669,7 @@ h3 {
     width: 22px;
     height: 22px;
   }
-  
+
   span {
     font-size: 0.875rem;
     line-height: 1.5;
@@ -683,11 +683,11 @@ mat-card-actions {
   display: flex;
   justify-content: flex-end;
   border-top: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     flex-direction: column;
     padding: $space-md;
-    
+
     button {
       width: 100%;
     }

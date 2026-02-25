@@ -20,17 +20,22 @@ import { Expense, ExpenseCategory } from '../../../../../models/budget.model';
     MatDividerModule,
     FormCardComponent,
     ExpenseItemComponent,
-    ExpenseFormComponent
+    ExpenseFormComponent,
   ],
   templateUrl: './expenses-step.component.html',
-  styleUrls: ['./expenses-step.component.scss']
+  styleUrls: ['./expenses-step.component.scss'],
 })
 export class ExpensesStepComponent {
   readonly expensesArray = input.required<FormArray>();
-  
+
   readonly previousStep = output<void>();
   readonly nextStep = output<void>();
-  readonly addExpense = output<{ name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time' }>();
+  readonly addExpense = output<{
+    name: string;
+    category: ExpenseCategory;
+    amount: number;
+    frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time';
+  }>();
   readonly removeExpense = output<number>();
 
   onPrevious(): void {
@@ -41,7 +46,12 @@ export class ExpensesStepComponent {
     this.nextStep.emit();
   }
 
-  onAddExpense(expense: { name: string; category: ExpenseCategory; amount: number; frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time' }): void {
+  onAddExpense(expense: {
+    name: string;
+    category: ExpenseCategory;
+    amount: number;
+    frequency: 'monthly' | 'quarterly' | 'yearly' | 'one-time';
+  }): void {
     this.addExpense.emit(expense);
   }
 
@@ -54,21 +64,5 @@ export class ExpensesStepComponent {
       const expense = control.value as Expense;
       return total + (expense.monthlyEquivalent || 0);
     }, 0);
-  }
-
-  getCategoryIcon(category: string): string {
-    const icons: Record<string, string> = {
-      housing: 'home',
-      transport: 'directions_car',
-      food: 'restaurant',
-      utilities: 'bolt',
-      insurance: 'shield',
-      health: 'healing',
-      education: 'school',
-      leisure: 'sports_esports',
-      savings: 'savings',
-      other: 'more_horiz'
-    };
-    return icons[category] || 'help';
   }
 }

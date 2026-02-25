@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // BUDGET SETUP - Responsive & Dark Theme
@@ -10,11 +10,11 @@
   padding: $space-xl $space-lg;
   min-height: 100vh;
   background: var(--background);
-  
+
   @include media-down($md) {
     padding: $space-lg $space-md;
   }
-  
+
   @include media-down($sm) {
     padding: $space-md $space-sm;
   }
@@ -24,20 +24,20 @@
 .setup-header {
   text-align: center;
   margin-bottom: $space-xl;
-  
+
   .header-brand {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: $space-md;
     margin-bottom: $space-xl;
-    
+
     @include media-down($sm) {
       flex-direction: column;
       gap: $space-sm;
       margin-bottom: $space-lg;
     }
-    
+
     .brand-icon {
       width: 56px;
       height: 56px;
@@ -48,18 +48,18 @@
       justify-content: center;
       box-shadow: 0 8px 24px rgba(var(--primary-color-rgb), 0.3);
       flex-shrink: 0;
-      
+
       @include media-down($sm) {
         width: 48px;
         height: 48px;
       }
-      
+
       mat-icon {
         font-size: 32px;
         width: 32px;
         height: 32px;
         color: var(--text-on-primary);
-        
+
         @include media-down($sm) {
           font-size: 28px;
           width: 28px;
@@ -67,14 +67,14 @@
         }
       }
     }
-    
+
     .brand-text {
       text-align: left;
-      
+
       @include media-down($sm) {
         text-align: center;
       }
-      
+
       h1 {
         margin: 0;
         font-size: 1.75rem;
@@ -83,12 +83,12 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        
+
         @include media-down($sm) {
           font-size: 1.5rem;
         }
       }
-      
+
       p {
         margin: 4px 0 0 0;
         font-size: 0.875rem;
@@ -103,7 +103,7 @@
 .progress-container {
   max-width: 400px;
   margin: 0 auto;
-  
+
   @include media-down($sm) {
     max-width: 320px;
   }
@@ -136,7 +136,7 @@
   gap: 8px;
   opacity: 0.4;
   transition: all $transition-base;
-  
+
   .step-dot {
     width: 36px;
     height: 36px;
@@ -150,32 +150,32 @@
     border: 2px solid transparent;
     transition: all $transition-base;
   }
-  
+
   span {
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--text-secondary);
-    
+
     @include media-down($sm) {
       display: none;
     }
   }
-  
+
   &.active {
     opacity: 1;
-    
+
     .step-dot {
       background: var(--gradient-primary);
       color: var(--text-on-primary);
     }
   }
-  
+
   &.current {
     .step-dot {
       box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.2);
       animation: pulse 2s infinite;
     }
-    
+
     span {
       color: var(--primary-color);
     }
@@ -183,8 +183,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.2); }
-  50% { box-shadow: 0 0 0 8px rgba(var(--primary-color-rgb), 0); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(var(--primary-color-rgb), 0);
+  }
 }
 
 // Setup Section
@@ -195,12 +200,12 @@
   box-shadow: $shadow-md;
   border: 1px solid var(--border);
   animation: slideUp 0.5s ease;
-  
+
   @include media-down($md) {
     padding: $space-lg;
     border-radius: $radius-lg;
   }
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-md;
@@ -226,32 +231,40 @@
   align-items: center;
   justify-content: center;
   margin-bottom: $space-md;
-  
+
   @include media-down($sm) {
     width: 56px;
     height: 56px;
     border-radius: 16px;
   }
-  
+
   mat-icon {
     font-size: 32px;
     width: 32px;
     height: 32px;
-    
+
     @include media-down($sm) {
       font-size: 28px;
       width: 28px;
       height: 28px;
     }
   }
-  
+
   &.income {
-    background: linear-gradient(135deg, rgba(var(--success-color-rgb), 0.15) 0%, rgba(var(--success-color-rgb), 0.3) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(var(--success-color-rgb), 0.15) 0%,
+      rgba(var(--success-color-rgb), 0.3) 100%
+    );
     color: var(--success-color);
   }
-  
+
   &.expenses {
-    background: linear-gradient(135deg, rgba(var(--warning-color-rgb), 0.15) 0%, rgba(var(--warning-color-rgb), 0.3) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(var(--warning-color-rgb), 0.15) 0%,
+      rgba(var(--warning-color-rgb), 0.3) 100%
+    );
     color: var(--warning-color);
   }
 }
@@ -261,7 +274,7 @@ h2 {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
-  
+
   @include media-down($sm) {
     font-size: 1.25rem;
   }
@@ -271,7 +284,7 @@ h2 {
   margin: 0 0 $space-xl 0;
   font-size: 1rem;
   color: var(--text-secondary);
-  
+
   @include media-down($sm) {
     font-size: 0.875rem;
     margin-bottom: $space-lg;
@@ -284,7 +297,7 @@ h2 {
   border-radius: $radius-lg;
   padding: $space-lg;
   margin-bottom: $space-lg;
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-md;
@@ -295,7 +308,7 @@ h2 {
 .form-grid {
   display: grid;
   gap: $space-md;
-  
+
   @include media-up($sm) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -312,11 +325,11 @@ h2 {
   padding: $space-md;
   border-radius: $radius-lg;
   margin-top: $space-md;
-  
+
   &.warning {
     background: var(--warning-light);
     border: 2px solid var(--warning-color);
-    
+
     mat-icon {
       color: var(--warning-color);
       font-size: 28px;
@@ -324,20 +337,20 @@ h2 {
       height: 28px;
       flex-shrink: 0;
     }
-    
+
     strong {
       display: block;
       margin-bottom: 4px;
       color: var(--warning-dark);
     }
-    
+
     p {
       margin: 0;
       color: var(--warning-color);
       font-size: 0.875rem;
     }
   }
-  
+
   @include media-down($sm) {
     flex-direction: column;
     padding: $space-sm;
@@ -351,13 +364,13 @@ h2 {
   padding: $space-lg;
   margin-bottom: $space-xl;
   border: 2px dashed var(--border);
-  
+
   @include media-down($sm) {
     padding: $space-md;
     margin-bottom: $space-lg;
     border-radius: $radius-md;
   }
-  
+
   h3 {
     display: flex;
     align-items: center;
@@ -365,13 +378,13 @@ h2 {
     margin: 0 0 8px 0;
     font-size: 1rem;
     font-weight: 700;
-    
+
     mat-icon {
       color: var(--warning-color);
       font-size: 24px;
     }
   }
-  
+
   .quick-add-desc {
     margin: 0 0 $space-md 0;
     font-size: 0.875rem;
@@ -397,20 +410,20 @@ h2 {
   background: var(--surface);
   transition: all $transition-fast;
   cursor: pointer;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-sm;
     border-color: var(--primary-color);
   }
-  
+
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
     color: var(--primary-color);
   }
-  
+
   .chip-amount {
     background: var(--gradient-primary);
     color: var(--text-on-primary);
@@ -419,7 +432,7 @@ h2 {
     font-size: 0.75rem;
     font-weight: 700;
   }
-  
+
   @include media-down($sm) {
     padding: 8px 12px;
     font-size: 0.8125rem;
@@ -434,12 +447,12 @@ h2 {
   font-size: 1.125rem;
   font-weight: 700;
   margin: 0 0 $space-md 0;
-  
+
   mat-icon {
     color: var(--primary-color);
     font-size: 24px;
   }
-  
+
   .expense-count {
     background: var(--gradient-primary);
     color: var(--text-on-primary);
@@ -463,11 +476,11 @@ h2 {
   padding: $space-md;
   border: 1px solid var(--border);
   transition: all $transition-base;
-  
+
   &:hover {
     box-shadow: $shadow-sm;
   }
-  
+
   @include media-down($sm) {
     padding: $space-sm;
     border-radius: $radius-md;
@@ -479,7 +492,7 @@ h2 {
   justify-content: space-between;
   align-items: center;
   margin-bottom: $space-md;
-  
+
   .expense-number {
     width: 36px;
     height: 36px;
@@ -492,12 +505,12 @@ h2 {
     font-size: 0.875rem;
     font-weight: 700;
   }
-  
+
   .delete-btn {
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    
+
     mat-icon {
       font-size: 20px;
     }
@@ -507,11 +520,11 @@ h2 {
 .expense-fields {
   display: grid;
   gap: $space-md;
-  
+
   @include media-up($sm) {
     grid-template-columns: 2fr 1.5fr 1fr 1fr;
   }
-  
+
   @include media-down($sm) {
     grid-template-columns: 1fr;
   }
@@ -523,7 +536,7 @@ h2 {
   border-radius: $radius-md;
   font-weight: 600;
   border: 2px dashed var(--border);
-  
+
   mat-icon {
     margin-right: 8px;
   }
@@ -543,15 +556,15 @@ h2 {
   align-items: center;
   gap: $space-md;
   padding: 12px 0;
-  
+
   &:first-child {
     padding-top: 0;
   }
-  
+
   &:last-child {
     padding-bottom: 0;
   }
-  
+
   .summary-icon {
     width: 44px;
     height: 44px;
@@ -560,44 +573,44 @@ h2 {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    
+
     &.total {
       background: var(--info-light);
       color: var(--info-color);
     }
-    
+
     &.remaining {
       background: var(--success-light);
       color: var(--success-color);
     }
-    
+
     mat-icon {
       font-size: 24px;
     }
   }
-  
+
   .summary-content {
     flex: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .summary-label {
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--text-secondary);
   }
-  
+
   .summary-value {
     font-size: 1.375rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    
+
     &.positive {
       color: var(--success-color);
     }
-    
+
     &.negative {
       color: var(--error-color);
     }
@@ -611,36 +624,36 @@ h2 {
   justify-content: flex-end;
   padding-top: $space-lg;
   border-top: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     flex-direction: column-reverse;
     padding-top: $space-md;
   }
-  
+
   button {
     height: 48px;
     border-radius: $radius-md;
     padding: 0 $space-lg;
     font-weight: 600;
-    
+
     @include media-down($sm) {
       width: 100%;
     }
-    
+
     mat-icon {
       margin: 0 8px;
     }
   }
-  
+
   .btn-primary {
     background: var(--gradient-primary);
     box-shadow: 0 4px 16px rgba(var(--primary-color-rgb), 0.4);
-    
+
     &:hover {
       box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.5);
     }
   }
-  
+
   .btn-secondary {
     color: var(--text-secondary);
   }

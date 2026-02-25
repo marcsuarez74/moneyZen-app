@@ -10,9 +10,7 @@
 >
   <div class="expenses-content">
     <!-- Formulaire d'ajout de charge -->
-    <app-expense-form
-      (saveExpense)="onAddExpense($event)"
-    ></app-expense-form>
+    <app-expense-form (saveExpense)="onAddExpense($event)"></app-expense-form>
 
     <!-- Liste des dépenses -->
     <div class="expenses-list-section">
@@ -20,7 +18,9 @@
         <h3>Vos charges ({{ expensesArray().length }})</h3>
         <div class="total-badge">
           <mat-icon>calculate</mat-icon>
-          <span>Total mensuel: <strong>{{ getTotalMonthly() | currency:'EUR' }}</strong></span>
+          <span
+            >Total mensuel: <strong>{{ getTotalMonthly() | currency: 'EUR' }}</strong></span
+          >
         </div>
       </div>
 
@@ -30,7 +30,6 @@
             <div class="expense-row">
               <app-expense-item
                 [expense]="expenseGroup.value"
-                [icon]="getCategoryIcon(expenseGroup.value.category)"
                 [editable]="false"
                 [removable]="true"
                 (remove)="onRemoveExpense($index)"
@@ -52,16 +51,28 @@
         <h4>Chargement rapide</h4>
         <p>Cliquez sur une suggestion pour l'ajouter rapidement :</p>
         <div class="suggestion-chips">
-          <button mat-stroked-button (click)="onAddExpense({ name: 'Loyer', category: 'housing', amount: 800, frequency: 'monthly' })">
+          <button
+            mat-stroked-button
+            (click)="onAddExpense({ name: 'Loyer', category: 'housing', amount: 800, frequency: 'monthly' })"
+          >
             <mat-icon>home</mat-icon> Loyer
           </button>
-          <button mat-stroked-button (click)="onAddExpense({ name: 'Courses', category: 'food', amount: 400, frequency: 'monthly' })">
+          <button
+            mat-stroked-button
+            (click)="onAddExpense({ name: 'Courses', category: 'food', amount: 400, frequency: 'monthly' })"
+          >
             <mat-icon>restaurant</mat-icon> Courses
           </button>
-          <button mat-stroked-button (click)="onAddExpense({ name: 'Transport', category: 'transport', amount: 100, frequency: 'monthly' })">
+          <button
+            mat-stroked-button
+            (click)="onAddExpense({ name: 'Transport', category: 'transport', amount: 100, frequency: 'monthly' })"
+          >
             <mat-icon>directions_car</mat-icon> Transport
           </button>
-          <button mat-stroked-button (click)="onAddExpense({ name: 'Électricité', category: 'utilities', amount: 80, frequency: 'monthly' })">
+          <button
+            mat-stroked-button
+            (click)="onAddExpense({ name: 'Électricité', category: 'utilities', amount: 80, frequency: 'monthly' })"
+          >
             <mat-icon>bolt</mat-icon> Élec.
           </button>
         </div>

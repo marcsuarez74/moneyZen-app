@@ -1,11 +1,11 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // BUDGET DASHBOARD PAGE - Responsive & Dark Theme
 // ============================================
 
 .budget-page {
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   background: var(--background);
@@ -15,11 +15,11 @@
 .dashboard-layout {
   flex: 1;
   padding: $space-xl 0;
-  
+
   @include media-down($md) {
     padding: $space-lg 0;
   }
-  
+
   @include media-down($sm) {
     padding: $space-md 0;
   }
@@ -32,16 +32,16 @@
   display: flex;
   flex-direction: column;
   gap: $space-xl;
-  
+
   @include media-down($lg) {
     padding: 0 $space-lg;
   }
-  
+
   @include media-down($md) {
     padding: 0 $space-md;
     gap: $space-lg;
   }
-  
+
   @include media-down($sm) {
     padding: 0 $space-sm;
     gap: $space-md;
@@ -52,11 +52,19 @@
 .dashboard-section {
   animation: slideUp 0.6s ease forwards;
   opacity: 0;
-  
-  &.section-alert { animation-delay: 0.1s; }
-  &.section-insights { animation-delay: 0.2s; }
-  &.section-stats { animation-delay: 0.3s; }
-  &.section-content { animation-delay: 0.4s; }
+
+  &.section-alert {
+    animation-delay: 0.1s;
+  }
+  &.section-insights {
+    animation-delay: 0.2s;
+  }
+  &.section-stats {
+    animation-delay: 0.3s;
+  }
+  &.section-content {
+    animation-delay: 0.4s;
+  }
 }
 
 // Onglets de contenu
@@ -80,34 +88,34 @@
       height: 64px;
       padding: 0 $space-lg;
       opacity: 1;
-      
+
       @include media-down($md) {
         height: 56px;
         padding: 0 $space-md;
       }
-      
+
       @include media-down($sm) {
         height: 48px;
         padding: 0 $space-sm;
       }
-      
+
       .mdc-tab__text-label {
         color: var(--text-secondary);
         font-weight: 500;
         font-size: 0.9375rem;
         transition: all $transition-base;
       }
-      
+
       &:hover .mdc-tab__text-label {
         color: var(--text-primary);
       }
-      
+
       &.mdc-tab--active {
         .mdc-tab__text-label {
           color: var(--primary-color);
           font-weight: 600;
         }
-        
+
         .mdc-tab-indicator__content--underline {
           border-color: var(--primary-color);
           border-top-width: 3px;
@@ -136,18 +144,18 @@
   justify-content: center;
   background: var(--surface-variant);
   transition: all $transition-base;
-  
+
   @include media-down($sm) {
     width: 32px;
     height: 32px;
   }
-  
+
   mat-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
     color: var(--text-secondary);
-    
+
     @include media-down($sm) {
       font-size: 18px;
       width: 18px;
@@ -158,7 +166,7 @@
 
 .modern-tabs ::ng-deep .mat-mdc-tab.mdc-tab--active .tab-icon {
   background: var(--gradient-primary);
-  
+
   mat-icon {
     color: var(--text-on-primary);
   }
@@ -183,11 +191,11 @@
 
 .tab-panel {
   padding: $space-xl;
-  
+
   @include media-down($md) {
     padding: $space-lg;
   }
-  
+
   @include media-down($sm) {
     padding: $space-md;
   }
@@ -219,7 +227,7 @@
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -231,7 +239,7 @@
   &:hover {
     transform: translateY(-6px);
     box-shadow: $shadow-lg;
-    
+
     &::before {
       height: 6px;
     }
@@ -241,7 +249,7 @@
     &::before {
       background: var(--gradient-error);
     }
-    
+
     .scenario-icon {
       background: var(--error-light);
       color: var(--error-dark);
@@ -252,7 +260,7 @@
     &::before {
       background: var(--gradient-warning);
     }
-    
+
     .scenario-icon {
       background: var(--warning-light);
       color: var(--warning-dark);
@@ -263,7 +271,7 @@
     &::before {
       background: var(--gradient-success);
     }
-    
+
     .scenario-icon {
       background: var(--success-light);
       color: var(--success-dark);
@@ -292,18 +300,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      
+
       @include media-down($sm) {
         width: 40px;
         height: 40px;
         border-radius: 12px;
       }
-      
+
       mat-icon {
         font-size: 24px;
         width: 24px;
         height: 24px;
-        
+
         @include media-down($sm) {
           font-size: 20px;
           width: 20px;
@@ -317,7 +325,7 @@
       font-size: 1.125rem;
       font-weight: 700;
       color: var(--text-primary);
-      
+
       @include media-down($sm) {
         font-size: 1rem;
       }

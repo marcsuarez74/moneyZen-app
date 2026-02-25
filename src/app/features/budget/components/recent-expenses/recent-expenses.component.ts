@@ -4,7 +4,7 @@
  * Affiche les dépenses du mois avec actions éditer/supprimer
  */
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +18,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { ExpenseListItemComponent } from '../../../../shared/components/expense-list-item/expense-list-item.component';
-import { ExpenseCategoryChipComponent } from '../../../../shared/components/expense-category-chip/expense-category-chip.component';
 import { ExpenseRecordStore } from '../../../../store/expense-record.store';
 import { ExpenseRecord, ExpenseCategory, ExpenseRecordFormData } from '../../../../models/expense-record.model';
 import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
@@ -29,7 +28,6 @@ import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
   imports: [
     CommonModule,
     CurrencyPipe,
-    DatePipe,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -43,7 +41,6 @@ import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
     MatNativeDateModule,
     FormsModule,
     ExpenseListItemComponent,
-    ExpenseCategoryChipComponent
   ],
   providers: [provideNativeDateAdapter()],
   template: `
@@ -61,7 +58,7 @@ import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
 
       <mat-card-content>
         <!-- Filtres par période -->
-        <mat-tab-group 
+        <mat-tab-group
           [selectedIndex]="selectedPeriod()"
           (selectedIndexChange)="selectedPeriod.set($event)"
           class="period-tabs">
@@ -142,8 +139,8 @@ import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
 
       <mat-card-actions align="end">
         @if (filteredExpenses().length > 0) {
-          <button 
-            mat-button 
+          <button
+            mat-button
             color="warn"
             (click)="confirmClearAll()">
             <mat-icon>delete_sweep</mat-icon>
@@ -160,7 +157,7 @@ import { EXPENSE_CATEGORIES } from '../../../../models/budget.model';
     .recent-expenses-card {
       background: var(--fintech-surface, #ffffff);
       border-radius: 24px;
-      box-shadow: 
+      box-shadow:
         0 4px 6px -1px rgba(0, 0, 0, 0.1),
         0 2px 4px -1px rgba(0, 0, 0, 0.06);
       border: 1px solid var(--fintech-border, #e0e0e0);

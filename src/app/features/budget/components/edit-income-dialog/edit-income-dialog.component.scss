@@ -1,4 +1,4 @@
-@import '../../../../../styles/variables';
+@use "../../../../../styles/variables" as *;
 
 // ============================================
 // EDIT INCOME DIALOG - Responsive & Dark Theme
@@ -11,11 +11,11 @@
   overflow: hidden;
   box-shadow: $shadow-xl;
   border-radius: $radius-xl;
-  
+
   @include media-down($md) {
     border-radius: $radius-lg;
   }
-  
+
   @include media-down($sm) {
     border-radius: $radius-md;
     margin: $space-sm;
@@ -29,65 +29,65 @@
   background: var(--gradient-primary);
   color: var(--text-on-primary);
   overflow: hidden;
-  
+
   @include media-down($sm) {
     padding: $space-md;
   }
-  
+
   .header-bg {
     position: absolute;
     inset: 0;
-    background: 
-      radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    background:
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
     pointer-events: none;
   }
-  
+
   .header-content {
     position: relative;
     display: flex;
     align-items: center;
     gap: $space-md;
     z-index: 1;
-    
+
     @include media-down($sm) {
       gap: $space-sm;
     }
   }
-  
+
   .header-icon {
     width: 48px;
     height: 48px;
     border-radius: 14px;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    
+
     @include media-down($sm) {
       width: 40px;
       height: 40px;
       border-radius: 12px;
     }
-    
+
     mat-icon {
       color: var(--text-on-primary);
       font-size: 24px;
-      
+
       @include media-down($sm) {
         font-size: 20px;
       }
     }
   }
-  
+
   h2 {
     margin: 0;
     font-size: 1.375rem;
     font-weight: 700;
     letter-spacing: -0.5px;
-    
+
     @include media-down($sm) {
       font-size: 1.125rem;
     }
@@ -98,7 +98,7 @@
 mat-dialog-content {
   padding: $space-lg;
   margin: 0;
-  
+
   @include media-down($sm) {
     padding: $space-md;
   }
@@ -112,7 +112,7 @@ mat-dialog-content {
   display: flex;
   flex-direction: column;
   gap: $space-lg;
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-md;
@@ -136,7 +136,7 @@ mat-dialog-content {
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  
+
   mat-icon {
     font-size: 18px;
     width: 18px;
@@ -162,35 +162,35 @@ mat-dialog-content {
   color: var(--text-secondary);
   transition: all $transition-base;
   flex-shrink: 0;
-  
+
   @include media-down($sm) {
     width: 44px;
     height: 44px;
     border-radius: 10px;
   }
-  
+
   &:hover {
     background: var(--surface-variant);
     border-color: var(--primary-color);
     color: var(--primary-color);
   }
-  
+
   &.negative {
     background: var(--error-light);
     border-color: var(--error-color);
     color: var(--error-color);
-    
+
     &:hover {
       background: var(--error-color);
       color: var(--text-on-error);
     }
   }
-  
+
   mat-icon {
     font-size: 24px;
     width: 24px;
     height: 24px;
-    
+
     @include media-down($sm) {
       font-size: 20px;
       width: 20px;
@@ -212,28 +212,28 @@ mat-dialog-content {
   border-radius: $radius-lg;
   padding: 0 4px 0 $space-md;
   transition: all $transition-base;
-  
+
   &:focus-within {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.1);
   }
-  
+
   &.positive {
     border-color: var(--success-color);
-    
+
     &:focus-within {
       box-shadow: 0 0 0 4px rgba(var(--success-color-rgb), 0.1);
     }
   }
-  
+
   &.negative {
     border-color: var(--error-color);
-    
+
     &:focus-within {
       box-shadow: 0 0 0 4px rgba(var(--error-color-rgb), 0.1);
     }
   }
-  
+
   @include media-down($sm) {
     border-radius: $radius-md;
   }
@@ -248,21 +248,21 @@ mat-dialog-content {
   font-weight: 700;
   color: var(--text-primary);
   outline: none;
-  
+
   @include media-down($sm) {
     font-size: 1.125rem;
     padding: 12px 0;
   }
-  
+
   &::placeholder {
     color: var(--text-secondary);
     font-weight: 500;
   }
-  
+
   &.positive {
     color: var(--success-color);
   }
-  
+
   &.negative {
     color: var(--error-color);
   }
@@ -276,7 +276,7 @@ mat-dialog-content {
   background: var(--surface-variant);
   border-radius: $radius-md;
   margin: 4px;
-  
+
   @include media-down($sm) {
     padding: 8px 12px;
     font-size: 0.875rem;
@@ -299,7 +299,7 @@ mat-dialog-content {
   border: 2px solid var(--border);
   border-radius: $radius-xl;
   padding: 8px;
-  
+
   @include media-down($sm) {
     gap: $space-sm;
     border-radius: $radius-lg;
@@ -313,29 +313,29 @@ mat-dialog-content {
   background: var(--gradient-primary) !important;
   color: var(--text-on-primary) !important;
   transition: all $transition-fast !important;
-  
+
   @include media-down($sm) {
     width: 40px;
     height: 40px;
     border-radius: 10px !important;
   }
-  
+
   &:hover:not([disabled]) {
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.4);
   }
-  
+
   &[disabled] {
     background: var(--surface-variant) !important;
     color: var(--text-secondary) !important;
     opacity: 0.5;
   }
-  
+
   mat-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
-    
+
     @include media-down($sm) {
       font-size: 18px;
       width: 18px;
@@ -357,7 +357,7 @@ mat-dialog-content {
   font-weight: 800;
   color: var(--primary-color);
   line-height: 1;
-  
+
   @include media-down($sm) {
     font-size: 1.75rem;
   }
@@ -380,19 +380,19 @@ mat-dialog-content {
   font-weight: 600;
   width: fit-content;
   margin-top: 4px;
-  
+
   mat-icon {
     font-size: 16px;
     width: 16px;
     height: 16px;
   }
-  
+
   &.positive {
     background: var(--success-light);
     color: var(--success-dark);
     border: 1px solid rgba(var(--success-color-rgb), 0.3);
   }
-  
+
   &.negative {
     background: var(--error-light);
     color: var(--error-dark);
@@ -406,7 +406,7 @@ mat-dialog-actions {
   margin: 0;
   gap: $space-sm;
   border-top: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     flex-direction: column-reverse;
     padding: $space-md;
@@ -421,7 +421,7 @@ mat-dialog-actions {
   text-transform: none !important;
   letter-spacing: 0 !important;
   color: var(--text-secondary) !important;
-  
+
   @include media-down($sm) {
     width: 100%;
   }
@@ -437,21 +437,21 @@ mat-dialog-actions {
   letter-spacing: 0 !important;
   box-shadow: 0 4px 14px rgba(var(--primary-color-rgb), 0.4) !important;
   transition: all $transition-fast !important;
-  
+
   &:hover:not([disabled]) {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.5) !important;
   }
-  
+
   &[disabled] {
     opacity: 0.5;
     box-shadow: none !important;
   }
-  
+
   @include media-down($sm) {
     width: 100%;
   }
-  
+
   mat-icon {
     margin-right: 8px;
     font-size: 18px;

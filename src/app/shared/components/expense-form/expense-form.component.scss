@@ -1,4 +1,4 @@
-@import '../../../../styles/variables';
+@use "../../../../styles/variables" as *;
 
 // ============================================
 // EXPENSE FORM - Responsive & Dark Theme
@@ -12,7 +12,7 @@
   border: 1px solid var(--border);
   box-shadow: $shadow-sm;
   transition: all $transition-base;
-  
+
   @include media-down($sm) {
     padding: $space-md;
     border-radius: $radius-md;
@@ -42,7 +42,7 @@
   margin-bottom: $space-md;
   padding-bottom: $space-md;
   border-bottom: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     margin-bottom: $space-sm;
     padding-bottom: $space-sm;
@@ -63,14 +63,14 @@
     font-size: 24px;
     width: 24px;
     height: 24px;
-    
+
     @include media-down($sm) {
       font-size: 20px;
       width: 20px;
       height: 20px;
     }
   }
-  
+
   @include media-down($sm) {
     font-size: 1rem;
     gap: 8px;
@@ -84,7 +84,7 @@
   &:hover {
     color: var(--text-primary);
   }
-  
+
   @include media-down($sm) {
     width: 36px;
     height: 36px;
@@ -95,7 +95,7 @@
   display: flex;
   flex-direction: column;
   gap: $space-md;
-  
+
   @include media-down($sm) {
     gap: $space-sm;
   }
@@ -128,11 +128,11 @@
     .mat-mdc-floating-label {
       color: var(--text-secondary);
     }
-    
+
     .mat-mdc-form-field-focus-overlay {
       background: var(--primary-color);
     }
-    
+
     .mdc-text-field--focused {
       .mat-mdc-floating-label {
         color: var(--primary-color);
@@ -147,7 +147,7 @@
       background: var(--surface-variant);
       border-radius: 8px;
     }
-    
+
     .mat-mdc-form-field-subscript-wrapper {
       padding: 0 4px;
     }
@@ -166,7 +166,7 @@ app-category-select {
   padding-top: 8px;
   margin-top: 8px;
   border-top: 1px solid var(--border);
-  
+
   @include media-down($sm) {
     flex-direction: column-reverse;
     gap: 8px;
@@ -178,7 +178,7 @@ app-category-select {
     border-radius: $radius-md;
     background: var(--gradient-primary) !important;
     color: var(--text-on-primary) !important;
-    
+
     @include media-down($sm) {
       width: 100%;
       min-width: auto;
@@ -189,7 +189,7 @@ app-category-select {
       font-size: 20px;
       width: 20px;
       height: 20px;
-      
+
       @include media-down($sm) {
         font-size: 18px;
         width: 18px;
@@ -197,10 +197,10 @@ app-category-select {
       }
     }
   }
-  
+
   .cancel-btn {
     color: var(--text-secondary);
-    
+
     @include media-down($sm) {
       width: 100%;
     }
@@ -218,7 +218,7 @@ mat-option {
     width: 20px;
     height: 20px;
     color: var(--primary-color);
-    
+
     @include media-down($sm) {
       font-size: 18px;
       width: 18px;
