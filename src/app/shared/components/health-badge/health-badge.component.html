@@ -1,0 +1,5 @@
+<div class="health-badge" [class]="getStatus()" [matTooltip]="getTooltip()">
+  <mat-icon>{{ getIcon() }}</mat-icon>
+  <span class="value">{{ health() }}%</span>
+  <div class="indicator" [style.width.%]="health()"></div>
+</div>

@@ -14,3 +14,6 @@ export { BackupImportDialogComponent } from './backup-import-dialog/backup-impor
 export { BackupImportBottomSheetComponent } from './backup-import-bottom-sheet/backup-import-bottom-sheet.component';
 export { BackupExportButtonComponent } from './backup-export-button/backup-export-button.component';
 export { BottomNavigationComponent } from './bottom-navigation/bottom-navigation.component';
+export { DailyBudgetInfoComponent } from './daily-budget-info/daily-budget-info.component';
+export { HealthBadgeComponent } from './health-badge/health-badge.component';
+export { AlertBadgeComponent } from './alert-badge/alert-badge.component';
