@@ -34,6 +34,7 @@ $color-warning: #ff9800;
 
 // ============================================
 // CONTENEUR PRINCIPAL
+// Laisser Material gérer les border-radius globaux
 // ============================================
 .backup-import-dialog {
   min-width: $dialog-min-width;
@@ -42,6 +43,7 @@ $color-warning: #ff9800;
   display: flex;
   flex-direction: column;
   max-height: 90vh;
+  // Pas de border-radius ici - laisser Material Dialog gérer
 
   // Responsive width
   @media (max-width: #{$mobile - 1}) {
@@ -61,34 +63,32 @@ $color-warning: #ff9800;
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  margin-bottom: $spacing-lg;
-  padding-bottom: $spacing-md;
-  border-bottom: 1px solid $color-border;
   flex-shrink: 0;
+  // Suppression du margin/border-bottom pour éviter les conflits Material
+  padding: 0 0 $spacing-md 0;
 
   @media (max-width: #{$mobile - 1}) {
-    margin-bottom: $spacing-md;
-    padding-bottom: $spacing-sm;
     gap: $spacing-sm;
+    padding: 0 0 $spacing-sm 0;
   }
 
   .header-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
     color: $color-primary;
     flex-shrink: 0;
 
     @media (max-width: #{$mobile - 1}) {
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
     }
   }
 
-  h2 {
+  .dialog-title-text {
     margin: 0;
-    font-size: clamp(1.125rem, 2.5vw, 1.25rem);
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
     font-weight: 600;
     color: $color-text-primary;
     line-height: 1.3;
@@ -704,14 +704,12 @@ $color-warning: #ff9800;
   display: flex;
   justify-content: flex-end;
   gap: $spacing-sm;
-  padding: $spacing-md $spacing-lg 0;
-  border-top: 1px solid $color-border;
-  margin-top: $spacing-md;
+  // Padding uniforme pour éviter les asymétries
+  padding: $spacing-md 0 0;
   flex-shrink: 0;
 
   @media (max-width: #{$mobile - 1}) {
     flex-direction: column-reverse;
-    padding: $spacing-md 0 0;
     gap: $spacing-xs;
 
     button {
@@ -735,9 +733,7 @@ $color-warning: #ff9800;
   }
 
   .dialog-header {
-    border-color: rgba(255, 255, 255, 0.1);
-
-    h2 {
+    .dialog-title-text {
       color: rgba(255, 255, 255, 0.9);
     }
   }
