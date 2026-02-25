@@ -115,21 +115,21 @@
 
 .page-container {
   flex: 1;
-  padding: $space-xl;
+  padding: 8px;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 
   @include media-down($lg) {
-    padding: $space-lg;
+    padding: 8px;
   }
 
   @include media-down($md) {
-    padding: $space-md;
+    padding: 8px;
   }
 
   @include media-down($sm) {
-    padding: $space-sm;
+    padding: 8px;
   }
 }
 

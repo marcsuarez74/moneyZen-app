@@ -76,6 +76,14 @@
   @include media-down($sm) {
     border-radius: $radius-lg;
   }
+
+  ::ng-deep .mat-mdc-card-header {
+    padding-bottom: $space-md;
+  }
+
+  ::ng-deep .mat-mdc-card-content {
+    padding-top: $space-md;
+  }
 }
 
 .header-icon {
