@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -11,7 +11,9 @@ import { PlanAutoUpdateService } from './services/plan-auto-update.service';
 import { VersionDisplayComponent } from './shared/components/version-display/version-display.component';
 import { UpdateNotificationComponent } from './shared/components/update-notification/update-notification.component';
 import { InstallPromptComponent } from './shared/components/install-prompt/install-prompt.component';
+import { BottomNavigationComponent } from './shared/components/bottom-navigation/bottom-navigation.component';
 import { UpdateService } from './core/services/update.service';
+import { ResponsiveService } from './services/responsive.service';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +28,8 @@ import { UpdateService } from './core/services/update.service';
     MatListModule,
     VersionDisplayComponent,
     UpdateNotificationComponent,
-    InstallPromptComponent
+    InstallPromptComponent,
+    BottomNavigationComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -35,10 +38,12 @@ export class AppComponent implements OnInit, OnDestroy {
   private storageService = inject(LocalStorageService);
   private planAutoUpdate = inject(PlanAutoUpdateService);
   private updateService = inject(UpdateService);
+  private responsiveService = inject(ResponsiveService);
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
   isDarkMode = false;
+  isMobile = this.responsiveService.isMobile;
 
   ngOnInit(): void {
     this.isDarkMode = this.storageService.loadThemePreference();

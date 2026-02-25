@@ -18,8 +18,8 @@
   }
 
   @if (budgetStore.hasUserData()) {
-    <main class="dashboard-layout">
-      <div class="dashboard-container">
+    <main class="dashboard-layout responsive-container">
+      <div class="dashboard-content">
         
         @if (isNegativeBalance() && recoveryData(); as recovery) {
           <section class="dashboard-section section-alert">
