@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { RecoveryPlanInfo } from '../debt-recovery-plan.component';
+import { RecoveryPlanInfo } from '../../debt-recovery-plan.component';
 
 @Component({
   selector: 'app-plan-next-step',

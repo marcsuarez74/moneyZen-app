@@ -2,8 +2,8 @@ import { Component, input, output, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { QuickExpenseComponent } from '../../quick-expense/quick-expense.component';
-import { RecentExpensesComponent } from '../../recent-expenses/recent-expenses.component';
+import { QuickExpenseComponent } from '../../../quick-expense/quick-expense.component';
+import { RecentExpensesComponent } from '../../../recent-expenses/recent-expenses.component';
 
 @Component({
   selector: 'app-plan-expenses',

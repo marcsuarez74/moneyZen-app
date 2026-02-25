@@ -121,8 +121,9 @@
 }
 
 .action-btn {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -133,6 +134,7 @@
   transition: all 0.2s ease;
   position: relative;
   flex-shrink: 0;
+  overflow: visible;
 
   &:hover {
     background: var(--surface);
@@ -140,6 +142,25 @@
     border-color: var(--primary-color);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.15);
+  }
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  ::ng-deep .mat-mdc-button-persistent-ripple,
+  ::ng-deep .mat-mdc-button-touch-target {
+    border-radius: 10px;
+  }
+
+  ::ng-deep .mdc-icon-button__ripple {
+    border-radius: 10px;
   }
 
   mat-icon {
@@ -282,9 +303,6 @@
   box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
   border: none;
   text-transform: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &:hover {
     transform: translateY(-1px);
@@ -295,14 +313,35 @@
     font-size: 20px;
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
   }
 
   span {
-    display: none;
+    display: inline;
+  }
 
-    @include media-down($sm) {
-      display: inline;
-      font-size: 0.8125rem;
+  @include media-down($sm) {
+    padding: 0 !important;
+    width: 44px;
+    min-width: 44px;
+    gap: 0;
+
+    span {
+      display: none !important;
+    }
+
+    ::ng-deep {
+      .mdc-button__label {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        gap: 0 !important;
+      }
+
+      mat-icon {
+        margin: 0 !important;
+      }
     }
   }
 }
@@ -385,6 +424,10 @@
       font-size: 20px;
       width: 20px;
       height: 20px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }
