@@ -12,3 +12,4 @@ export { ExpenseListItemComponent } from './expense-list-item/expense-list-item.
 export { PlanNavigationComponent, PlanSection } from './plan-navigation/plan-navigation.component';
 export { BackupImportDialogComponent } from './backup-import-dialog/backup-import-dialog.component';
 export { BackupExportButtonComponent } from './backup-export-button/backup-export-button.component';
+export { BottomNavigationComponent } from './bottom-navigation/bottom-navigation.component';
