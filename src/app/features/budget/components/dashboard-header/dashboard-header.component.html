@@ -86,7 +86,15 @@
 
 <!-- Mobile Menu Overlay -->
 @if (isMenuOpen()) {
-  <div class="mobile-menu-overlay" [class.open]="isMenuOpen()" (click)="isMenuOpen.set(false)"></div>
+  <div
+    class="mobile-menu-overlay"
+    [class.open]="isMenuOpen()"
+    (click)="isMenuOpen.set(false)"
+    (keydown.escape)="isMenuOpen.set(false)"
+    tabindex="0"
+    role="button"
+    aria-label="Fermer le menu mobile"
+  ></div>
 }
 
 <!-- Mobile Menu -->
