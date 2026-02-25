@@ -1,0 +1,350 @@
+@use "../../../styles/variables" as *;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+// Settings Page Layout
+.settings-page {
+  min-height: calc(100vh - 64px);
+  padding: $space-xl 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+
+  @include media-down($md) {
+    padding: $space-lg 0;
+    gap: $space-lg;
+  }
+
+  @include media-down($sm) {
+    padding: $space-md 0;
+    gap: $space-md;
+  }
+}
+
+// Container with max-width
+.settings-container {
+  max-width: $xxl;
+  margin: 0 auto;
+  padding: 0 $space-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+  width: 100%;
+
+  @include media-down($lg) {
+    max-width: 900px;
+    padding: 0 $space-lg;
+    gap: $space-lg;
+  }
+
+  @include media-down($md) {
+    padding: 0 $space-md;
+    gap: $space-lg;
+  }
+
+  @include media-down($sm) {
+    padding: 0 $space-sm;
+    gap: $space-md;
+  }
+}
+
+// Page Header
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: $space-lg;
+  padding: $space-lg $space-xl;
+  background: var(--surface);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  border: 1px solid var(--border);
+  animation: slideUp 0.5s ease forwards;
+
+  @include media-down($md) {
+    padding: $space-md $space-lg;
+    gap: $space-md;
+  }
+
+  @include media-down($sm) {
+    padding: $space-md;
+    gap: $space-sm;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.header-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: $radius-lg;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+
+  @include media-down($md) {
+    width: 48px;
+    height: 48px;
+  }
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--text-on-primary);
+
+    @include media-down($md) {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.header-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.5px;
+
+  @include media-down($md) {
+    font-size: 1.5rem;
+  }
+
+  @include media-down($sm) {
+    font-size: 1.25rem;
+  }
+}
+
+.header-subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+
+  @include media-down($sm) {
+    font-size: 0.875rem;
+  }
+}
+
+// Settings Content
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xl;
+
+  @include media-down($md) {
+    gap: $space-lg;
+  }
+
+  @include media-down($sm) {
+    gap: $space-md;
+  }
+}
+
+// Section Cards
+.settings-section {
+  background: var(--surface);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  animation: slideUp 0.6s ease forwards;
+  opacity: 0;
+
+  &:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-lg $space-xl;
+  background: var(--surface-variant);
+  border-bottom: 1px solid var(--border);
+
+  @include media-down($md) {
+    padding: $space-md $space-lg;
+  }
+
+  @include media-down($sm) {
+    padding: $space-md;
+  }
+}
+
+.section-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: $radius-md;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  @include media-down($md) {
+    width: 36px;
+    height: 36px;
+  }
+
+  mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    color: var(--text-on-primary);
+
+    @include media-down($md) {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.section-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+
+  @include media-down($sm) {
+    font-size: 1rem;
+  }
+}
+
+.section-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 2px 0 0 0;
+
+  @include media-down($sm) {
+    font-size: 0.8125rem;
+  }
+}
+
+.section-content {
+  // Les composants enfants gèrent leur propre padding
+}
+
+// Coming Soon Card
+.coming-soon-card {
+  opacity: 0.7;
+
+  .section-icon {
+    background: var(--surface-variant);
+    border: 2px dashed var(--border);
+
+    mat-icon {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.coming-soon-content {
+  padding: $space-xl;
+
+  @include media-down($md) {
+    padding: $space-lg;
+  }
+
+  @include media-down($sm) {
+    padding: $space-md;
+  }
+
+  p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin: 0 0 $space-md 0;
+  }
+}
+
+.coming-soon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-sm;
+
+  @include media-down($sm) {
+    grid-template-columns: 1fr;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    padding: $space-sm $space-md;
+    background: var(--surface-variant);
+    border-radius: $radius-md;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+
+    @include media-down($sm) {
+      padding: $space-sm;
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: var(--primary-color);
+      opacity: 0.6;
+    }
+  }
+}
+
+// Dark theme adjustments
+:host-context(.dark-theme) {
+  .settings-header {
+    background: var(--surface);
+  }
+
+  .settings-section {
+    background: var(--surface);
+  }
+
+  .section-header {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .coming-soon-list li {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Animations
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

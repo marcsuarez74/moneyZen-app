@@ -1,0 +1,69 @@
+<div class="settings-page">
+  <div class="settings-container">
+    <!-- Page Header -->
+    <header class="settings-header">
+      <div class="header-icon">
+        <mat-icon>settings</mat-icon>
+      </div>
+      <div class="header-content">
+        <h1 class="header-title">Paramètres</h1>
+        <p class="header-subtitle">Personnalisez votre expérience MoneyZen</p>
+      </div>
+    </header>
+
+    <!-- Settings Content -->
+    <div class="settings-content">
+      <!-- Notifications Section -->
+      <section class="settings-section">
+        <div class="section-header">
+          <div class="section-icon">
+            <mat-icon>notifications_active</mat-icon>
+          </div>
+          <div class="section-info">
+            <h2 class="section-title">Notifications Push</h2>
+            <p class="section-description">Gérez vos alertes et résumés</p>
+          </div>
+        </div>
+        <div class="section-content">
+          <app-notification-preferences></app-notification-preferences>
+        </div>
+      </section>
+
+      <!-- Coming Soon Section -->
+      <section class="settings-section coming-soon-card">
+        <div class="section-header">
+          <div class="section-icon">
+            <mat-icon>construction</mat-icon>
+          </div>
+          <div class="section-info">
+            <h2 class="section-title">Plus d'options</h2>
+            <p class="section-description">Prochainement disponibles</p>
+          </div>
+        </div>
+        <div class="section-content">
+          <div class="coming-soon-content">
+            <p>D'autres paramètres seront ajoutés dans les prochaines versions :</p>
+            <ul class="coming-soon-list">
+              <li>
+                <mat-icon>palette</mat-icon>
+                <span>Thème (clair/sombre)</span>
+              </li>
+              <li>
+                <mat-icon>language</mat-icon>
+                <span>Langue</span>
+              </li>
+              <li>
+                <mat-icon>attach_money</mat-icon>
+                <span>Devise</span>
+              </li>
+              <li>
+                <mat-icon>cloud_sync</mat-icon>
+                <span>Sauvegarde automatique</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
