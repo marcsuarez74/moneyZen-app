@@ -23,12 +23,17 @@ import { PlanStore } from '../../../../store/plan.store';
 import { LocalStorageService } from '../../../../services/local-storage.service';
 import { BudgetStore } from '../../../../store/budget.store';
 import { ExpenseRecordStore } from '../../../../store/expense-record.store';
-import { QuickExpenseComponent } from '../quick-expense/quick-expense.component';
-import { RecentExpensesComponent } from '../recent-expenses/recent-expenses.component';
 import {
   PlanNavigationComponent,
   PlanSection,
 } from '../../../../shared/components/plan-navigation/plan-navigation.component';
+import {
+  PlanInfoComponent,
+  PlanNextStepComponent,
+  PlanSituationComponent,
+  PlanStrategyComponent,
+  PlanExpensesComponent,
+} from './components';
 
 export interface RecoveryPlanData {
   overdraftAmount: number;
@@ -73,9 +78,12 @@ export interface MonthlyTarget {
     MatExpansionModule,
     FormsModule,
     CurrencyPipe,
-    QuickExpenseComponent,
-    RecentExpensesComponent,
     PlanNavigationComponent,
+    PlanInfoComponent,
+    PlanNextStepComponent,
+    PlanSituationComponent,
+    PlanStrategyComponent,
+    PlanExpensesComponent,
   ],
   templateUrl: './debt-recovery-plan.component.html',
   styleUrls: ['./debt-recovery-plan.component.scss'],

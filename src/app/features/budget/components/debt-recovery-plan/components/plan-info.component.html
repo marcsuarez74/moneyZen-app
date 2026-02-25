@@ -1,0 +1,40 @@
+<div id="plan-info" class="info-box info-primary">
+  <h3>
+    <mat-icon>info</mat-icon>
+    Comment fonctionne ce plan ?
+  </h3>
+  <div class="info-content">
+    <p>
+      Ce plan de redressement est conçu pour vous aider à remonter à zéro de manière réaliste et progressive.
+      <strong>Il démarrera automatiquement le jour de votre prochaine paie.</strong>
+    </p>
+    <ul class="info-list">
+      <li>
+        <mat-icon>event</mat-icon>
+        <span>
+          @if (planInfo().hasStarted) {
+            Votre plan a <strong>commencé ce mois-ci</strong> 🎯 et prendra fin
+            <strong>{{ planInfo().endDateFormatted }}</strong>
+          } @else {
+            Le plan commence le <strong>{{ planInfo().startDateFormatted }}</strong> (votre prochaine paie)
+          }
+        </span>
+      </li>
+      <li>
+        <mat-icon>update</mat-icon>
+        <span
+          ><strong>Important :</strong> Mettez à jour votre solde bancaire le jour de votre paie pour un suivi
+          précis</span
+        >
+      </li>
+      <li>
+        <mat-icon>track_changes</mat-icon>
+        <span>Suivez vos dépenses quotidiennes avec le budget indiqué chaque mois</span>
+      </li>
+      <li>
+        <mat-icon>trending_up</mat-icon>
+        <span>Le plan s'adapte automatiquement à votre situation si vous mettez à jour vos données</span>
+      </li>
+    </ul>
+  </div>
+</div>

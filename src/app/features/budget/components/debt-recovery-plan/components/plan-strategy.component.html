@@ -1,0 +1,65 @@
+<div id="plan-strategy" class="strategy-box">
+  <h3>
+    <mat-icon>lightbulb</mat-icon>
+    Stratégie recommandée
+  </h3>
+  <div class="strategy-content">
+    <div class="strategy-item primary">
+      <mat-icon>savings</mat-icon>
+      <div class="strategy-text">
+        <span class="strategy-label">Budget mensuel disponible</span>
+        <span class="strategy-value">{{ recommendedMonthlyBudget() | currency: 'EUR' }}</span>
+        <span class="strategy-detail"
+          >C'est ce que vous pouvez dépenser en extra ce mois-ci tout en remontant votre découvert</span
+        >
+      </div>
+    </div>
+
+    <div class="strategy-item">
+      <mat-icon>calendar_today</mat-icon>
+      <div class="strategy-text">
+        <span class="strategy-label">Budget quotidien réaliste</span>
+        <span class="strategy-value">{{ recommendedDailyBudget() | currency: 'EUR' }}/jour</span>
+        <span class="strategy-detail">Pour {{ daysInMonth() }} jours (alimentation, loisirs, imprévus...)</span>
+      </div>
+    </div>
+
+    @if (minimumRecoveryPerMonth() > 0) {
+      <div class="strategy-item">
+        <mat-icon>trending_up</mat-icon>
+        <div class="strategy-text">
+          <span class="strategy-label">Minimum à "retrouver" par mois</span>
+          <span class="strategy-value">{{ minimumRecoveryPerMonth() | currency: 'EUR' }}</span>
+          <span class="strategy-detail">Pour atteindre zéro en {{ targetMonths() }} mois</span>
+        </div>
+      </div>
+    }
+
+    <!-- Budget ajusté avec les dépenses réelles -->
+    @if (currentMonthExpenses() > 0) {
+      <div class="strategy-item adjusted-budget">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <div class="strategy-text">
+          <span class="strategy-label">Budget ajusté (déduction des dépenses)</span>
+          <span class="strategy-value" [class.negative]="adjustedMonthlyBudget() < 0">
+            {{ adjustedMonthlyBudget() | currency: 'EUR' }}
+          </span>
+          <span class="strategy-detail">
+            Après {{ currentMonthExpenses() | currency: 'EUR' }} déjà dépensé ce mois
+          </span>
+        </div>
+      </div>
+
+      <div class="strategy-item">
+        <mat-icon>today</mat-icon>
+        <div class="strategy-text">
+          <span class="strategy-label">Budget quotidien ajusté</span>
+          <span class="strategy-value" [class.negative]="adjustedDailyBudget() < 0">
+            {{ adjustedDailyBudget() | currency: 'EUR' }}/jour
+          </span>
+          <span class="strategy-detail">Budget réel disponible pour le reste du mois</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

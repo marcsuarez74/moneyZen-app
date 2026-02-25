@@ -71,8 +71,17 @@
 
 .sidenav-container {
   flex: 1;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
   background: var(--background);
+}
+
+::ng-deep .mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-sidenav {
@@ -101,7 +110,7 @@
 .main-content {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  flex: 1 0 auto;
 }
 
 .page-container {

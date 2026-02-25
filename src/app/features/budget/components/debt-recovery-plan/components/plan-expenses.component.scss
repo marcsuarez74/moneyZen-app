@@ -1,0 +1,55 @@
+@use "../../../../../../styles/variables" as *;
+
+.expense-tracker-panel {
+  margin-bottom: $space-lg;
+
+  @include media-down($sm) {
+    margin-bottom: $space-md;
+  }
+
+  ::ng-deep {
+    .mat-expansion-panel-header {
+      padding: $space-md $space-lg;
+
+      @include media-down($sm) {
+        padding: $space-sm $space-md;
+      }
+    }
+
+    .mat-expansion-panel-header-title {
+      display: flex;
+      align-items: center;
+      gap: $space-sm;
+      font-weight: 600;
+      font-size: 1rem;
+
+      mat-icon {
+        color: var(--primary-color);
+      }
+    }
+
+    .mat-expansion-panel-header-description {
+      @include media-down($sm) {
+        display: none;
+      }
+    }
+
+    .mat-expansion-panel-content {
+      padding: 0 $space-lg $space-lg;
+
+      @include media-down($sm) {
+        padding: 0 $space-md $space-md;
+      }
+    }
+  }
+}
+
+.expense-tracker-content {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+
+  @include media-down($sm) {
+    gap: $space-md;
+  }
+}

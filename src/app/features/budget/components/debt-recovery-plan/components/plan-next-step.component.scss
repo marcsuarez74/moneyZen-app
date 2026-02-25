@@ -1,0 +1,53 @@
+@use "../../../../../../styles/variables" as *;
+
+.alert-box {
+  display: flex;
+  gap: $space-md;
+  padding: $space-md;
+  background: var(--error-light);
+  border-radius: $radius-md;
+  margin-bottom: $space-md;
+  border: 2px solid var(--error-color);
+
+  mat-icon {
+    color: var(--error-color);
+    flex-shrink: 0;
+  }
+
+  &.alert-info {
+    background: var(--info-light);
+    border: 2px solid var(--info-color);
+
+    mat-icon {
+      color: var(--info-color);
+    }
+
+    strong {
+      color: var(--info-color);
+    }
+
+    .hint {
+      margin-top: $space-sm;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+  }
+}
+
+strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: $space-sm;
+}
+
+p {
+  margin: 0 0 $space-sm;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

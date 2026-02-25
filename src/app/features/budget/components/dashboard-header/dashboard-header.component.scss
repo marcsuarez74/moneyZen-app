@@ -398,6 +398,10 @@
   overflow-y: auto;
 }
 
+.mobile-menu.open .mobile-menu-content {
+  flex: unset;
+}
+
 .mobile-menu-item {
   display: flex;
   align-items: center;
