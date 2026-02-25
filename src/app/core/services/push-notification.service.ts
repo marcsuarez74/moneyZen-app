@@ -242,12 +242,22 @@ export class PushNotificationService {
       throw new Error('Push notifications are not enabled');
     }
 
-    await this.sendPushNotificationViaCloud(
-      'Test MoneyZen',
-      'Vos notifications push fonctionnent correctement! 🎉',
-      'test',
-      { url: '/' }
-    );
+    // Use local notification (plan Spark = pas de Cloud Functions)
+    this.sendLocalNotification({
+      notification: {
+        title: 'Test MoneyZen',
+        body: 'Vos notifications push fonctionnent correctement! 🎉',
+        icon: '/assets/icons/icon-192x192.png',
+        badge: '/assets/icons/icon-72x72.png',
+        tag: 'test-notification',
+        requireInteraction: true,
+        actions: [
+          { action: 'open', title: "Ouvrir l'app" },
+          { action: 'dismiss', title: 'Fermer' },
+        ],
+        data: { type: 'test', url: '/' },
+      },
+    });
   }
 
   async sendBudgetAlert(budgetName: string, percentage: number, remaining: number): Promise<void> {
@@ -260,12 +270,24 @@ export class PushNotificationService {
       return;
     }
 
-    await this.sendPushNotificationViaCloud(
-      '⚠️ Alerte Budget',
-      `Votre budget "${budgetName}" a atteint ${percentage.toFixed(0)}%. Reste: ${remaining}€`,
-      'budget-alert',
-      { budgetName, percentage: percentage.toString(), remaining: remaining.toString() }
-    );
+    // Use local notification (plan Spark = pas de Cloud Functions)
+    this.sendLocalNotification({
+      notification: {
+        title: '⚠️ Alerte Budget',
+        body: `Votre budget "${budgetName}" a atteint ${percentage.toFixed(0)}%. Reste: ${remaining}€`,
+        icon: '/assets/icons/icon-192x192.png',
+        badge: '/assets/icons/icon-72x72.png',
+        tag: 'budget-alert',
+        requireInteraction: false,
+        actions: [{ action: 'open', title: 'Ouvrir' }],
+        data: {
+          type: 'budget-alert',
+          budgetName,
+          percentage: percentage.toString(),
+          remaining: remaining.toString(),
+        },
+      },
+    });
   }
 
   async sendWeeklySummary(
@@ -285,83 +307,23 @@ export class PushNotificationService {
         ? `Dominé par: ${topCategories[0].name} (${topCategories[0].amount}€)`
         : '';
 
-    await this.sendPushNotificationViaCloud(
-      '📊 Résumé Hebdomadaire',
-      `Semaine: ${totalSpent}€/${totalBudget}€ (${percentage.toFixed(0)}%). Reste: ${remaining}€. ${topCategoryText}`,
-      'weekly-summary',
-      { totalSpent: totalSpent.toString(), totalBudget: totalBudget.toString() }
-    );
-  }
-
-  /**
-   * Send push notification via Firebase Cloud Function
-   * This works even when the app is closed/background
-   */
-  private async sendPushNotificationViaCloud(
-    title: string,
-    body: string,
-    type: 'budget-alert' | 'weekly-summary' | 'daily-reminder' | 'test',
-    data?: Record<string, string>
-  ): Promise<void> {
-    const token = this._fcmToken();
-    if (!token) {
-      if (isDevMode()) {
-        console.log('No FCM token available, falling back to local notification');
-      }
-      // Fallback to local notification
-      this.sendLocalNotification({
-        notification: {
-          title,
-          body,
-          icon: '/assets/icons/icon-192x192.png',
-          badge: '/assets/icons/icon-72x72.png',
+    // Use local notification (plan Spark = pas de Cloud Functions)
+    this.sendLocalNotification({
+      notification: {
+        title: '📊 Résumé Hebdomadaire',
+        body: `Semaine: ${totalSpent}€/${totalBudget}€ (${percentage.toFixed(0)}%). Reste: ${remaining}€. ${topCategoryText}`,
+        icon: '/assets/icons/icon-192x192.png',
+        badge: '/assets/icons/icon-72x72.png',
+        tag: 'weekly-summary',
+        requireInteraction: false,
+        actions: [{ action: 'view', title: 'Voir détails' }],
+        data: {
+          type: 'weekly-summary',
+          totalSpent: totalSpent.toString(),
+          totalBudget: totalBudget.toString(),
         },
-      });
-      return;
-    }
-
-    try {
-      const projectId = environment.firebase.projectId;
-      const functionUrl = `https://us-central1-${projectId}.cloudfunctions.net/sendPushNotification`;
-
-      const response = await fetch(functionUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token,
-          title,
-          body,
-          type,
-          data: {
-            timestamp: new Date().toISOString(),
-            ...data,
-          },
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
-      }
-
-      const result = await response.json();
-
-      if (isDevMode()) {
-        console.log('Notification sent via cloud:', result);
-      }
-    } catch (error) {
-      console.error('Error sending notification via cloud:', error);
-      // Fallback to local notification
-      this.sendLocalNotification({
-        notification: {
-          title,
-          body,
-          icon: '/assets/icons/icon-192x192.png',
-          badge: '/assets/icons/icon-72x72.png',
-        },
-      });
-    }
+      },
+    });
   }
 
   private listenToMessages(): void {
