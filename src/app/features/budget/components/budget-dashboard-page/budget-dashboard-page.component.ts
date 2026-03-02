@@ -294,6 +294,12 @@ export class BudgetDashboardPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSavedData();
+
+    // S'assurer que le plan d'épargne est affiché si un plan existe dans le store
+    // Cela gère aussi le cas du refresh de la page
+    if (this.hasActiveSavingsPlan()) {
+      this.initializeSavingsPlanFromStore();
+    }
   }
 
   private loadSavedData(): void {
@@ -329,48 +335,31 @@ export class BudgetDashboardPageComponent implements OnInit {
 
   private initializeSavingsPlanFromStore(): void {
     const activePlan = this.planStore.activePlan();
-    const userData = this.budgetStore.userData();
-    const summary = this.budgetStore.budgetSummary();
 
-    if (activePlan && userData && summary) {
+    if (activePlan && activePlan.type === 'savings') {
+      // Utiliser les données du plan stocké ou des valeurs par défaut
       const targetAmount = activePlan.monthlyIncome * 3;
+      const monthlyIncome = activePlan.monthlyIncome;
+      const remainingBudget = activePlan.remainingBudget;
+      const paydayDay = activePlan.paydayDay;
 
-      // Calculer les charges fixes
-      const fixedCategories = [
-        'housing',
-        'mortgage',
-        'condoFees',
-        'propertyTax',
-        'housingServices',
-        'carLoan',
-        'consumerLoan',
-        'debtRepayment',
-        'energy',
-        'water',
-        'internet',
-        'phone',
-        'tvStreaming',
-        'homeInsurance',
-        'carInsurance',
-        'healthInsurance',
-        'lifeInsurance',
-      ];
-      const fixedExpenses = this.budgetStore
-        .expenses()
-        .filter(e => fixedCategories.includes(e.category))
-        .reduce((sum, e) => sum + e.monthlyEquivalent, 0);
+      // Si on a des données de budget, on les utilise pour le calcul des charges fixes
+      const userData = this.budgetStore.userData();
+      const fixedExpenses = userData ? monthlyIncome - remainingBudget : 0;
 
       const savingsData: SavingsPlanData = {
         targetAmount,
-        monthlyIncome: activePlan.monthlyIncome,
-        fixedExpenses,
-        remainingBudget: activePlan.remainingBudget,
+        monthlyIncome,
+        fixedExpenses: Math.max(0, fixedExpenses),
+        remainingBudget,
         hasDebtRecoveryPlan: this.isNegativeBalance(),
-        paydayDay: activePlan.paydayDay,
+        paydayDay,
       };
 
       this.savingsPlanData.set(savingsData);
       this.showSavingsPlan.set(true);
+
+      console.log("✅ Plan d'épargne initialisé depuis le store:", savingsData);
     }
   }
 
@@ -570,7 +559,13 @@ export class BudgetDashboardPageComponent implements OnInit {
     adopted: boolean;
   }): void {
     console.log("Plan d'épargne accepté:", event);
-    this.closeSavingsPlan();
+    // Ne pas fermer le plan, le garder visible
+    // Le plan est déjà sauvegardé dans le store par le composant savings-plan
+    // On sauvegarde aussi dans le localStorage au cas où
+    this.storageService.savePlanState({
+      activePlan: this.planStore.activePlan(),
+      pastPlans: this.planStore.pastPlans(),
+    });
   }
 
   // Handler pour ajuster la durée du plan d'épargne

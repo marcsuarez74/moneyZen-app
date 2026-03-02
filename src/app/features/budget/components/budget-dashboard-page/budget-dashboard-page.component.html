@@ -35,9 +35,25 @@
             </app-debt-recovery-plan>
           }
 
-          @if ((showSavingsPlan() || hasActiveSavingsPlan()) && savingsPlanData(); as savingsData) {
+          @if (showSavingsPlan() && savingsPlanData(); as savingsData) {
             <app-savings-plan
               [data]="savingsData"
+              (acceptPlan)="onAcceptSavingsPlan($event)"
+              (adjustPlan)="onAdjustSavingsPlan($event)"
+            >
+            </app-savings-plan>
+          }
+
+          @if (hasActiveSavingsPlan() && !showSavingsPlan()) {
+            <app-savings-plan
+              [data]="{
+                targetAmount: planStore.activePlan()!.monthlyIncome * 3,
+                monthlyIncome: planStore.activePlan()!.monthlyIncome,
+                fixedExpenses: planStore.activePlan()!.monthlyIncome - planStore.activePlan()!.remainingBudget,
+                remainingBudget: planStore.activePlan()!.remainingBudget,
+                hasDebtRecoveryPlan: isNegativeBalance(),
+                paydayDay: planStore.activePlan()!.paydayDay,
+              }"
               (acceptPlan)="onAcceptSavingsPlan($event)"
               (adjustPlan)="onAdjustSavingsPlan($event)"
             >
