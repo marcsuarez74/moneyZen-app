@@ -38,6 +38,7 @@ import {
   PlanNavigationComponent,
   PlanSection,
 } from '../../../../shared/components/plan-navigation/plan-navigation.component';
+import { SavingsPlanComponent, SavingsPlanData } from '../savings-plan/savings-plan.component';
 import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
 
 @Component({
@@ -62,6 +63,7 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
     WelcomeCardComponent,
     QuickExpenseComponent,
     PlanNavigationComponent,
+    SavingsPlanComponent,
   ],
   templateUrl: './budget-dashboard-page.component.html',
   styleUrls: ['./budget-dashboard-page.component.scss'],
@@ -79,6 +81,8 @@ export class BudgetDashboardPageComponent implements OnInit {
   protected getCategoriesByGroup = getCategoriesByGroup;
 
   readonly budgetAnalysis = signal<BudgetAnalysis | null>(null);
+  readonly showSavingsPlan = signal<boolean>(false);
+  readonly savingsPlanData = signal<SavingsPlanData | null>(null);
 
   readonly priorityInsights = computed(() => {
     const analysis = this.budgetAnalysis();
@@ -424,5 +428,87 @@ export class BudgetDashboardPageComponent implements OnInit {
   openAllExpenses(): void {
     // Ouvrir la page de toutes les dépenses (à implémenter si nécessaire)
     console.log('Voir toutes les dépenses');
+  }
+
+  // Afficher le plan d'épargne
+  openSavingsPlan(): void {
+    const userData = this.budgetStore.userData();
+    const summary = this.budgetStore.budgetSummary();
+
+    if (!userData || !summary) return;
+
+    const targetAmount = userData.salary * 3; // 3 mois de salaire
+    // Calculer les charges fixes
+    const fixedCategories = [
+      'housing',
+      'mortgage',
+      'condoFees',
+      'propertyTax',
+      'housingServices',
+      'carLoan',
+      'consumerLoan',
+      'debtRepayment',
+      'energy',
+      'water',
+      'internet',
+      'phone',
+      'tvStreaming',
+      'homeInsurance',
+      'carInsurance',
+      'healthInsurance',
+      'lifeInsurance',
+    ];
+    const fixedExpenses = this.budgetStore
+      .expenses()
+      .filter(e => fixedCategories.includes(e.category))
+      .reduce((sum, e) => sum + e.monthlyEquivalent, 0);
+    const remainingBudget = summary.remainingBudget;
+
+    const savingsData: SavingsPlanData = {
+      targetAmount,
+      monthlyIncome: userData.salary,
+      fixedExpenses,
+      remainingBudget,
+      hasDebtRecoveryPlan: this.isNegativeBalance(),
+      paydayDay: userData.paydayDay || 1,
+    };
+
+    this.savingsPlanData.set(savingsData);
+    this.showSavingsPlan.set(true);
+  }
+
+  // Fermer le plan d'épargne
+  closeSavingsPlan(): void {
+    this.showSavingsPlan.set(false);
+    this.savingsPlanData.set(null);
+  }
+
+  // Handler pour "Appliquer" sur une recommandation
+  handleApplyRecommendation(recommendation: any): void {
+    if (
+      recommendation.title?.toLowerCase().includes('fonds') ||
+      recommendation.title?.toLowerCase().includes('urgence') ||
+      recommendation.title?.toLowerCase().includes('épargne')
+    ) {
+      this.openSavingsPlan();
+    } else {
+      console.log('Recommendation appliquée:', recommendation);
+    }
+  }
+
+  // Handler pour adopter le plan d'épargne
+  onAcceptSavingsPlan(event: {
+    duration: number;
+    monthlyContribution: number;
+    targetAmount: number;
+    adopted: boolean;
+  }): void {
+    console.log("Plan d'épargne accepté:", event);
+    this.closeSavingsPlan();
+  }
+
+  // Handler pour ajuster la durée du plan d'épargne
+  onAdjustSavingsPlan(duration: number): void {
+    console.log("Nouvelle durée du plan d'épargne:", duration);
   }
 }

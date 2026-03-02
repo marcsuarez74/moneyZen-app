@@ -106,7 +106,11 @@
                 </ng-template>
                 <div class="tab-panel">
                   @if (budgetStore.budgetSummary(); as summary) {
-                    <app-budget-recommendations [analysis]="budgetAnalysis()" [summary]="summary">
+                    <app-budget-recommendations
+                      [analysis]="budgetAnalysis()"
+                      [summary]="summary"
+                      (applyRecommendation)="handleApplyRecommendation($event)"
+                    >
                     </app-budget-recommendations>
                   }
                 </div>
@@ -159,5 +163,22 @@
         </section>
       </div>
     </main>
+  }
+
+  <!-- Modal/Lightbox pour le plan d'épargne -->
+  @if (showSavingsPlan() && savingsPlanData(); as savingsData) {
+    <div class="savings-plan-overlay" (click)="closeSavingsPlan()">
+      <div class="savings-plan-modal" (click)="$event.stopPropagation()">
+        <button class="close-button" (click)="closeSavingsPlan()" aria-label="Fermer">
+          <mat-icon>close</mat-icon>
+        </button>
+        <app-savings-plan
+          [data]="savingsData"
+          (acceptPlan)="onAcceptSavingsPlan($event)"
+          (adjustPlan)="onAdjustSavingsPlan($event)"
+        >
+        </app-savings-plan>
+      </div>
+    </div>
   }
 </div>
