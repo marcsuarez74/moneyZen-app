@@ -16,6 +16,8 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 ### Fixed
 - 
 
+## [1.8.4] - 2026-03-02
+
 ## [1.8.3] - 2026-03-02
 
 ## [1.6.3] - 2026-02-24
