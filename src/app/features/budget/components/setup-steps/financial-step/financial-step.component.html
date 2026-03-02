@@ -10,7 +10,7 @@
     <div class="form-grid">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Salaire net mensuel</mat-label>
-        <input matInput type="number" formControlName="salary" placeholder="3000">
+        <input matInput type="number" formControlName="salary" placeholder="3000" />
         <span matSuffix>€</span>
         <mat-hint>Votre revenu net après impôts et cotisations</mat-hint>
         @if (form().get('salary')?.hasError('required')) {
@@ -18,12 +18,41 @@
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
+      <!-- Desktop: Input standard avec valeur négative possible -->
+      <mat-form-field appearance="outline" class="full-width desktop-only">
         <mat-label>Solde de vos comptes actuel</mat-label>
-        <input matInput type="number" step="0.01" formControlName="accountBalance" placeholder="0">
+        <input matInput type="number" step="0.01" formControlName="accountBalance" placeholder="0" />
         <span matSuffix>€</span>
         <mat-hint>Somme de tous vos comptes (positif ou négatif si découvert)</mat-hint>
       </mat-form-field>
+
+      <!-- Mobile: Input avec valeur absolue + toggle pour le signe -->
+      <div class="mobile-balance-container mobile-only">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Solde de vos comptes actuel</mat-label>
+          <input
+            matInput
+            type="number"
+            step="0.01"
+            [value]="absoluteBalance()"
+            (input)="onBalanceInput($any($event.target).valueAsNumber)"
+            placeholder="0"
+          />
+          <span matSuffix>€</span>
+        </mat-form-field>
+
+        <div class="balance-toggle-container">
+          <mat-slide-toggle
+            [checked]="isNegativeBalance()"
+            [disabled]="isToggleDisabled()"
+            (change)="onBalanceToggle($event.checked)"
+            color="warn"
+          >
+            <span class="toggle-label">À découvert</span>
+          </mat-slide-toggle>
+          <span class="toggle-hint"> Activer si votre solde est négatif </span>
+        </div>
+      </div>
     </div>
 
     @if (isOverdrawn()) {
