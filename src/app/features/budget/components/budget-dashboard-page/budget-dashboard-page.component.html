@@ -19,8 +19,10 @@
 
   @if (budgetStore.hasUserData()) {
     <main class="dashboard-layout responsive-container">
-      <!-- Navigation pour desktop et mobile -->
-      <app-plan-navigation [sections]="dashboardSections()" class="dashboard-navigation"></app-plan-navigation>
+      <!-- Navigation pour desktop et mobile - affiché seulement si pas de plan de redressement -->
+      @if (!isNegativeBalance()) {
+        <app-plan-navigation [sections]="dashboardSections()" class="dashboard-navigation"></app-plan-navigation>
+      }
 
       <div class="dashboard-content">
         @if (isNegativeBalance() && recoveryData(); as recovery) {
