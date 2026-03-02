@@ -38,8 +38,11 @@
         >
           @if (!loading()) {
             <mat-icon>{{ isEnabled() ? 'notifications_off' : 'notifications_active' }}</mat-icon>
+          }
+          @if (!loading()) {
             <span>{{ isEnabled() ? 'Désactiver' : 'Activer' }}</span>
-          } @else {
+          }
+          @if (loading()) {
             <span class="btn-loading-text">{{ isEnabled() ? 'Désactivation...' : 'Activation...' }}</span>
           }
         </button>
@@ -184,10 +187,16 @@
       <button mat-stroked-button class="test-btn" [disabled]="testing()" (click)="testNotification()">
         @if (!testing()) {
           <mat-icon>send</mat-icon>
-        } @else {
+        }
+        @if (!testing()) {
+          <span>Envoyer une notification de test</span>
+        }
+        @if (testing()) {
           <mat-spinner diameter="16"></mat-spinner>
         }
-        <span>Envoyer une notification de test</span>
+        @if (testing()) {
+          <span>Envoi en cours...</span>
+        }
       </button>
     </div>
   }

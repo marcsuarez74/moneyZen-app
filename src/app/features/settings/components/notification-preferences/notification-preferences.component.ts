@@ -48,6 +48,7 @@ export class NotificationPreferencesComponent {
   readonly canEnableNotifications = computed(
     () => this.notificationSupported && !this.isPermissionDenied()
   );
+  
 
   async toggleNotifications(): Promise<void> {
     const currentEnabled = this.preferences()?.enabled ?? false;
