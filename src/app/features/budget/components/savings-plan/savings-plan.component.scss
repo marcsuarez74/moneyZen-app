@@ -1,12 +1,87 @@
 @use "../../../../../styles/variables" as *;
 
+// Panel d'expansion principal
+.savings-plan-panel {
+  background: var(--mat-sys-surface-container-low);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+  ::ng-deep {
+    .mat-expansion-panel-header {
+      padding: 20px 24px;
+      background: var(--mat-sys-surface-container);
+      border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+      &:hover {
+        background: var(--mat-sys-surface-container-high);
+      }
+
+      &.mat-expanded {
+        border-bottom-color: var(--mat-sys-outline-variant);
+      }
+    }
+
+    .mat-expansion-panel-content {
+      background: var(--mat-sys-surface);
+    }
+
+    .mat-expansion-indicator {
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+
+  .panel-header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .header-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--mat-sys-tertiary-container);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        color: var(--mat-sys-tertiary);
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .subtitle {
+        font-size: 0.875rem;
+        color: var(--mat-sys-on-surface-variant);
+      }
+    }
+  }
+}
+
 // Layout du plan
 .plan-layout {
   display: flex;
   gap: 24px;
+  padding: 24px;
 
   @media (max-width: 1023px) {
     flex-direction: column;
+    padding: 16px;
   }
 }
 
@@ -22,60 +97,9 @@
   }
 }
 
-.savings-card {
+.savings-content {
   flex: 1;
   min-width: 0;
-
-  mat-card-header {
-    padding: 24px;
-
-    .header-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-
-      &.success {
-        background: var(--mat-sys-tertiary-container);
-
-        mat-icon {
-          color: var(--mat-sys-tertiary);
-          font-size: 28px;
-          width: 28px;
-          height: 28px;
-        }
-      }
-    }
-
-    mat-card-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--mat-sys-on-surface);
-    }
-
-    mat-card-subtitle {
-      color: var(--mat-sys-on-surface-variant);
-      font-size: 1rem;
-      margin-top: 4px;
-    }
-  }
-
-  mat-card-content {
-    padding: 0 24px 24px;
-  }
-
-  mat-card-actions {
-    padding: 16px 24px 24px;
-    gap: 12px;
-
-    button {
-      mat-icon {
-        margin-right: 8px;
-      }
-    }
-  }
 }
 
 // Section Évolution
@@ -292,6 +316,28 @@
       strong {
         color: var(--mat-sys-on-surface);
       }
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  button {
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+
+    button {
+      width: 100%;
     }
   }
 }
