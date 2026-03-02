@@ -6,6 +6,7 @@ import {
   signal,
   ViewChild,
   ElementRef,
+  inject,
   OnInit,
 } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
@@ -14,6 +15,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { PlanStore } from '../../../../store/plan.store';
+import { BudgetStore } from '../../../../store/budget.store';
+import { LocalStorageService } from '../../../../services/local-storage.service';
+import { MonthlyTarget } from '../../../../features/budget/components/debt-recovery-plan/debt-recovery-plan.component';
 import {
   PlanNavigationComponent,
   PlanSection,
@@ -56,6 +61,10 @@ export interface SavingsPlanInfo {
 })
 export class SavingsPlanComponent implements OnInit {
   @ViewChild('contributionSection') contributionSection!: ElementRef;
+
+  private planStore = inject(PlanStore);
+  private budgetStore = inject(BudgetStore);
+  private storageService = inject(LocalStorageService);
 
   readonly data = input.required<SavingsPlanData>();
   readonly acceptPlan = output<{
@@ -211,6 +220,72 @@ export class SavingsPlanComponent implements OnInit {
   }
 
   adoptPlan(): void {
+    const planInfo = this.planInfo();
+    const targetAmountFormatted = this.data().targetAmount.toLocaleString('fr-FR');
+    const monthlyContributionFormatted =
+      this.recommendedMonthlyContribution().toLocaleString('fr-FR');
+
+    // Créer les targets mensuels
+    const monthlyTargets: MonthlyTarget[] = [];
+    const contribution = this.recommendedMonthlyContribution();
+    let currentAmount = 0;
+    const planStartDate = planInfo.startDate;
+
+    for (let i = 1; i <= this.targetMonths(); i++) {
+      const startDate = new Date(planStartDate);
+      startDate.setMonth(startDate.getMonth() + i - 1);
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 1);
+
+      const startDateStr = startDate.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+      });
+      const endDateStr = endDate.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+      const monthName = `${startDateStr} - ${endDateStr}`;
+
+      const newAmount = Math.min(this.data().targetAmount, currentAmount + contribution);
+      const actualContribution = newAmount - currentAmount;
+
+      monthlyTargets.push({
+        month: i,
+        monthName,
+        startOverdraft: 0,
+        endOverdraft: 0,
+        availableBudget: actualContribution,
+        dailyBudget: actualContribution / 30,
+        overdraftReduction: actualContribution,
+        isAchievable: true,
+      });
+
+      currentAmount = newAmount;
+      if (currentAmount >= this.data().targetAmount) break;
+    }
+
+    // Sauvegarder dans le store
+    this.planStore.createPlan({
+      type: 'savings',
+      durationMonths: this.targetMonths(),
+      monthlyBudget: this.recommendedMonthlyContribution(),
+      dailyBudget: 0,
+      paydayDay: this.data().paydayDay || 1,
+      startDate: planInfo.startDate.toISOString(),
+      targets: monthlyTargets,
+      overdraftAmount: 0,
+      remainingBudget: this.data().remainingBudget,
+      monthlyIncome: this.data().monthlyIncome,
+    });
+
+    // Persister dans le localStorage
+    this.storageService.savePlanState({
+      activePlan: this.planStore.activePlan(),
+      pastPlans: this.planStore.pastPlans(),
+    });
+
     this.acceptPlan.emit({
       duration: this.targetMonths(),
       monthlyContribution: this.recommendedMonthlyContribution(),
@@ -218,13 +293,14 @@ export class SavingsPlanComponent implements OnInit {
       adopted: true,
     });
 
-    const planInfo = this.planInfo();
-    const targetAmountFormatted = this.data().targetAmount.toLocaleString('fr-FR');
-    const monthlyContributionFormatted =
-      this.recommendedMonthlyContribution().toLocaleString('fr-FR');
+    console.log("✅ Plan d'épargne sauvegardé avec succès !");
+
+    const hasDebtPlan = this.data().hasDebtRecoveryPlan;
 
     alert(
-      `Plan d'épargne adopté ! 🎯\n\n💰 Objectif : ${targetAmountFormatted}€\n📅 ${this.targetMonths()} mois\n💵 ${monthlyContributionFormatted}€/mois\n\n🚀 Objectif atteint le : ${planInfo.endDateFormatted}`
+      hasDebtPlan
+        ? `Plan d'épargne adopté et sauvegardé ! 🎯\n\n💰 Objectif : ${targetAmountFormatted}€ sur ${this.targetMonths()} mois\n📅 Contribution mensuelle : ${monthlyContributionFormatted}€\n⚠️ Un plan de redressement est actif : la contribution est ajustée à un minimum\n\n✅ Vous pourrez augmenter la contribution une fois le découvert remboursé !`
+        : `Plan d'épargne adopté et sauvegardé ! 🎯\n\n💰 Objectif : ${targetAmountFormatted}€\n📅 ${this.targetMonths()} mois\n💵 ${monthlyContributionFormatted}€/mois\n\n🚀 Objectif atteint le : ${planInfo.endDateFormatted}`
     );
   }
 }
