@@ -1,0 +1,131 @@
+@use "../../../../styles/variables" as *;
+
+.info-section {
+  padding: $space-xl 0;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 $space-xl 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.info-cards {
+  display: grid;
+  gap: $space-md;
+  margin-bottom: $space-xl;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.info-card {
+  display: flex;
+  gap: $space-md;
+  padding: $space-lg;
+  background: var(--surface-elevated);
+  border-radius: $radius-lg;
+  border: 1px solid var(--border);
+
+  .card-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: var(--surface-hover);
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      color: var(--primary-color);
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .card-content {
+    flex: 1;
+
+    h4 {
+      margin: 0 0 $space-xs 0;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+.alert-box {
+  display: flex;
+  gap: $space-md;
+  padding: $space-lg;
+  border-radius: $radius-lg;
+  align-items: flex-start;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  strong {
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: $space-xs;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  &.alert-info {
+    border-color: var(--info-color);
+    background: rgba(59, 130, 246, 0.1);
+
+    mat-icon {
+      color: var(--info-color);
+    }
+  }
+
+  &.alert-warning {
+    border-color: var(--warning-color);
+    background: rgba(245, 158, 11, 0.1);
+
+    mat-icon {
+      color: var(--warning-color);
+    }
+  }
+
+  &.alert-error {
+    border-color: var(--error-color);
+    background: rgba(239, 68, 68, 0.1);
+
+    mat-icon {
+      color: var(--error-color);
+    }
+  }
+}

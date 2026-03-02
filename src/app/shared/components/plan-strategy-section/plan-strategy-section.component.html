@@ -1,0 +1,54 @@
+<div id="plan-strategy" class="strategy-section">
+  <h3>
+    <mat-icon>lightbulb</mat-icon>
+    {{ title() }}
+  </h3>
+
+  <div class="strategy-cards">
+    @if (primaryCard()) {
+      <mat-card class="strategy-card primary">
+        <mat-card-content>
+          <div class="strategy-header">
+            <mat-icon>savings</mat-icon>
+            <span class="strategy-label">{{ primaryCard()!.label }}</span>
+          </div>
+          <div class="strategy-value">
+            {{ primaryCard()!.value | currency: 'EUR' }}
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <div class="strategy-details-grid">
+      @for (detail of details(); track detail.label) {
+        <div class="detail-item">
+          <mat-icon>{{ detail.icon }}</mat-icon>
+          <div class="detail-content">
+            <span class="detail-label">{{ detail.label }}</span>
+            <span class="detail-value">{{ detail.value }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <mat-card class="feasibility-card" [class.feasible]="isFeasible()" [class.challenging]="!isFeasible()">
+      <mat-card-content>
+        <div class="feasibility-header">
+          <mat-icon>{{ isFeasible() ? 'check_circle' : 'warning' }}</mat-icon>
+          <span>{{ isFeasible() ? 'Plan réalisable' : 'Plan ambitieux' }}</span>
+        </div>
+        <p class="feasibility-text">{{ feasibilityText() }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    @if (hasConstraints()) {
+      <div class="constraint-warning">
+        <mat-icon color="warn">warning</mat-icon>
+        <div class="warning-content">
+          <strong>Contrainte active</strong>
+          <p>{{ constraintText() }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,178 @@
+@use "../../../../styles/variables" as *;
+
+// ============================================
+// PLAN CARD - Reusable component with Fintech design
+// ============================================
+
+.plan-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+  }
+}
+
+.plan-navigation-sidebar {
+  width: 100%;
+  order: -1;
+
+  @media (min-width: 1024px) {
+    width: 240px;
+    flex-shrink: 0;
+    order: 0;
+    position: sticky;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--fintech-border, #e0e0e0);
+      border-radius: 2px;
+    }
+  }
+}
+
+.plan-card {
+  flex: 1;
+  min-width: 0;
+  border-radius: $radius-xl;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: $shadow-md;
+
+  // Bordure colorée selon le type
+  &[data-plan-type="debt"] {
+    border-left: 4px solid var(--error-color);
+  }
+
+  &[data-plan-type="savings"] {
+    border-left: 4px solid #10b981;
+  }
+
+  &[data-plan-type="investment"] {
+    border-left: 4px solid var(--primary-color);
+  }
+
+  @include media-down($sm) {
+    border-radius: $radius-lg;
+  }
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      padding: $space-xl;
+      padding-bottom: $space-md;
+    }
+
+    .mat-mdc-card-content {
+      padding: 0 $space-xl $space-xl;
+    }
+
+    .mat-mdc-card-actions {
+      padding: $space-md $space-xl $space-xl;
+      gap: $space-md;
+    }
+  }
+
+  .header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    @include media-down($sm) {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+
+    mat-icon {
+      color: white;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+
+      @include media-down($sm) {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    // Couleurs selon le type
+    &.debt {
+      background: var(--gradient-error);
+    }
+
+    &.savings {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    &.investment {
+      background: var(--gradient-primary);
+    }
+  }
+
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+
+    @include media-down($sm) {
+      font-size: 1.25rem;
+    }
+  }
+
+  mat-card-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  mat-card-actions {
+    button {
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+// Dark Theme
+:host-context(.dark-theme) {
+  .plan-card {
+    &[data-plan-type="savings"] {
+      border-left-color: #34d399;
+    }
+
+    .header-icon {
+      &.savings {
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      }
+    }
+  }
+
+  .plan-navigation-sidebar {
+    @media (min-width: 1024px) {
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}

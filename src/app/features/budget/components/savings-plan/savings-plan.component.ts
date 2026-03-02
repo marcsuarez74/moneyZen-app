@@ -17,8 +17,6 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
 import { PlanStore } from '../../../../store/plan.store';
 import { LocalStorageService } from '../../../../services/local-storage.service';
@@ -30,14 +28,16 @@ import {
   PlanSection,
 } from '../../../../shared/components/plan-navigation/plan-navigation.component';
 import {
-  PlanInfoComponent,
-  PlanStrategyComponent,
-  PlanSituationComponent,
-  PlanContributionComponent,
-} from './components';
+  PlanCardComponent,
+  PlanInfoSectionComponent,
+  PlanStrategySectionComponent,
+  PlanSituationSectionComponent,
+  type InfoCard,
+  type SituationMetric,
+} from '../../../../shared/components';
 
 export interface SavingsPlanData {
-  targetAmount: number; // Objectif: 3 mois de salaire
+  targetAmount: number;
   monthlyIncome: number;
   fixedExpenses: number;
   remainingBudget: number;
@@ -76,22 +76,19 @@ export interface MonthlySavingsTarget {
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
-    MatExpansionModule,
-    MatDividerModule,
     FormsModule,
     CurrencyPipe,
     PlanNavigationComponent,
-    PlanInfoComponent,
-    PlanStrategyComponent,
-    PlanSituationComponent,
-    PlanContributionComponent,
+    PlanCardComponent,
+    PlanInfoSectionComponent,
+    PlanStrategySectionComponent,
+    PlanSituationSectionComponent,
   ],
   templateUrl: './savings-plan.component.html',
   styleUrls: ['./savings-plan.component.scss'],
 })
 export class SavingsPlanComponent implements OnInit {
   @ViewChild('contributionSection') contributionSection!: ElementRef;
-  @ViewChild('savingsCard') savingsCard!: ElementRef;
 
   private planStore = inject(PlanStore);
   private budgetStore = inject(BudgetStore);
@@ -108,11 +105,9 @@ export class SavingsPlanComponent implements OnInit {
   readonly adjustPlan = output<number>();
 
   readonly Math = Math;
-  readonly selectedDuration = signal(12); // Durée par défaut: 12 mois
-  readonly daysInMonth = signal(30);
+  readonly selectedDuration = signal(12);
   readonly monthlyContribution = signal(0);
 
-  // Informations sur le plan d'épargne
   readonly planInfo = computed((): SavingsPlanInfo => {
     const today = new Date();
     const paydayDay = this.data().paydayDay || 1;
@@ -176,7 +171,6 @@ export class SavingsPlanComponent implements OnInit {
 
   readonly targetMonths = computed(() => this.selectedDuration());
 
-  // Montant épargné actuellement
   readonly currentSavings = computed(() => {
     const userData = this.budgetStore.userData();
     if (!userData) return 0;
@@ -184,12 +178,10 @@ export class SavingsPlanComponent implements OnInit {
     return balance > 0 ? balance : 0;
   });
 
-  // Reste à épargner pour atteindre l'objectif
   readonly remainingToSave = computed(() => {
     return Math.max(0, this.data().targetAmount - this.currentSavings());
   });
 
-  // Contribution mensuelle recommandée
   readonly recommendedMonthlyContribution = computed(() => {
     const remaining = this.remainingToSave();
     const months = this.targetMonths();
@@ -197,7 +189,6 @@ export class SavingsPlanComponent implements OnInit {
     return Math.ceil(remaining / months);
   });
 
-  // Vérifier si le plan est réaliste avec le budget actuel
   readonly isPlanFeasible = computed(() => {
     const contribution = this.recommendedMonthlyContribution();
     const remainingBudget = this.data().remainingBudget;
@@ -210,13 +201,11 @@ export class SavingsPlanComponent implements OnInit {
     return contribution <= remainingBudget * 0.3;
   });
 
-  // Contribution minimale possible (si plan de redressement actif)
   readonly minimumContribution = computed(() => {
     if (!this.data().hasDebtRecoveryPlan) return 0;
     return Math.min(10, this.data().remainingBudget * 0.05);
   });
 
-  // Contribution maximale possible
   readonly maximumContribution = computed(() => {
     const remainingBudget = this.data().remainingBudget;
     if (this.data().hasDebtRecoveryPlan) {
@@ -225,7 +214,99 @@ export class SavingsPlanComponent implements OnInit {
     return remainingBudget * 0.3;
   });
 
-  // Objectifs mensuels pour l'affichage
+  readonly planSections = computed((): PlanSection[] => [
+    { id: 'plan-info', label: 'Fonctionnement', icon: 'info', visible: true },
+    {
+      id: 'plan-next-step',
+      label: 'Prochaine étape',
+      icon: 'event_available',
+      visible: this.planInfo().daysUntilStart >= 0,
+    },
+    { id: 'plan-situation', label: 'Votre situation', icon: 'account_balance', visible: true },
+    { id: 'plan-strategy', label: 'Stratégie', icon: 'lightbulb', visible: true },
+    { id: 'plan-contribution', label: 'Contribution', icon: 'savings', visible: true },
+    { id: 'plan-evolution', label: 'Évolution', icon: 'flag', visible: true },
+    { id: 'plan-tips', label: 'Conseils', icon: 'tips_and_updates', visible: true },
+  ]);
+
+  // Info cards for PlanInfoSection
+  readonly infoCards = computed((): InfoCard[] => [
+    {
+      icon: 'savings',
+      title: 'Objectif: 3 mois de salaire',
+      description:
+        "Vous allez constituer un fonds d'urgence équivalent à 3 mois de votre salaire net. Cette épargne vous protège en cas d'imprévu.",
+    },
+    {
+      icon: 'calendar_today',
+      title: 'Contribution mensuelle',
+      description:
+        'Une somme est automatiquement calculée à chaque paie. Vous pouvez ajuster cette contribution en fonction de votre situation.',
+    },
+    {
+      icon: 'shield',
+      title: 'Sécurité financière',
+      description:
+        "Ce fonds d'urgence est votre filet de sécurité. Une fois atteint, vous pourrez vous concentrer sur d'autres objectifs.",
+    },
+  ]);
+
+  // Situation metrics for PlanSituationSection
+  readonly situationMetrics = computed((): SituationMetric[] => [
+    {
+      icon: 'flag',
+      label: "Objectif d'épargne",
+      value: this.data().targetAmount,
+      currency: true,
+      subtitle: '3 mois de salaire',
+      progress: Math.min(100, (this.currentSavings() / this.data().targetAmount) * 100),
+    },
+    {
+      icon: 'savings',
+      label: 'Épargne actuelle',
+      value: this.currentSavings(),
+      currency: true,
+      subtitle: `Reste à épargner: ${this.remainingToSave().toLocaleString('fr-FR')}€`,
+      isNegative: false,
+    },
+    {
+      icon: 'account_balance_wallet',
+      label: 'Revenus mensuels',
+      value: this.data().monthlyIncome,
+      currency: true,
+      subtitle: `Charges fixes: ${this.data().fixedExpenses.toLocaleString('fr-FR')}€`,
+    },
+    {
+      icon: 'wallet',
+      label: 'Budget disponible',
+      value: this.data().remainingBudget,
+      currency: true,
+      subtitle: this.data().hasDebtRecoveryPlan ? '⚠️ Plan de redressement actif' : '',
+      isNegative: this.data().remainingBudget < 0,
+    },
+  ]);
+
+  // Strategy details for PlanStrategySection
+  readonly strategyDetails = computed(() => [
+    { icon: 'calendar_today', label: 'Durée du plan', value: `${this.targetMonths()} mois` },
+    {
+      icon: 'flag',
+      label: 'Objectif final',
+      value: `${this.data().targetAmount.toLocaleString('fr-FR')}€`,
+    },
+    {
+      icon: 'trending_up',
+      label: 'Épargne actuelle',
+      value: `${this.currentSavings().toLocaleString('fr-FR')}€`,
+    },
+    {
+      icon: 'account_balance_wallet',
+      label: 'Reste à épargner',
+      value: `${this.remainingToSave().toLocaleString('fr-FR')}€`,
+    },
+  ]);
+
+  // Monthly targets
   readonly monthlyTargets = computed((): MonthlySavingsTarget[] => {
     const targets: MonthlySavingsTarget[] = [];
     const targetAmount = this.data().targetAmount;
@@ -257,7 +338,6 @@ export class SavingsPlanComponent implements OnInit {
         minContribution,
         Math.min(maxContribution, monthlyContribution)
       );
-
       const newAmount = Math.min(targetAmount, currentAmount + requiredContribution);
       const actualContribution = newAmount - currentAmount;
 
@@ -278,51 +358,24 @@ export class SavingsPlanComponent implements OnInit {
     return targets;
   });
 
-  // Objectifs mensuels pour le store (format compatible MonthlyTarget)
-  private readonly storeTargets = computed((): MonthlyTarget[] => {
-    return this.monthlyTargets().map(target => ({
-      month: target.month,
-      monthName: target.monthName,
-      startOverdraft: 0,
-      endOverdraft: 0,
-      availableBudget: target.contribution,
-      dailyBudget: target.contribution / 30,
-      overdraftReduction: 0,
-      isAchievable: target.isAchievable,
-    }));
-  });
-
-  // Durée recommandée
-  readonly recommendedDuration = computed(() => {
+  ngOnInit(): void {
     const remainingToSave = this.remainingToSave();
     const maxMonthlyContribution = this.data().hasDebtRecoveryPlan
       ? Math.min(50, this.data().remainingBudget * 0.1)
       : this.data().remainingBudget * 0.3;
 
-    if (maxMonthlyContribution <= 0) return 36;
+    if (maxMonthlyContribution > 0) {
+      const recommendedMonths = Math.ceil(remainingToSave / maxMonthlyContribution);
+      this.selectedDuration.set(Math.max(3, Math.min(36, recommendedMonths)));
+    } else {
+      this.selectedDuration.set(36);
+    }
+  }
 
-    const recommendedMonths = Math.ceil(remainingToSave / maxMonthlyContribution);
-    return Math.max(3, Math.min(36, recommendedMonths));
-  });
-
-  // Configuration des sections pour la navigation
-  readonly planSections = computed((): PlanSection[] => [
-    { id: 'plan-info', label: 'Fonctionnement', icon: 'info', visible: true },
-    {
-      id: 'plan-next-step',
-      label: 'Prochaine étape',
-      icon: 'event_available',
-      visible: this.planInfo().daysUntilStart >= 0,
-    },
-    { id: 'plan-situation', label: 'Votre situation', icon: 'account_balance', visible: true },
-    { id: 'plan-strategy', label: 'Stratégie', icon: 'lightbulb', visible: true },
-    { id: 'plan-contribution', label: 'Contribution', icon: 'savings', visible: true },
-    { id: 'plan-evolution', label: 'Évolution', icon: 'flag', visible: true },
-    { id: 'plan-tips', label: 'Conseils', icon: 'tips_and_updates', visible: true },
-  ]);
-
-  ngOnInit(): void {
-    this.selectedDuration.set(this.recommendedDuration());
+  calculateDurationFromContribution(contribution: number): number {
+    const remainingToSave = this.remainingToSave();
+    if (contribution <= 0) return 36;
+    return Math.max(3, Math.min(36, Math.ceil(remainingToSave / contribution)));
   }
 
   updateDuration(value: number): void {
@@ -347,6 +400,17 @@ export class SavingsPlanComponent implements OnInit {
       adopted: true,
     });
 
+    const storeTargets: MonthlyTarget[] = this.monthlyTargets().map(target => ({
+      month: target.month,
+      monthName: target.monthName,
+      startOverdraft: 0,
+      endOverdraft: 0,
+      availableBudget: target.contribution,
+      dailyBudget: target.contribution / 30,
+      overdraftReduction: 0,
+      isAchievable: target.isAchievable,
+    }));
+
     this.planStore.createPlan({
       type: 'savings',
       durationMonths: this.targetMonths(),
@@ -354,7 +418,7 @@ export class SavingsPlanComponent implements OnInit {
       dailyBudget: 0,
       paydayDay: this.data().paydayDay || 1,
       startDate: planInfo.startDate.toISOString(),
-      targets: this.storeTargets(),
+      targets: storeTargets,
       overdraftAmount: 0,
       remainingBudget: this.data().remainingBudget,
       monthlyIncome: this.data().monthlyIncome,
@@ -364,8 +428,6 @@ export class SavingsPlanComponent implements OnInit {
       activePlan: this.planStore.activePlan(),
       pastPlans: this.planStore.pastPlans(),
     });
-
-    console.log("✅ Plan d'épargne sauvegardé avec succès !");
 
     const targetAmountFormatted = this.data().targetAmount.toLocaleString('fr-FR');
     const monthlyContributionFormatted =

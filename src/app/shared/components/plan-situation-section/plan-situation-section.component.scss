@@ -1,0 +1,99 @@
+@use "../../../../styles/variables" as *;
+
+.situation-section {
+  padding: $space-xl 0;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 $space-xl 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.situation-grid {
+  display: grid;
+  gap: $space-md;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.situation-card {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: $radius-lg;
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      padding: $space-md $space-lg $space-xs;
+
+      .metric-icon {
+        color: var(--primary-color);
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+
+      .mat-mdc-card-title {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+    }
+
+    .mat-mdc-card-content {
+      padding: $space-xs $space-lg $space-lg;
+    }
+  }
+
+  &.warning {
+    border-color: var(--error-color);
+  }
+}
+
+.amount-display {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: $space-md;
+
+  .amount {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+
+    &.positive {
+      color: #10b981;
+    }
+
+    &.negative {
+      color: var(--error-color);
+    }
+  }
+
+  .label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+}
+
+.progress-text {
+  margin-top: $space-sm;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+mat-progress-bar {
+  height: 8px;
+  border-radius: 4px;
+}

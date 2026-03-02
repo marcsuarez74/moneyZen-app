@@ -14,24 +14,18 @@ interface CategoryGroup {
 @Component({
   selector: 'app-category-select',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule, MatIconModule],
   templateUrl: './category-select.component.html',
-  styleUrls: ['./category-select.component.scss']
+  styleUrls: ['./category-select.component.scss'],
 })
 export class CategorySelectComponent {
-  readonly formControl = input.required<AbstractControl | FormControl>();
+  readonly formControl = input.required<FormControl>();
   readonly label = input<string>('Catégorie');
   readonly placeholder = input<string>('Sélectionnez une catégorie');
   readonly appearance = input<'outline' | 'fill'>('outline');
   readonly showIcon = input<boolean>(true);
   readonly sortAlphabetically = input<boolean>(true);
-  
+
   readonly categoryChange = output<ExpenseCategory>();
 
   // Tri alphabétique des catégories
@@ -47,7 +41,7 @@ export class CategorySelectComponent {
   readonly groupedCategories = computed((): CategoryGroup[] => {
     const categories = this.sortedCategories();
     const groups = new Map<string, typeof EXPENSE_CATEGORIES>();
-    
+
     categories.forEach(cat => {
       if (!groups.has(cat.group)) {
         groups.set(cat.group, []);
