@@ -1,151 +1,258 @@
-<app-plan-card
-  [title]="'Plan d\'épargne - Fonds d\'urgence'"
-  [subtitle]="'Objectif : ' + (data().targetAmount | currency: 'EUR') + ' (3 mois de salaire)'"
-  [icon]="'savings'"
-  [planType]="'savings'"
-  [sections]="planSections()"
-  [showNavigation]="true"
-  (adoptPlan)="adoptPlan()"
-  (adjustPlan)="scrollToContribution()"
->
-  <div cardContent>
-    <!-- Section explicative du fonctionnement -->
-    <app-plan-info-section
-      [title]="'Comment fonctionne ce plan ?'"
-      [infoCards]="infoCards()"
-      [showAlert]="data().hasDebtRecoveryPlan"
-      [alertIcon]="'info'"
-      [alertTitle]="'Plan de redressement actif'"
-      [alertMessage]="'Un plan de redressement est actuellement en cours. Votre contribution mensuelle est ajustée au minimum possible pour ne pas compromettre votre remontée à zéro. Vous pourrez augmenter cette contribution une fois le découvert remboursé.'"
-    >
-    </app-plan-info-section>
+<div class="plan-layout">
+  <!-- Navigation interne -->
+  <aside class="plan-navigation-sidebar">
+    <app-plan-navigation [sections]="planSections()"></app-plan-navigation>
+  </aside>
 
-    <!-- Alerte sur le statut du plan -->
-    <div id="plan-next-step" class="next-step-section">
-      <h3>
-        <mat-icon>event_available</mat-icon>
-        Prochaine étape
-      </h3>
-      <div class="next-step-card">
-        <div class="step-date">
-          <span class="date-label">Date de début</span>
-          <span class="date-value">{{ planInfo().startDateFormatted }}</span>
+  <!-- Contenu principal -->
+  <mat-card class="savings-card" #savingsCard>
+    <mat-card-header>
+      <div class="header-icon savings" mat-card-avatar>
+        <mat-icon>savings</mat-icon>
+      </div>
+      <mat-card-title>Plan d'épargne - Fonds d'urgence</mat-card-title>
+      <mat-card-subtitle>Objectif : {{ data().targetAmount | currency: 'EUR' }} (3 mois de salaire)</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Section explicative du fonctionnement -->
+      <div id="plan-info" class="info-box info-primary">
+        <h3>
+          <mat-icon>info</mat-icon>
+          Comment fonctionne ce plan ?
+        </h3>
+        <div class="info-content">
+          <p>
+            Ce plan d'épargne est conçu pour vous aider à constituer un fonds d'urgence équivalent à 3 mois de salaire.
+            <strong>Il démarrera automatiquement le jour de votre prochaine paie.</strong>
+          </p>
+          <ul class="info-list">
+            <li>
+              <mat-icon>event</mat-icon>
+              <span>
+                @if (planInfo().hasStarted) {
+                  Votre plan a <strong>commencé ce mois-ci</strong> et prendra fin
+                  <strong>{{ planInfo().endDateFormatted }}</strong>
+                } @else {
+                  Le plan commence le <strong>{{ planInfo().startDateFormatted }}</strong> (votre prochaine paie)
+                }
+              </span>
+            </li>
+            <li>
+              <mat-icon>update</mat-icon>
+              <span
+                ><strong>Important :</strong> Mettez à jour votre solde bancaire le jour de votre paie pour un suivi
+                précis</span
+              >
+            </li>
+            <li>
+              <mat-icon>track_changes</mat-icon>
+              <span>Suivez votre progression mensuelle avec la contribution indiquée</span>
+            </li>
+            <li>
+              <mat-icon>trending_up</mat-icon>
+              <span>Le plan s'adapte automatiquement à votre situation si vous mettez à jour vos données</span>
+            </li>
+          </ul>
         </div>
-        @if (planInfo().daysUntilStart > 0) {
-          <div class="step-countdown">
-            <mat-icon>schedule</mat-icon>
-            <span>Dans {{ planInfo().daysUntilStart }} jour{{ planInfo().daysUntilStart > 1 ? 's' : '' }}</span>
+      </div>
+
+      <!-- Alerte sur le statut du plan -->
+      <div id="plan-next-step" class="next-step-box" #nextStepSection>
+        <h3>
+          <mat-icon>event_available</mat-icon>
+          Prochaine étape
+        </h3>
+        <div class="next-step-content">
+          <div class="step-main">
+            @if (planInfo().hasStarted) {
+              <div class="step-status active">
+                <mat-icon>play_circle</mat-icon>
+                <span>Plan actif depuis {{ planInfo().startDateFormatted }}</span>
+              </div>
+            } @else {
+              <div class="step-status">
+                <mat-icon>schedule</mat-icon>
+                <span
+                  >Le plan commence le <strong>{{ planInfo().startDateFormatted }}</strong> (votre prochaine paie)</span
+                >
+              </div>
+            }
+            <div class="step-end">
+              <mat-icon>flag</mat-icon>
+              <span
+                >Objectif atteint le <strong>{{ planInfo().endDateFormatted }}</strong></span
+              >
+            </div>
           </div>
-        } @else {
-          <div class="step-countdown active">
-            <mat-icon>play_circle</mat-icon>
-            <span>Plan actif</span>
+          @if (planInfo().daysUntilStart > 0) {
+            <div class="countdown">
+              <span class="countdown-number">{{ planInfo().daysUntilStart }}</span>
+              <span class="countdown-label">jour{{ planInfo().daysUntilStart > 1 ? 's' : '' }} avant le début</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Section situation -->
+      <div id="plan-situation" class="situation-section">
+        <h3>
+          <mat-icon>account_balance</mat-icon>
+          Votre situation actuelle
+        </h3>
+
+        <div class="situation-grid">
+          <div class="situation-card">
+            <div class="card-icon">
+              <mat-icon>flag</mat-icon>
+            </div>
+            <div class="card-content">
+              <span class="card-label">Objectif d'épargne</span>
+              <span class="card-value">{{ data().targetAmount | currency: 'EUR' }}</span>
+              <span class="card-detail">3 mois de salaire</span>
+            </div>
+          </div>
+
+          <div class="situation-card">
+            <div class="card-icon">
+              <mat-icon>savings</mat-icon>
+            </div>
+            <div class="card-content">
+              <span class="card-label">À épargner</span>
+              <span class="card-value">{{ remainingToSave() | currency: 'EUR' }}</span>
+              <span class="card-detail">Reste à constituer</span>
+            </div>
+          </div>
+
+          <div class="situation-card">
+            <div class="card-icon">
+              <mat-icon>account_balance_wallet</mat-icon>
+            </div>
+            <div class="card-content">
+              <span class="card-label">Revenus mensuels</span>
+              <span class="card-value">{{ data().monthlyIncome | currency: 'EUR' }}</span>
+              <span class="card-detail">Charges fixes: {{ data().fixedExpenses | currency: 'EUR' }}</span>
+            </div>
+          </div>
+
+          <div class="situation-card" [class.warning]="data().remainingBudget < 0">
+            <div class="card-icon">
+              <mat-icon>wallet</mat-icon>
+            </div>
+            <div class="card-content">
+              <span class="card-label">Budget disponible</span>
+              <span class="card-value" [class.negative]="data().remainingBudget < 0">{{
+                data().remainingBudget | currency: 'EUR'
+              }}</span>
+              @if (data().hasDebtRecoveryPlan) {
+                <span class="card-detail warning">⚠️ Plan de redressement actif</span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stratégie recommandée -->
+      <div id="plan-strategy" class="strategy-section">
+        <h3>
+          <mat-icon>lightbulb</mat-icon>
+          Stratégie recommandée
+        </h3>
+
+        <div class="strategy-main-card">
+          <div class="strategy-icon">
+            <mat-icon>savings</mat-icon>
+          </div>
+          <span class="strategy-label">Contribution mensuelle recommandée</span>
+          <span class="strategy-value">{{ recommendedMonthlyContribution() | currency: 'EUR' }}</span>
+        </div>
+
+        <div class="strategy-details">
+          <div class="detail-item">
+            <mat-icon>calendar_today</mat-icon>
+            <div>
+              <span class="detail-label">Durée du plan</span>
+              <span class="detail-value">{{ targetMonths() }} mois</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <mat-icon>flag</mat-icon>
+            <div>
+              <span class="detail-label">Objectif final</span>
+              <span class="detail-value">{{ data().targetAmount | currency: 'EUR' }}</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <mat-icon>trending_up</mat-icon>
+            <div>
+              <span class="detail-label">À épargner</span>
+              <span class="detail-value">{{ remainingToSave() | currency: 'EUR' }}</span>
+            </div>
+          </div>
+          <div class="detail-item">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <div>
+              <span class="detail-label">Contribution</span>
+              <span class="detail-value">{{ recommendedMonthlyContribution() | currency: 'EUR' }}/mois</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="feasibility-box" [class.feasible]="isPlanFeasible()" [class.challenging]="!isPlanFeasible()">
+          <mat-icon>{{ isPlanFeasible() ? 'check_circle' : 'warning' }}</mat-icon>
+          <div class="feasibility-content">
+            <strong>{{ isPlanFeasible() ? 'Plan réalisable' : 'Plan ambitieux' }}</strong>
+            <p>
+              @if (isPlanFeasible()) {
+                Cette contribution mensuelle respecte votre budget et est compatible avec votre situation actuelle.
+              } @else {
+                Cette contribution mensuelle dépasse votre capacité actuelle. Elle sera automatiquement ajustée au
+                maximum possible.
+              }
+            </p>
+          </div>
+        </div>
+
+        @if (data().hasDebtRecoveryPlan) {
+          <div class="constraint-box">
+            <mat-icon>info</mat-icon>
+            <div>
+              <strong>Plan de redressement actif</strong>
+              <p>
+                Votre contribution mensuelle est limitée pour ne pas affecter votre remontée à zéro. Maximum:
+                {{ maximumContribution() | currency: 'EUR' }}/mois
+              </p>
+            </div>
           </div>
         }
       </div>
-    </div>
 
-    <!-- Section situation -->
-    <app-plan-situation-section [title]="'Votre situation actuelle'" [metrics]="situationMetrics()">
-    </app-plan-situation-section>
+      <!-- Gestion de la contribution -->
+      <div id="plan-contribution" class="contribution-section" #contributionSection>
+        <h3>
+          <mat-icon>savings</mat-icon>
+          Gestion de la contribution
+        </h3>
 
-    <!-- Stratégie -->
-    <app-plan-strategy-section
-      [title]="'Stratégie recommandée'"
-      [primaryCard]="{
-        value: recommendedMonthlyContribution(),
-        label: 'Contribution mensuelle recommandée',
-        isPrimary: true,
-      }"
-      [details]="strategyDetails()"
-      [isFeasible]="isPlanFeasible()"
-      [feasibilityText]="
-        isPlanFeasible()
-          ? 'Cette contribution mensuelle respecte votre budget et est compatible avec votre situation actuelle.'
-          : 'Cette contribution mensuelle dépasse votre capacité actuelle. Elle sera automatiquement ajustée au maximum possible.'
-      "
-      [hasConstraints]="data().hasDebtRecoveryPlan"
-      [constraintText]="
-        'Votre contribution mensuelle est limitée pour ne pas affecter votre remontée à zéro. Maximum: ' +
-        (maximumContribution() | currency: 'EUR') +
-        '/mois'
-      "
-    >
-    </app-plan-strategy-section>
-
-    <!-- Gestion de la contribution -->
-    <div id="plan-contribution" class="contribution-section" #contributionSection>
-      <h3>
-        <mat-icon>savings</mat-icon>
-        Gestion de la contribution
-      </h3>
-
-      <mat-card class="contribution-card">
-        <mat-card-header>
-          <mat-icon mat-card-avatar>edit</mat-icon>
-          <mat-card-title>Contribution mensuelle</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="contribution-header">
-            <span class="label">Montant</span>
-            <span class="value">{{ recommendedMonthlyContribution() | currency: 'EUR' }}</span>
-          </div>
-
-          <div class="slider-container">
-            <div class="slider-labels">
-              <span>Min: {{ minimumContribution() | currency: 'EUR' }}</span>
-              <span>Max: {{ maximumContribution() | currency: 'EUR' }}</span>
-            </div>
-            <mat-slider
-              [min]="minimumContribution()"
-              [max]="maximumContribution()"
-              [step]="10"
-              [discrete]="true"
-              [showTickMarks]="true"
-              class="contribution-slider"
-            >
-              <input
-                matSliderThumb
-                [ngModel]="recommendedMonthlyContribution()"
-                (ngModelChange)="updateDuration(calculateDurationFromContribution($event))"
-              />
-            </mat-slider>
-          </div>
-
-          <div class="contribution-details">
-            <div class="detail-row">
-              <mat-icon>schedule</mat-icon>
-              <span
-                >Durée estimée: <strong>{{ targetMonths() }} mois</strong></span
-              >
-            </div>
-            <div class="detail-row">
-              <mat-icon>calendar_today</mat-icon>
-              <span
-                >Date d'accomplissement: <strong>{{ planInfo().endDateFormatted }}</strong></span
-              >
+        <div class="contribution-control">
+          <mat-slider
+            [min]="minimumContribution()"
+            [max]="maximumContribution()"
+            [step]="10"
+            [discrete]="true"
+            [showTickMarks]="true"
+          >
+            <input matSliderThumb [(ngModel)]="selectedDuration" (ngModelChange)="updateDuration($event)" />
+          </mat-slider>
+          <div class="contribution-summary">
+            <div class="contribution-main">
+              <span class="contribution-number">{{ recommendedMonthlyContribution() | currency: 'EUR' }}</span>
+              <span class="contribution-detail">par mois pendant {{ targetMonths() }} mois</span>
             </div>
           </div>
+        </div>
 
-          @if (data().hasDebtRecoveryPlan) {
-            <div class="debt-notice">
-              <mat-icon>info</mat-icon>
-              <p>
-                <strong>Contribution limitée</strong><br />
-                Un plan de redressement est actif. Votre contribution est plafonnée à
-                {{ maximumContribution() | currency: 'EUR' }}/mois.
-              </p>
-            </div>
-          }
-        </mat-card-content>
-      </mat-card>
-
-      <div class="contribution-tips">
-        <h4>
-          <mat-icon>tips_and_updates</mat-icon>
-          Conseils pour épargner
-        </h4>
-        <ul>
+        <ul class="contribution-tips">
           <li>
             <mat-icon>check_circle</mat-icon>
             <span>Automatisez votre épargne: virement automatique à chaque paie</span>
@@ -166,112 +273,91 @@
           </li>
         </ul>
       </div>
-    </div>
 
-    <!-- Évolution -->
-    <div id="plan-evolution" class="targets-section">
-      <h3>
-        <mat-icon>flag</mat-icon>
-        Évolution de l'épargne
-      </h3>
-      <p class="targets-explanation">Suivez la progression de votre fonds d'urgence mois après mois :</p>
+      <!-- Évolution simplifiée -->
+      <div id="plan-evolution" class="evolution-section">
+        <h3>
+          <mat-icon>flag</mat-icon>
+          Évolution de l'épargne
+        </h3>
 
-      <div class="targets-list">
-        @for (target of monthlyTargets(); track target.month) {
-          <div
-            class="target-card"
-            [class.completed]="target.endAmount >= data().targetAmount"
-            [class.difficult]="!target.isAchievable"
-          >
-            <div class="target-header">
-              <div class="month-badge">M{{ target.month }}</div>
-              <span class="month-name">{{ target.monthName }}</span>
-              @if (!target.isAchievable) {
-                <mat-icon class="warning-icon" color="warn">warning</mat-icon>
-              }
+        <div class="evolution-status">
+          <div class="months-remaining">
+            <span class="months-count">{{ targetMonths() }}</span>
+            <span class="months-text">mois restants</span>
+          </div>
+          <div class="evolution-details">
+            <div class="evolution-item">
+              <mat-icon>calendar_today</mat-icon>
+              <span
+                >Fin prévue: <strong>{{ planInfo().endDateFormatted }}</strong></span
+              >
             </div>
-
-            <div class="target-body">
-              <div class="balance-track">
-                <div class="balance-point start">
-                  <span class="point-label">Début</span>
-                  <span class="point-value">{{ target.startAmount | currency: 'EUR' }}</span>
-                </div>
-                <div class="progress-arrow">
-                  <mat-icon>add</mat-icon>
-                  <span>+{{ target.contribution | currency: 'EUR' }}</span>
-                </div>
-                <div class="balance-point end">
-                  <span class="point-label">Fin du mois</span>
-                  <span class="point-value">{{ target.endAmount | currency: 'EUR' }}</span>
-                </div>
-              </div>
-
-              @if (target.endAmount >= data().targetAmount) {
-                <div class="achievement-badge">
-                  <mat-icon>emoji_events</mat-icon>
-                  <span>Objectif atteint !</span>
-                </div>
-              }
+            <div class="evolution-item">
+              <mat-icon>savings</mat-icon>
+              <span
+                >Objectif: <strong>{{ data().targetAmount | currency: 'EUR' }}</strong></span
+              >
             </div>
           </div>
-        }
+        </div>
       </div>
-    </div>
 
-    <!-- Conseils -->
-    <div id="plan-tips" class="tips-section">
-      <h3>
-        <mat-icon>tips_and_updates</mat-icon>
-        Comment constituer votre fonds d'urgence
-      </h3>
+      <!-- Conseils -->
+      <div id="plan-tips" class="tips-section">
+        <h3>
+          <mat-icon>tips_and_updates</mat-icon>
+          Comment constituer votre fonds d'urgence
+        </h3>
 
-      <ul class="tips-list">
-        <li>
-          <mat-icon>autorenew</mat-icon>
-          <span
-            ><strong>Automatisez :</strong> Configurez un virement automatique à chaque paie pour ne pas avoir à y
-            penser</span
-          >
-        </li>
-        <li>
-          <mat-icon>account_balance</mat-icon>
-          <span><strong>Séparez :</strong> Gardez ce fonds sur un compte distinct de votre compte courant</span>
-        </li>
-        <li>
-          <mat-icon>block</mat-icon>
-          <span
-            ><strong>Réservez :</strong> Ce fonds est uniquement pour les urgences (perte d'emploi, imprévu
-            médical...)</span
-          >
-        </li>
-        <li>
-          <mat-icon>trending_up</mat-icon>
-          <span
-            ><strong>Augmentez progressivement :</strong> Une fois l'habitude prise, augmentez votre contribution</span
-          >
-        </li>
-        @if (data().hasDebtRecoveryPlan) {
-          <li class="highlight">
-            <mat-icon>info</mat-icon>
+        <ul class="tips-list">
+          <li>
+            <mat-icon>account_balance</mat-icon>
             <span
-              ><strong>Patience :</strong> Pendant le plan de redressement, contribuez le minimum. Vous pourrez
-              accélérer ensuite !</span
+              ><strong>Automatisez :</strong> Configurez un virement automatique à chaque paie pour ne pas avoir à y
+              penser</span
             >
           </li>
-        }
-      </ul>
-    </div>
-  </div>
+          <li>
+            <mat-icon>lock</mat-icon>
+            <span><strong>Séparez :</strong> Gardez ce fonds sur un compte distinct de votre compte courant</span>
+          </li>
+          <li>
+            <mat-icon>block</mat-icon>
+            <span
+              ><strong>Réservez :</strong> Ce fonds est uniquement pour les urgences (perte d'emploi, imprévu
+              médical...)</span
+            >
+          </li>
+          <li>
+            <mat-icon>trending_up</mat-icon>
+            <span
+              ><strong>Augmentez progressivement :</strong> Une fois l'habitude prise, augmentez votre
+              contribution</span
+            >
+          </li>
+          @if (data().hasDebtRecoveryPlan) {
+            <li class="info">
+              <mat-icon>info</mat-icon>
+              <span
+                ><strong>Patience :</strong> Pendant le plan de redressement, contribuez le minimum. Vous pourrez
+                accélérer ensuite !</span
+              >
+            </li>
+          }
+        </ul>
+      </div>
+    </mat-card-content>
 
-  <div cardActions>
-    <button mat-stroked-button (click)="scrollToContribution()">
-      <mat-icon>edit</mat-icon>
-      Ajuster la contribution
-    </button>
-    <button mat-raised-button color="primary" (click)="adoptPlan()">
-      <mat-icon>check</mat-icon>
-      J'adhère à ce plan sur {{ targetMonths() }} mois
-    </button>
-  </div>
-</app-plan-card>
+    <mat-card-actions align="end">
+      <button mat-stroked-button (click)="scrollToContribution()">
+        <mat-icon>edit</mat-icon>
+        Ajuster la contribution
+      </button>
+      <button mat-raised-button color="primary" (click)="adoptPlan()">
+        <mat-icon>check</mat-icon>
+        J'adhère à ce plan sur {{ targetMonths() }} mois
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -423,3 +423,11 @@
 .section-savings-plan {
   animation: slideUp 0.6s ease forwards;
 }
+.section-alert {
+  app-savings-plan,
+  app-debt-recovery-plan {
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+}

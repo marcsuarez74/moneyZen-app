@@ -17,13 +17,3 @@ export { BottomNavigationComponent } from './bottom-navigation/bottom-navigation
 export { DailyBudgetInfoComponent } from './daily-budget-info/daily-budget-info.component';
 export { HealthBadgeComponent } from './health-badge/health-badge.component';
 export { AlertBadgeComponent } from './alert-badge/alert-badge.component';
-export { PlanCardComponent, type PlanType } from './plan-card/plan-card.component';
-export {
-  PlanInfoSectionComponent,
-  type InfoCard,
-} from './plan-info-section/plan-info-section.component';
-export { PlanStrategySectionComponent } from './plan-strategy-section/plan-strategy-section.component';
-export {
-  PlanSituationSectionComponent,
-  type SituationMetric,
-} from './plan-situation-section/plan-situation-section.component';

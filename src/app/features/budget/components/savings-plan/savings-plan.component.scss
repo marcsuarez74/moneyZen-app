@@ -1,89 +1,25 @@
 @use "../../../../../styles/variables" as *;
 
 // ============================================
-// SAVINGS PLAN - Responsive & Dark Theme
+// SAVINGS PLAN - Match debt-recovery-plan design
 // ============================================
 
-// Expansion panel avec style fintech
-.savings-plan-panel {
-  background: var(--surface);
-  border-left: 4px solid #10b981; // Vert pour l'épargne
-  border-radius: $radius-xl;
-  overflow: hidden;
-  box-shadow: $shadow-md;
+// Espacement entre les plans
+:host {
+  display: block;
 
-  @include media-down($sm) {
-    border-radius: $radius-lg;
-  }
-
-  ::ng-deep {
-    .mat-expansion-panel-header {
-      padding: $space-lg $space-xl;
-      background: var(--surface-elevated);
-      border-bottom: 1px solid var(--border);
-
-      &:hover {
-        background: var(--surface-hover);
-      }
-
-      &.mat-expanded {
-        border-bottom-color: var(--border);
-      }
-    }
-
-    .mat-expansion-panel-content {
-      background: var(--surface);
-    }
-  }
-
-  .panel-header-content {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    .header-icon {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      mat-icon {
-        color: white;
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
-      }
-    }
-
-    .header-text {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-
-      .title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--text-primary);
-      }
-
-      .subtitle {
-        font-size: 0.875rem;
-        color: var(--text-secondary);
-      }
-    }
+  & + app-savings-plan,
+  & + app-debt-recovery-plan {
+    margin-top: 24px;
   }
 }
 
-// Layout avec navigation
+// Layout avec navigation (identique à debt-recovery-plan)
 .plan-layout {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
-  padding: $space-xl;
 
   @media (min-width: 1024px) {
     flex-direction: row;
@@ -104,23 +40,197 @@
     top: 24px;
     max-height: calc(100vh - 48px);
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--fintech-border, #e0e0e0);
+      border-radius: 2px;
+    }
   }
 }
 
-.savings-content {
+// Carte principale (identique à debt-recovery-plan mais avec couleur verte)
+.savings-card {
   flex: 1;
   min-width: 0;
+  border-left: 4px solid #10b981; // Vert pour épargne
+  background: var(--surface);
+  border-radius: $radius-xl;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+
+  @include media-down($sm) {
+    border-radius: $radius-lg;
+  }
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      padding-bottom: $space-md;
+    }
+
+    .mat-mdc-card-content {
+      padding-top: $space-md;
+    }
+
+    .mat-mdc-card-actions {
+      padding: 16px 24px 24px;
+      gap: 12px;
+    }
+  }
+
+  .header-icon {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    @include media-down($sm) {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+
+    mat-icon {
+      color: white;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+
+      @include media-down($sm) {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+
+    @include media-down($sm) {
+      font-size: 1.25rem;
+    }
+  }
+
+  mat-card-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+  }
 }
 
-// Sections
-.targets-section {
+// Info box (Comment fonctionne ce plan) - identique à debt-recovery-plan
+.info-box {
+  background: var(--surface-variant);
+  border-radius: $radius-lg;
+  padding: $space-lg;
+  margin-bottom: $space-lg;
+  border: 1px solid var(--border);
+
+  @include media-down($sm) {
+    padding: $space-md;
+    border-radius: $radius-md;
+    margin-bottom: $space-md;
+  }
+
+  &.info-primary {
+    border: 2px solid var(--primary-color);
+    background: var(--primary-light);
+
+    h3 mat-icon {
+      color: var(--primary-color);
+    }
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 $space-md;
+    color: var(--text-primary);
+
+    @include media-down($sm) {
+      font-size: 0.9375rem;
+      margin-bottom: $space-sm;
+    }
+
+    mat-icon {
+      font-size: 22px;
+      color: var(--primary-color);
+
+      @include media-down($sm) {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.info-content {
+  p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: $space-md;
+  }
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-sm;
+    padding: $space-sm;
+    background: var(--surface);
+    border-radius: $radius-md;
+
+    mat-icon {
+      color: var(--primary-color);
+      flex-shrink: 0;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    span {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+  }
+}
+
+// Next step box (Prochaine étape)
+.next-step-box {
   padding: $space-xl 0;
 
   h3 {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 0 0 16px 0;
+    margin: 0 0 $space-lg;
     color: var(--text-primary);
     font-size: 1.25rem;
     font-weight: 600;
@@ -129,148 +239,531 @@
       color: var(--primary-color);
     }
   }
+}
 
-  .targets-explanation {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin: 0 0 20px 0;
+.next-step-content {
+  background: var(--surface-variant);
+  border-radius: $radius-lg;
+  padding: $space-lg;
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include media-down($sm) {
+    flex-direction: column;
+    gap: $space-md;
   }
 }
 
-.targets-list {
+.step-main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: $space-sm;
 }
 
-.target-card {
-  background: var(--surface-elevated);
-  border-radius: $radius-lg;
-  border: 1px solid var(--border);
-  padding: 20px;
+.step-status,
+.step-end {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
 
-  &.completed {
-    border-color: #10b981;
-    background: rgba(16, 185, 129, 0.1);
+  mat-icon {
+    color: var(--primary-color);
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
   }
 
-  .target-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-
-    .month-badge {
-      background: var(--primary-color);
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.875rem;
-    }
-
-    .month-name {
-      flex: 1;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-
-    .warning-icon {
-      color: var(--error-color);
-    }
+  span {
+    font-size: 0.9375rem;
+    color: var(--text-primary);
   }
 
-  .target-body {
-    .balance-track {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-
-      @media (max-width: 640px) {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-      }
-    }
-
-    .balance-point {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-
-      .point-label {
-        font-size: 0.75rem;
-        color: var(--text-tertiary);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .point-value {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--text-primary);
-      }
-    }
-
-    .progress-arrow {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
+  &.active {
+    mat-icon {
       color: #10b981;
-
-      @media (max-width: 640px) {
-        flex-direction: row;
-        justify-content: center;
-      }
-
-      mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
-
-      span {
-        font-weight: 600;
-        font-size: 0.875rem;
-      }
-    }
-
-    .achievement-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 16px;
-      padding: 12px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
-      border-radius: $radius-md;
-      font-weight: 600;
-
-      mat-icon {
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-      }
     }
   }
 }
 
-// Conseils
-.summary-section {
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $space-md $space-lg;
+  background: var(--surface);
+  border-radius: $radius-md;
+  border: 2px solid var(--primary-color);
+
+  .countdown-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1;
+  }
+
+  .countdown-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+}
+
+// Situation section
+.situation-section {
   padding: $space-xl 0;
 
   h3 {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 0 0 20px 0;
+    margin: 0 0 $space-xl;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.situation-grid {
+  display: grid;
+  gap: $space-md;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.situation-card {
+  display: flex;
+  gap: $space-md;
+  padding: $space-lg;
+  background: var(--surface-elevated);
+  border-radius: $radius-lg;
+  border: 1px solid var(--border);
+
+  &.warning {
+    border-color: var(--error-color);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--surface-hover);
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      color: var(--primary-color);
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .card-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .card-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+
+      &.negative {
+        color: var(--error-color);
+      }
+    }
+
+    .card-detail {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+
+      &.warning {
+        color: var(--error-color);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Strategy section
+.strategy-section {
+  padding: $space-xl 0;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 $space-xl;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.strategy-main-card {
+  background: var(--surface-hover);
+  border-radius: $radius-lg;
+  padding: $space-xl;
+  border: 2px solid var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $space-sm;
+  margin-bottom: $space-lg;
+
+  .strategy-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      color: white;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .strategy-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .strategy-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+}
+
+.strategy-details {
+  display: grid;
+  gap: $space-md;
+  margin-bottom: $space-lg;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-md;
+  background: var(--surface-elevated);
+  border-radius: $radius-lg;
+  border: 1px solid var(--border);
+
+  mat-icon {
+    color: var(--primary-color);
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .detail-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+  }
+}
+
+.feasibility-box {
+  display: flex;
+  gap: $space-md;
+  padding: $space-md $space-lg;
+  border-radius: $radius-lg;
+  margin-bottom: $space-lg;
+
+  &.feasible {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid #10b981;
+
+    mat-icon {
+      color: #10b981;
+    }
+  }
+
+  &.challenging {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error-color);
+
+    mat-icon {
+      color: var(--error-color);
+    }
+  }
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .feasibility-content {
+    strong {
+      display: block;
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+  }
+}
+
+.constraint-box {
+  display: flex;
+  gap: $space-md;
+  padding: $space-md $space-lg;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: $radius-lg;
+  border: 1px solid #3b82f6;
+
+  mat-icon {
+    color: #3b82f6;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  div {
+    strong {
+      display: block;
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// Contribution section (Gestion de la contribution)
+.contribution-section {
+  padding: $space-xl 0;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 $space-xl;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.contribution-control {
+  background: var(--surface-variant);
+  border-radius: $radius-lg;
+  padding: $space-xl;
+  border: 1px solid var(--border);
+  margin-bottom: $space-lg;
+}
+
+mat-slider {
+  width: 100%;
+}
+
+.contribution-summary {
+  display: flex;
+  justify-content: center;
+  padding-top: $space-md;
+  border-top: 1px solid var(--border);
+}
+
+.contribution-main {
+  display: flex;
+  align-items: baseline;
+  gap: $space-sm;
+
+  .contribution-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+
+  .contribution-detail {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+}
+
+.contribution-tips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-sm;
+    padding: $space-sm;
+    background: var(--surface-elevated);
+    border-radius: $radius-md;
+    border: 1px solid var(--border);
+
+    mat-icon {
+      color: #10b981;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    span {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+  }
+}
+
+// Evolution section (simplifiée)
+.evolution-section {
+  padding: $space-xl 0;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 $space-xl;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.evolution-status {
+  background: var(--surface-variant);
+  border-radius: $radius-lg;
+  padding: $space-xl;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-lg;
+  text-align: center;
+}
+
+.months-remaining {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .months-count {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1;
+  }
+
+  .months-text {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+}
+
+.evolution-details {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  width: 100%;
+  padding-top: $space-lg;
+  border-top: 1px solid var(--border);
+}
+
+.evolution-item {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--primary-color);
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+}
+
+// Tips section (Conseils)
+.tips-section {
+  padding: $space-xl 0;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 $space-xl;
     color: var(--text-primary);
     font-size: 1.25rem;
     font-weight: 600;
@@ -285,100 +778,96 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
 
   li {
     display: flex;
     align-items: flex-start;
-    gap: 16px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &.info {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid #10b981;
-      border-radius: $radius-md;
-      padding: 16px;
-      margin: 8px 0;
-
-      mat-icon {
-        color: #10b981;
-      }
-    }
+    gap: $space-md;
+    padding: $space-md;
+    background: var(--surface-elevated);
+    border-radius: $radius-lg;
+    border: 1px solid var(--border);
 
     mat-icon {
-      color: #10b981;
       font-size: 24px;
       width: 24px;
       height: 24px;
+      color: var(--primary-color);
       flex-shrink: 0;
       margin-top: 2px;
     }
 
     span {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       line-height: 1.5;
+      color: var(--text-secondary);
 
       strong {
         color: var(--text-primary);
+        font-weight: 600;
       }
     }
-  }
-}
 
-// Actions
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding-top: $space-xl;
-  border-top: 1px solid var(--border);
+    &.info {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: #10b981;
 
-  button {
-    mat-icon {
-      margin-right: 8px;
-    }
-  }
-
-  @include media-down($sm) {
-    flex-direction: column;
-
-    button {
-      width: 100%;
+      mat-icon {
+        color: #10b981;
+      }
     }
   }
 }
 
 // Dark Theme
 :host-context(.dark-theme) {
-  .savings-plan-panel {
+  .savings-card {
     border-left-color: #34d399;
 
-    .panel-header-content {
-      .header-icon {
-        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-      }
+    .header-icon {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
     }
   }
 
-  .target-card {
-    &.completed {
+  .next-step-content {
+    .countdown {
       border-color: #34d399;
-      background: rgba(52, 211, 153, 0.15);
+
+      .countdown-number {
+        color: #34d399;
+      }
     }
   }
 
-  .tips-list {
-    li {
-      &.info {
-        background: rgba(52, 211, 153, 0.15);
-        border-color: #34d399;
-      }
+  .strategy-main-card {
+    border-color: #34d399;
 
+    .strategy-value {
+      color: #34d399;
+    }
+  }
+
+  .feasibility-box {
+    &.feasible {
+      border-color: #34d399;
+
+      mat-icon {
+        color: #34d399;
+      }
+    }
+  }
+
+  .months-remaining {
+    .months-count {
+      color: #34d399;
+    }
+  }
+
+  .contribution-tips {
+    li {
       mat-icon {
         color: #34d399;
       }
