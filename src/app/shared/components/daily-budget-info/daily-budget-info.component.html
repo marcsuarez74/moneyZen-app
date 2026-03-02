@@ -2,7 +2,7 @@
   <div class="daily-budget-info" [class]="getUrgencyClass()" [matTooltip]="getTooltipText()">
     <div class="budget-main">
       <span class="budget-amount" [class]="getBudgetStatusClass()">
-        {{ info.realisticDailyBudget | currency: 'EUR' : 'symbol' : '1.0-0' }}
+        {{ info.realisticDailyBudget | currency: 'EUR' : 'symbol' : '1.2-2' }}
       </span>
       <span class="budget-label">/jour</span>
     </div>

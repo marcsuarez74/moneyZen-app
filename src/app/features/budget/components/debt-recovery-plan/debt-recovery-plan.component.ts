@@ -214,9 +214,10 @@ export class DebtRecoveryPlanComponent implements OnInit {
     return Math.max(0, recommended - spent);
   });
 
-  // Budget quotidien ajusté
+  // Budget quotidien ajusté (basé sur les jours restants jusqu'à la paie)
   readonly adjustedDailyBudget = computed(() => {
-    return this.adjustedMonthlyBudget() / this.daysInMonth();
+    const daysUntilPayday = this.planInfo().daysUntilStart;
+    return this.adjustedMonthlyBudget() / Math.max(1, daysUntilPayday);
   });
 
   readonly minimumRecoveryPerMonth = computed(() => {

@@ -89,10 +89,10 @@ export class PaydayCalculatorService {
     const adjustedDailyBudget =
       daysUntilPayday > 0 ? remainingBudget / daysUntilPayday : remainingBudget;
 
-    // Budget quotidien réaliste : (Reste à vivre - Dépenses réelles) / 30 jours
-    // Utilise 30 jours comme base mensuelle standard (comme debt-recovery-plan)
+    // Budget quotidien réaliste : (Reste à vivre - Dépenses réelles) / jours jusqu'à la paie
     const realisticBudget = realisticRemainingBudget ?? remainingBudget;
-    const realisticDailyBudget = realisticBudget / 30;
+    const realisticDailyBudget =
+      daysUntilPayday > 0 ? realisticBudget / daysUntilPayday : realisticBudget;
 
     return {
       lastPayday,

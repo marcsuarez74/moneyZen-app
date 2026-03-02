@@ -605,7 +605,7 @@ export class QuickExpenseComponent implements OnInit {
       nextPayday.getDate()
     );
     const diffTime = nextPaydayWithoutTime.getTime() - todayWithoutTime.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   adjustedDailyBudget = () => {
