@@ -36,16 +36,18 @@
           </section>
         }
 
-        <!-- Suivi des dépenses - visible même sans plan de redressement -->
-        <section id="section-expense-tracking" class="dashboard-section section-expense-tracking">
-          <app-quick-expense
-            [monthlyBudget]="budgetStore.userData()?.salary || 0"
-            [dailyBudget]="paydayInfo()?.adjustedDailyBudget || 0"
-            [paydayDay]="budgetStore.userData()?.paydayDay || 1"
-            (viewAllExpensesClicked)="openAllExpenses()"
-          >
-          </app-quick-expense>
-        </section>
+        <!-- Suivi des dépenses - visible uniquement si pas de plan de redressement -->
+        @if (!isNegativeBalance()) {
+          <section id="section-expense-tracking" class="dashboard-section section-expense-tracking">
+            <app-quick-expense
+              [monthlyBudget]="budgetStore.userData()?.salary || 0"
+              [dailyBudget]="paydayInfo()?.adjustedDailyBudget || 0"
+              [paydayDay]="budgetStore.userData()?.paydayDay || 1"
+              (viewAllExpensesClicked)="openAllExpenses()"
+            >
+            </app-quick-expense>
+          </section>
+        }
 
         @if (priorityInsights().length > 0) {
           <section id="section-insights" class="dashboard-section section-insights">

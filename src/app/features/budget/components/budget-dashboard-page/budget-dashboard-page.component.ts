@@ -105,28 +105,31 @@ export class BudgetDashboardPageComponent implements OnInit {
     return !isNaN(balance) && balance < 0;
   });
 
-  // Sections de navigation pour le dashboard
-  readonly dashboardSections = computed((): PlanSection[] => [
-    {
-      id: 'section-expense-tracking',
-      label: 'Suivi des dépenses',
-      icon: 'add_circle',
-      visible: true,
-    },
-    {
-      id: 'section-insights',
-      label: 'Insights',
-      icon: 'lightbulb',
-      visible: this.priorityInsights().length > 0,
-    },
-    {
-      id: 'section-stats',
-      label: 'Statistiques',
-      icon: 'bar_chart',
-      visible: this.budgetStore.budgetSummary() !== null,
-    },
-    { id: 'section-content', label: 'Détails', icon: 'article', visible: true },
-  ]);
+  // Sections de navigation pour le dashboard - affiché seulement si pas de plan
+  readonly dashboardSections = computed((): PlanSection[] => {
+    const hasPlan = this.isNegativeBalance();
+    return [
+      {
+        id: 'section-expense-tracking',
+        label: 'Suivi des dépenses',
+        icon: 'add_circle',
+        visible: !hasPlan,
+      },
+      {
+        id: 'section-insights',
+        label: 'Insights',
+        icon: 'lightbulb',
+        visible: !hasPlan && this.priorityInsights().length > 0,
+      },
+      {
+        id: 'section-stats',
+        label: 'Statistiques',
+        icon: 'bar_chart',
+        visible: !hasPlan && this.budgetStore.budgetSummary() !== null,
+      },
+      { id: 'section-content', label: 'Détails', icon: 'article', visible: !hasPlan },
+    ];
+  });
 
   readonly recoveryData = computed((): RecoveryPlanData | null => {
     const userData = this.budgetStore.userData();
