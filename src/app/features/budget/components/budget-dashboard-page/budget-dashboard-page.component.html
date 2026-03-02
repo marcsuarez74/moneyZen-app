@@ -25,16 +25,25 @@
       }
 
       <div class="dashboard-content">
-        @if (isNegativeBalance() && recoveryData(); as recovery) {
-          <section id="section-alert" class="dashboard-section section-alert">
+        <section id="section-alert" class="dashboard-section section-alert">
+          @if (isNegativeBalance() && recoveryData(); as recovery) {
             <app-debt-recovery-plan
               [data]="recovery"
               (acceptPlan)="onAcceptRecoveryPlan($event)"
               (adjustPlan)="onAdjustRecoveryPlan($event)"
             >
             </app-debt-recovery-plan>
-          </section>
-        }
+          }
+
+          @if (showSavingsPlan() && savingsPlanData(); as savingsData) {
+            <app-savings-plan
+              [data]="savingsData"
+              (acceptPlan)="onAcceptSavingsPlan($event)"
+              (adjustPlan)="onAdjustSavingsPlan($event)"
+            >
+            </app-savings-plan>
+          }
+        </section>
 
         <!-- Suivi des dépenses - visible uniquement si pas de plan de redressement -->
         @if (!isNegativeBalance()) {
@@ -161,16 +170,6 @@
             </mat-tab-group>
           </div>
         </section>
-        @if (showSavingsPlan() && savingsPlanData(); as savingsData) {
-          <section id="savings-plan-section" class="dashboard-section section-savings-plan">
-            <app-savings-plan
-              [data]="savingsData"
-              (acceptPlan)="onAcceptSavingsPlan($event)"
-              (adjustPlan)="onAdjustSavingsPlan($event)"
-            >
-            </app-savings-plan>
-          </section>
-        }
       </div>
     </main>
   }

@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
 import { PlanStore } from '../../../../store/plan.store';
 import { LocalStorageService } from '../../../../services/local-storage.service';
@@ -77,8 +77,7 @@ export interface MonthlySavingsTarget {
     MatInputModule,
     MatTooltipModule,
     MatExpansionModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    MatDividerModule,
     FormsModule,
     CurrencyPipe,
     PlanNavigationComponent,

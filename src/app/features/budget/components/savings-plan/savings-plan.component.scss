@@ -1,34 +1,38 @@
 @use "../../../../../styles/variables" as *;
 
-// Panel d'expansion principal
+// ============================================
+// SAVINGS PLAN - Responsive & Dark Theme
+// ============================================
+
+// Expansion panel avec style fintech
 .savings-plan-panel {
-  background: var(--mat-sys-surface-container-low);
-  border-radius: 16px;
+  background: var(--surface);
+  border-left: 4px solid #10b981; // Vert pour l'épargne
+  border-radius: $radius-xl;
   overflow: hidden;
-  border: 1px solid var(--mat-sys-outline-variant);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow-md;
+
+  @include media-down($sm) {
+    border-radius: $radius-lg;
+  }
 
   ::ng-deep {
     .mat-expansion-panel-header {
-      padding: 20px 24px;
-      background: var(--mat-sys-surface-container);
-      border-bottom: 1px solid var(--mat-sys-outline-variant);
+      padding: $space-lg $space-xl;
+      background: var(--surface-elevated);
+      border-bottom: 1px solid var(--border);
 
       &:hover {
-        background: var(--mat-sys-surface-container-high);
+        background: var(--surface-hover);
       }
 
       &.mat-expanded {
-        border-bottom-color: var(--mat-sys-outline-variant);
+        border-bottom-color: var(--border);
       }
     }
 
     .mat-expansion-panel-content {
-      background: var(--mat-sys-surface);
-    }
-
-    .mat-expansion-indicator {
-      color: var(--mat-sys-on-surface-variant);
+      background: var(--surface);
     }
   }
 
@@ -40,14 +44,14 @@
     .header-icon {
       width: 48px;
       height: 48px;
-      background: var(--mat-sys-tertiary-container);
-      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
 
       mat-icon {
-        color: var(--mat-sys-tertiary);
+        color: white;
         font-size: 28px;
         width: 28px;
         height: 28px;
@@ -62,38 +66,44 @@
       .title {
         font-size: 1.25rem;
         font-weight: 600;
-        color: var(--mat-sys-on-surface);
+        color: var(--text-primary);
       }
 
       .subtitle {
         font-size: 0.875rem;
-        color: var(--mat-sys-on-surface-variant);
+        color: var(--text-secondary);
       }
     }
   }
 }
 
-// Layout du plan
+// Layout avec navigation
 .plan-layout {
   display: flex;
-  gap: 24px;
-  padding: 24px;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: $space-xl;
 
-  @media (max-width: 1023px) {
-    flex-direction: column;
-    padding: 16px;
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
   }
 }
 
 .plan-navigation-sidebar {
-  flex-shrink: 0;
-  width: 220px;
+  width: 100%;
+  order: -1;
 
-  @media (max-width: 1023px) {
-    width: 100%;
+  @media (min-width: 1024px) {
+    width: 240px;
+    flex-shrink: 0;
+    order: 0;
     position: sticky;
-    top: 0;
-    z-index: 100;
+    top: 24px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
   }
 }
 
@@ -102,26 +112,26 @@
   min-width: 0;
 }
 
-// Section Évolution
+// Sections
 .targets-section {
-  padding: 24px 0;
+  padding: $space-xl 0;
 
   h3 {
     display: flex;
     align-items: center;
     gap: 12px;
     margin: 0 0 16px 0;
-    color: var(--mat-sys-on-surface);
+    color: var(--text-primary);
     font-size: 1.25rem;
     font-weight: 600;
 
     mat-icon {
-      color: var(--mat-sys-primary);
+      color: var(--primary-color);
     }
   }
 
   .targets-explanation {
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--text-secondary);
     font-size: 0.875rem;
     margin: 0 0 20px 0;
   }
@@ -134,14 +144,14 @@
 }
 
 .target-card {
-  background: var(--mat-sys-surface-container);
-  border-radius: 16px;
-  border: 1px solid var(--mat-sys-outline-variant);
+  background: var(--surface-elevated);
+  border-radius: $radius-lg;
+  border: 1px solid var(--border);
   padding: 20px;
 
   &.completed {
-    border-color: var(--mat-sys-tertiary);
-    background: var(--mat-sys-tertiary-container);
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
   }
 
   .target-header {
@@ -151,7 +161,7 @@
     margin-bottom: 16px;
 
     .month-badge {
-      background: var(--mat-sys-primary);
+      background: var(--primary-color);
       color: white;
       width: 40px;
       height: 40px;
@@ -166,11 +176,11 @@
     .month-name {
       flex: 1;
       font-size: 0.875rem;
-      color: var(--mat-sys-on-surface-variant);
+      color: var(--text-secondary);
     }
 
     .warning-icon {
-      color: var(--mat-sys-error);
+      color: var(--error-color);
     }
   }
 
@@ -195,7 +205,7 @@
 
       .point-label {
         font-size: 0.75rem;
-        color: var(--mat-sys-on-surface-variant);
+        color: var(--text-tertiary);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
@@ -203,7 +213,7 @@
       .point-value {
         font-size: 1.25rem;
         font-weight: 600;
-        color: var(--mat-sys-on-surface);
+        color: var(--text-primary);
       }
     }
 
@@ -212,7 +222,7 @@
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      color: var(--mat-sys-primary);
+      color: #10b981;
 
       @media (max-width: 640px) {
         flex-direction: row;
@@ -238,9 +248,9 @@
       gap: 8px;
       margin-top: 16px;
       padding: 12px;
-      background: var(--mat-sys-tertiary);
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
-      border-radius: 8px;
+      border-radius: $radius-md;
       font-weight: 600;
 
       mat-icon {
@@ -252,21 +262,21 @@
   }
 }
 
-// Section Conseils
+// Conseils
 .summary-section {
-  padding: 24px 0;
+  padding: $space-xl 0;
 
   h3 {
     display: flex;
     align-items: center;
     gap: 12px;
     margin: 0 0 20px 0;
-    color: var(--mat-sys-on-surface);
+    color: var(--text-primary);
     font-size: 1.25rem;
     font-weight: 600;
 
     mat-icon {
-      color: var(--mat-sys-primary);
+      color: var(--primary-color);
     }
   }
 }
@@ -281,26 +291,26 @@
     align-items: flex-start;
     gap: 16px;
     padding: 16px 0;
-    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    border-bottom: 1px solid var(--border);
 
     &:last-child {
       border-bottom: none;
     }
 
     &.info {
-      background: var(--mat-sys-info-container);
-      margin: 0 -24px;
-      padding: 16px 24px;
-      border-radius: 0;
-      border-bottom: none;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid #10b981;
+      border-radius: $radius-md;
+      padding: 16px;
+      margin: 8px 0;
 
       mat-icon {
-        color: var(--mat-sys-info);
+        color: #10b981;
       }
     }
 
     mat-icon {
-      color: var(--mat-sys-primary);
+      color: #10b981;
       font-size: 24px;
       width: 24px;
       height: 24px;
@@ -309,23 +319,24 @@
     }
 
     span {
-      color: var(--mat-sys-on-surface-variant);
+      color: var(--text-secondary);
       font-size: 0.875rem;
       line-height: 1.5;
 
       strong {
-        color: var(--mat-sys-on-surface);
+        color: var(--text-primary);
       }
     }
   }
 }
 
+// Actions
 .actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding-top: 24px;
-  border-top: 1px solid var(--mat-sys-outline-variant);
+  padding-top: $space-xl;
+  border-top: 1px solid var(--border);
 
   button {
     mat-icon {
@@ -333,11 +344,44 @@
     }
   }
 
-  @media (max-width: 640px) {
+  @include media-down($sm) {
     flex-direction: column;
 
     button {
       width: 100%;
+    }
+  }
+}
+
+// Dark Theme
+:host-context(.dark-theme) {
+  .savings-plan-panel {
+    border-left-color: #34d399;
+
+    .panel-header-content {
+      .header-icon {
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      }
+    }
+  }
+
+  .target-card {
+    &.completed {
+      border-color: #34d399;
+      background: rgba(52, 211, 153, 0.15);
+    }
+  }
+
+  .tips-list {
+    li {
+      &.info {
+        background: rgba(52, 211, 153, 0.15);
+        border-color: #34d399;
+      }
+
+      mat-icon {
+        color: #34d399;
+      }
     }
   }
 }
