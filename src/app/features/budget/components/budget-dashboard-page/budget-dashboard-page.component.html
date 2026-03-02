@@ -31,6 +31,17 @@
           </section>
         }
 
+        <!-- Suivi des dépenses - visible même sans plan de redressement -->
+        <section class="dashboard-section section-expense-tracking">
+          <app-quick-expense
+            [monthlyBudget]="budgetStore.userData()?.salary || 0"
+            [dailyBudget]="paydayInfo()?.adjustedDailyBudget || 0"
+            [paydayDay]="budgetStore.userData()?.paydayDay || 1"
+            (viewAllExpensesClicked)="openAllExpenses()"
+          >
+          </app-quick-expense>
+        </section>
+
         @if (priorityInsights().length > 0) {
           <section class="dashboard-section section-insights">
             <app-budget-insights [insights]="priorityInsights()" (actionClicked)="handleInsightAction($event)">

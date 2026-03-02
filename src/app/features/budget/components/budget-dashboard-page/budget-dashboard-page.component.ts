@@ -33,6 +33,7 @@ import { EditExpensesDialogComponent } from '../edit-expenses-dialog/edit-expens
 import { BankImportWizardComponent } from '../bank-import-wizard/bank-import-wizard.component';
 import { DashboardHeaderComponent } from '../dashboard-header/dashboard-header.component';
 import { WelcomeCardComponent } from '../welcome-card/welcome-card.component';
+import { QuickExpenseComponent } from '../quick-expense/quick-expense.component';
 import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
 
 @Component({
@@ -55,6 +56,7 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
     DebtRecoveryPlanComponent,
     DashboardHeaderComponent,
     WelcomeCardComponent,
+    QuickExpenseComponent,
   ],
   templateUrl: './budget-dashboard-page.component.html',
   styleUrls: ['./budget-dashboard-page.component.scss'],
@@ -386,5 +388,10 @@ export class BudgetDashboardPageComponent implements OnInit {
       Optimisé: 'optimise',
     };
     return map[name] || '';
+  }
+
+  openAllExpenses(): void {
+    // Ouvrir la page de toutes les dépenses (à implémenter si nécessaire)
+    console.log('Voir toutes les dépenses');
   }
 }
