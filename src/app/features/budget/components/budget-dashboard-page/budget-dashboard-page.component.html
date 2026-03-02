@@ -35,7 +35,7 @@
             </app-debt-recovery-plan>
           }
 
-          @if (showSavingsPlan() && savingsPlanData(); as savingsData) {
+          @if ((showSavingsPlan() || hasActiveSavingsPlan()) && savingsPlanData(); as savingsData) {
             <app-savings-plan
               [data]="savingsData"
               (acceptPlan)="onAcceptSavingsPlan($event)"

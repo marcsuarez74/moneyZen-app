@@ -84,6 +84,12 @@ export class BudgetDashboardPageComponent implements OnInit {
   readonly showSavingsPlan = signal<boolean>(false);
   readonly savingsPlanData = signal<SavingsPlanData | null>(null);
 
+  // Vérifie si un plan d'épargne est actif dans le store
+  readonly hasActiveSavingsPlan = computed(() => {
+    const activePlan = this.planStore.activePlan();
+    return activePlan?.isActive && activePlan?.type === 'savings';
+  });
+
   readonly priorityInsights = computed(() => {
     const analysis = this.budgetAnalysis();
     return analysis?.insights?.filter(i => i.priority >= 7).slice(0, 3) || [];
@@ -291,6 +297,7 @@ export class BudgetDashboardPageComponent implements OnInit {
   }
 
   private loadSavedData(): void {
+    // Charger le budget state
     const savedState = this.storageService.loadBudgetState();
     if (savedState) {
       // Normaliser les données utilisateur pour s'assurer que les types sont corrects
@@ -305,6 +312,65 @@ export class BudgetDashboardPageComponent implements OnInit {
       }
       if (savedState.expenses?.length > 0) this.budgetStore.setExpenses(savedState.expenses);
       this.calculateAnalysis();
+    }
+
+    // Charger le plan state
+    const savedPlanState = this.storageService.loadPlanState();
+    if (savedPlanState?.activePlan) {
+      // Restaurer le plan actif dans le store
+      this.planStore.createPlan(savedPlanState.activePlan);
+
+      // Si c'est un plan d'épargne, l'afficher automatiquement
+      if (savedPlanState.activePlan.type === 'savings') {
+        this.initializeSavingsPlanFromStore();
+      }
+    }
+  }
+
+  private initializeSavingsPlanFromStore(): void {
+    const activePlan = this.planStore.activePlan();
+    const userData = this.budgetStore.userData();
+    const summary = this.budgetStore.budgetSummary();
+
+    if (activePlan && userData && summary) {
+      const targetAmount = activePlan.monthlyIncome * 3;
+
+      // Calculer les charges fixes
+      const fixedCategories = [
+        'housing',
+        'mortgage',
+        'condoFees',
+        'propertyTax',
+        'housingServices',
+        'carLoan',
+        'consumerLoan',
+        'debtRepayment',
+        'energy',
+        'water',
+        'internet',
+        'phone',
+        'tvStreaming',
+        'homeInsurance',
+        'carInsurance',
+        'healthInsurance',
+        'lifeInsurance',
+      ];
+      const fixedExpenses = this.budgetStore
+        .expenses()
+        .filter(e => fixedCategories.includes(e.category))
+        .reduce((sum, e) => sum + e.monthlyEquivalent, 0);
+
+      const savingsData: SavingsPlanData = {
+        targetAmount,
+        monthlyIncome: activePlan.monthlyIncome,
+        fixedExpenses,
+        remainingBudget: activePlan.remainingBudget,
+        hasDebtRecoveryPlan: this.isNegativeBalance(),
+        paydayDay: activePlan.paydayDay,
+      };
+
+      this.savingsPlanData.set(savingsData);
+      this.showSavingsPlan.set(true);
     }
   }
 
