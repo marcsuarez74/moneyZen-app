@@ -19,9 +19,12 @@
 
   @if (budgetStore.hasUserData()) {
     <main class="dashboard-layout responsive-container">
+      <!-- Navigation pour desktop et mobile -->
+      <app-plan-navigation [sections]="dashboardSections()" class="dashboard-navigation"></app-plan-navigation>
+
       <div class="dashboard-content">
         @if (isNegativeBalance() && recoveryData(); as recovery) {
-          <section class="dashboard-section section-alert">
+          <section id="section-alert" class="dashboard-section section-alert">
             <app-debt-recovery-plan
               [data]="recovery"
               (acceptPlan)="onAcceptRecoveryPlan($event)"
@@ -32,7 +35,7 @@
         }
 
         <!-- Suivi des dépenses - visible même sans plan de redressement -->
-        <section class="dashboard-section section-expense-tracking">
+        <section id="section-expense-tracking" class="dashboard-section section-expense-tracking">
           <app-quick-expense
             [monthlyBudget]="budgetStore.userData()?.salary || 0"
             [dailyBudget]="paydayInfo()?.adjustedDailyBudget || 0"
@@ -43,14 +46,14 @@
         </section>
 
         @if (priorityInsights().length > 0) {
-          <section class="dashboard-section section-insights">
+          <section id="section-insights" class="dashboard-section section-insights">
             <app-budget-insights [insights]="priorityInsights()" (actionClicked)="handleInsightAction($event)">
             </app-budget-insights>
           </section>
         }
 
         @if (budgetStore.budgetSummary(); as summary) {
-          <section class="dashboard-section section-stats">
+          <section id="section-stats" class="dashboard-section section-stats">
             <app-budget-stats-display
               [summary]="summary"
               [userData]="budgetStore.userData()"
@@ -61,7 +64,7 @@
           </section>
         }
 
-        <section class="dashboard-section section-content">
+        <section id="section-content" class="dashboard-section section-content">
           <div class="content-tabs">
             <mat-tab-group animationDuration="300ms" class="modern-tabs">
               <mat-tab>

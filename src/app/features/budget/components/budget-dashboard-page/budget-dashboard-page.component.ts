@@ -34,6 +34,10 @@ import { BankImportWizardComponent } from '../bank-import-wizard/bank-import-wiz
 import { DashboardHeaderComponent } from '../dashboard-header/dashboard-header.component';
 import { WelcomeCardComponent } from '../welcome-card/welcome-card.component';
 import { QuickExpenseComponent } from '../quick-expense/quick-expense.component';
+import {
+  PlanNavigationComponent,
+  PlanSection,
+} from '../../../../shared/components/plan-navigation/plan-navigation.component';
 import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
 
 @Component({
@@ -57,6 +61,7 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
     DashboardHeaderComponent,
     WelcomeCardComponent,
     QuickExpenseComponent,
+    PlanNavigationComponent,
   ],
   templateUrl: './budget-dashboard-page.component.html',
   styleUrls: ['./budget-dashboard-page.component.scss'],
@@ -99,6 +104,29 @@ export class BudgetDashboardPageComponent implements OnInit {
     const balance = Number(userData.accountBalance);
     return !isNaN(balance) && balance < 0;
   });
+
+  // Sections de navigation pour le dashboard
+  readonly dashboardSections = computed((): PlanSection[] => [
+    {
+      id: 'section-expense-tracking',
+      label: 'Suivi des dépenses',
+      icon: 'add_circle',
+      visible: true,
+    },
+    {
+      id: 'section-insights',
+      label: 'Insights',
+      icon: 'lightbulb',
+      visible: this.priorityInsights().length > 0,
+    },
+    {
+      id: 'section-stats',
+      label: 'Statistiques',
+      icon: 'bar_chart',
+      visible: this.budgetStore.budgetSummary() !== null,
+    },
+    { id: 'section-content', label: 'Détails', icon: 'article', visible: true },
+  ]);
 
   readonly recoveryData = computed((): RecoveryPlanData | null => {
     const userData = this.budgetStore.userData();
