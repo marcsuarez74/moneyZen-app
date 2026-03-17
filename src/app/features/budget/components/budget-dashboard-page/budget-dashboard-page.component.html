@@ -19,27 +19,70 @@
 
   @if (budgetStore.hasUserData()) {
     <main class="dashboard-layout responsive-container">
+      <!-- Navigation pour desktop et mobile - affiché seulement si pas de plan de redressement -->
+      @if (!isNegativeBalance()) {
+        <app-plan-navigation [sections]="dashboardSections()" class="dashboard-navigation"></app-plan-navigation>
+      }
+
       <div class="dashboard-content">
-        @if (isNegativeBalance() && recoveryData(); as recovery) {
-          <section class="dashboard-section section-alert">
+        <section id="section-alert" class="dashboard-section section-alert">
+          @if (isNegativeBalance() && recoveryData(); as recovery) {
             <app-debt-recovery-plan
               [data]="recovery"
               (acceptPlan)="onAcceptRecoveryPlan($event)"
               (adjustPlan)="onAdjustRecoveryPlan($event)"
             >
             </app-debt-recovery-plan>
+          }
+
+          @if (showSavingsPlan() && savingsPlanData(); as savingsData) {
+            <app-savings-plan
+              [data]="savingsData"
+              (acceptPlan)="onAcceptSavingsPlan($event)"
+              (adjustPlan)="onAdjustSavingsPlan($event)"
+            >
+            </app-savings-plan>
+          }
+
+          @if (hasActiveSavingsPlan() && !showSavingsPlan()) {
+            <app-savings-plan
+              [data]="{
+                targetAmount: planStore.activePlan()!.monthlyIncome * 3,
+                monthlyIncome: planStore.activePlan()!.monthlyIncome,
+                fixedExpenses: planStore.activePlan()!.monthlyIncome - planStore.activePlan()!.remainingBudget,
+                remainingBudget: planStore.activePlan()!.remainingBudget,
+                hasDebtRecoveryPlan: isNegativeBalance(),
+                paydayDay: planStore.activePlan()!.paydayDay,
+              }"
+              (acceptPlan)="onAcceptSavingsPlan($event)"
+              (adjustPlan)="onAdjustSavingsPlan($event)"
+            >
+            </app-savings-plan>
+          }
+        </section>
+
+        <!-- Suivi des dépenses - visible uniquement si pas de plan de redressement -->
+        @if (!isNegativeBalance()) {
+          <section id="section-expense-tracking" class="dashboard-section section-expense-tracking">
+            <app-quick-expense
+              [monthlyBudget]="budgetStore.userData()?.salary || 0"
+              [dailyBudget]="paydayInfo()?.adjustedDailyBudget || 0"
+              [paydayDay]="budgetStore.userData()?.paydayDay || 1"
+              (viewAllExpensesClicked)="openAllExpenses()"
+            >
+            </app-quick-expense>
           </section>
         }
 
         @if (priorityInsights().length > 0) {
-          <section class="dashboard-section section-insights">
+          <section id="section-insights" class="dashboard-section section-insights">
             <app-budget-insights [insights]="priorityInsights()" (actionClicked)="handleInsightAction($event)">
             </app-budget-insights>
           </section>
         }
 
         @if (budgetStore.budgetSummary(); as summary) {
-          <section class="dashboard-section section-stats">
+          <section id="section-stats" class="dashboard-section section-stats">
             <app-budget-stats-display
               [summary]="summary"
               [userData]="budgetStore.userData()"
@@ -50,7 +93,7 @@
           </section>
         }
 
-        <section class="dashboard-section section-content">
+        <section id="section-content" class="dashboard-section section-content">
           <div class="content-tabs">
             <mat-tab-group animationDuration="300ms" class="modern-tabs">
               <mat-tab>
@@ -88,7 +131,11 @@
                 </ng-template>
                 <div class="tab-panel">
                   @if (budgetStore.budgetSummary(); as summary) {
-                    <app-budget-recommendations [analysis]="budgetAnalysis()" [summary]="summary">
+                    <app-budget-recommendations
+                      [analysis]="budgetAnalysis()"
+                      [summary]="summary"
+                      (applyRecommendation)="handleApplyRecommendation($event)"
+                    >
                     </app-budget-recommendations>
                   }
                 </div>

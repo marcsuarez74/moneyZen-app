@@ -16,12 +16,13 @@
   flex: 1;
   padding: $space-xl 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: $space-xl;
 
   @include media-down($md) {
     padding: $space-lg 0;
     gap: $space-lg;
+    flex-direction: column;
   }
 
   @include media-down($sm) {
@@ -30,10 +31,33 @@
   }
 }
 
+// Navigation du dashboard
+.dashboard-navigation {
+  flex-shrink: 0;
+
+  @media (min-width: 1024px) {
+    width: 240px;
+    position: sticky;
+    top: 24px;
+    align-self: flex-start;
+  }
+
+  @media (max-width: 1023px) {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--background);
+    padding: 8px 0;
+  }
+}
+
 .dashboard-content {
   display: flex;
   flex-direction: column;
   gap: $space-xl;
+  flex: 1;
+  min-width: 0;
 
   @include media-down($md) {
     gap: $space-lg;
@@ -391,6 +415,23 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
+    }
+  }
+}
+
+// Section plan d'épargne
+.section-savings-plan {
+  animation: slideUp 0.6s ease forwards;
+}
+
+// Espacement entre les plans dans section-alert
+.section-alert {
+  > app-savings-plan,
+  > app-debt-recovery-plan {
+    display: block;
+
+    &:not(:last-child) {
+      margin-bottom: 32px;
     }
   }
 }

@@ -33,6 +33,12 @@ import { EditExpensesDialogComponent } from '../edit-expenses-dialog/edit-expens
 import { BankImportWizardComponent } from '../bank-import-wizard/bank-import-wizard.component';
 import { DashboardHeaderComponent } from '../dashboard-header/dashboard-header.component';
 import { WelcomeCardComponent } from '../welcome-card/welcome-card.component';
+import { QuickExpenseComponent } from '../quick-expense/quick-expense.component';
+import {
+  PlanNavigationComponent,
+  PlanSection,
+} from '../../../../shared/components/plan-navigation/plan-navigation.component';
+import { SavingsPlanComponent, SavingsPlanData } from '../savings-plan/savings-plan.component';
 import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../models/budget.model';
 
 @Component({
@@ -55,6 +61,9 @@ import { Expense, UserFinancialData, getCategoriesByGroup } from '../../../../mo
     DebtRecoveryPlanComponent,
     DashboardHeaderComponent,
     WelcomeCardComponent,
+    QuickExpenseComponent,
+    PlanNavigationComponent,
+    SavingsPlanComponent,
   ],
   templateUrl: './budget-dashboard-page.component.html',
   styleUrls: ['./budget-dashboard-page.component.scss'],
@@ -72,6 +81,14 @@ export class BudgetDashboardPageComponent implements OnInit {
   protected getCategoriesByGroup = getCategoriesByGroup;
 
   readonly budgetAnalysis = signal<BudgetAnalysis | null>(null);
+  readonly showSavingsPlan = signal<boolean>(false);
+  readonly savingsPlanData = signal<SavingsPlanData | null>(null);
+
+  // Vérifie si un plan d'épargne est actif dans le store
+  readonly hasActiveSavingsPlan = computed(() => {
+    const activePlan = this.planStore.activePlan();
+    return activePlan?.isActive && activePlan?.type === 'savings';
+  });
 
   readonly priorityInsights = computed(() => {
     const analysis = this.budgetAnalysis();
@@ -96,6 +113,32 @@ export class BudgetDashboardPageComponent implements OnInit {
     // Sinon utiliser le solde numérique
     const balance = Number(userData.accountBalance);
     return !isNaN(balance) && balance < 0;
+  });
+
+  // Sections de navigation pour le dashboard - affiché seulement si pas de plan
+  readonly dashboardSections = computed((): PlanSection[] => {
+    const hasPlan = this.isNegativeBalance();
+    return [
+      {
+        id: 'section-expense-tracking',
+        label: 'Suivi des dépenses',
+        icon: 'add_circle',
+        visible: !hasPlan,
+      },
+      {
+        id: 'section-insights',
+        label: 'Insights',
+        icon: 'lightbulb',
+        visible: !hasPlan && this.priorityInsights().length > 0,
+      },
+      {
+        id: 'section-stats',
+        label: 'Statistiques',
+        icon: 'bar_chart',
+        visible: !hasPlan && this.budgetStore.budgetSummary() !== null,
+      },
+      { id: 'section-content', label: 'Détails', icon: 'article', visible: !hasPlan },
+    ];
   });
 
   readonly recoveryData = computed((): RecoveryPlanData | null => {
@@ -251,9 +294,16 @@ export class BudgetDashboardPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSavedData();
+
+    // S'assurer que le plan d'épargne est affiché si un plan existe dans le store
+    // Cela gère aussi le cas du refresh de la page
+    if (this.hasActiveSavingsPlan()) {
+      this.initializeSavingsPlanFromStore();
+    }
   }
 
   private loadSavedData(): void {
+    // Charger le budget state
     const savedState = this.storageService.loadBudgetState();
     if (savedState) {
       // Normaliser les données utilisateur pour s'assurer que les types sont corrects
@@ -268,6 +318,48 @@ export class BudgetDashboardPageComponent implements OnInit {
       }
       if (savedState.expenses?.length > 0) this.budgetStore.setExpenses(savedState.expenses);
       this.calculateAnalysis();
+    }
+
+    // Charger le plan state
+    const savedPlanState = this.storageService.loadPlanState();
+    if (savedPlanState?.activePlan) {
+      // Restaurer le plan actif dans le store
+      this.planStore.createPlan(savedPlanState.activePlan);
+
+      // Si c'est un plan d'épargne, l'afficher automatiquement
+      if (savedPlanState.activePlan.type === 'savings') {
+        this.initializeSavingsPlanFromStore();
+      }
+    }
+  }
+
+  private initializeSavingsPlanFromStore(): void {
+    const activePlan = this.planStore.activePlan();
+
+    if (activePlan && activePlan.type === 'savings') {
+      // Utiliser les données du plan stocké ou des valeurs par défaut
+      const targetAmount = activePlan.monthlyIncome * 3;
+      const monthlyIncome = activePlan.monthlyIncome;
+      const remainingBudget = activePlan.remainingBudget;
+      const paydayDay = activePlan.paydayDay;
+
+      // Si on a des données de budget, on les utilise pour le calcul des charges fixes
+      const userData = this.budgetStore.userData();
+      const fixedExpenses = userData ? monthlyIncome - remainingBudget : 0;
+
+      const savingsData: SavingsPlanData = {
+        targetAmount,
+        monthlyIncome,
+        fixedExpenses: Math.max(0, fixedExpenses),
+        remainingBudget,
+        hasDebtRecoveryPlan: this.isNegativeBalance(),
+        paydayDay,
+      };
+
+      this.savingsPlanData.set(savingsData);
+      this.showSavingsPlan.set(true);
+
+      console.log("✅ Plan d'épargne initialisé depuis le store:", savingsData);
     }
   }
 
@@ -386,5 +478,98 @@ export class BudgetDashboardPageComponent implements OnInit {
       Optimisé: 'optimise',
     };
     return map[name] || '';
+  }
+
+  openAllExpenses(): void {
+    // Ouvrir la page de toutes les dépenses (à implémenter si nécessaire)
+    console.log('Voir toutes les dépenses');
+  }
+
+  // Afficher le plan d'épargne
+  openSavingsPlan(): void {
+    const userData = this.budgetStore.userData();
+    const summary = this.budgetStore.budgetSummary();
+
+    if (!userData || !summary) return;
+
+    const targetAmount = userData.salary * 3; // 3 mois de salaire
+    // Calculer les charges fixes
+    const fixedCategories = [
+      'housing',
+      'mortgage',
+      'condoFees',
+      'propertyTax',
+      'housingServices',
+      'carLoan',
+      'consumerLoan',
+      'debtRepayment',
+      'energy',
+      'water',
+      'internet',
+      'phone',
+      'tvStreaming',
+      'homeInsurance',
+      'carInsurance',
+      'healthInsurance',
+      'lifeInsurance',
+    ];
+    const fixedExpenses = this.budgetStore
+      .expenses()
+      .filter(e => fixedCategories.includes(e.category))
+      .reduce((sum, e) => sum + e.monthlyEquivalent, 0);
+    const remainingBudget = summary.remainingBudget;
+
+    const savingsData: SavingsPlanData = {
+      targetAmount,
+      monthlyIncome: userData.salary,
+      fixedExpenses,
+      remainingBudget,
+      hasDebtRecoveryPlan: this.isNegativeBalance(),
+      paydayDay: userData.paydayDay || 1,
+    };
+
+    this.savingsPlanData.set(savingsData);
+    this.showSavingsPlan.set(true);
+  }
+
+  // Fermer le plan d'épargne
+  closeSavingsPlan(): void {
+    this.showSavingsPlan.set(false);
+    this.savingsPlanData.set(null);
+  }
+
+  // Handler pour "Appliquer" sur une recommandation
+  handleApplyRecommendation(recommendation: any): void {
+    if (
+      recommendation.title?.toLowerCase().includes('fonds') ||
+      recommendation.title?.toLowerCase().includes('urgence') ||
+      recommendation.title?.toLowerCase().includes('épargne')
+    ) {
+      this.openSavingsPlan();
+    } else {
+      console.log('Recommendation appliquée:', recommendation);
+    }
+  }
+
+  // Handler pour adopter le plan d'épargne
+  onAcceptSavingsPlan(event: {
+    duration: number;
+    monthlyContribution: number;
+    targetAmount: number;
+    adopted: boolean;
+  }): void {
+    console.log("Plan d'épargne accepté:", event);
+    // Ne pas fermer le plan, le garder visible
+    // Le plan est déjà sauvegardé dans le store par le composant savings-plan
+    // On sauvegarde aussi dans le localStorage au cas où
+    this.storageService.savePlanState({
+      activePlan: this.planStore.activePlan(),
+      pastPlans: this.planStore.pastPlans(),
+    });
+  }
+
+  // Handler pour ajuster la durée du plan d'épargne
+  onAdjustSavingsPlan(duration: number): void {
+    console.log("Nouvelle durée du plan d'épargne:", duration);
   }
 }
