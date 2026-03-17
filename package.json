@@ -1,6 +1,6 @@
 {
   "name": "moneyzen",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "scripts": {
     "ng": "ng",
     "config": "node scripts/set-env.js",

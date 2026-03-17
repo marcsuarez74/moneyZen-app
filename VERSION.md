@@ -2,12 +2,15 @@
 
 ## Version actuelle
 
-**1.9.0**
+**1.10.0**
 
 Date de release : 2025-02-23
 
 ## Historique des versions
 
+| Version | Date | Description |
+|---------|------|-------------|
+| 1.10.0 | 2026-03-17 | [INSCRIRE LA DESCRIPTION] |
 | Version | Date | Description |
 |---------|------|-------------|
 | 1.9.0 | 2026-03-17 | [INSCRIRE LA DESCRIPTION] |
